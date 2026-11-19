@@ -39,67 +39,41 @@ export function GalleryHome({ entries }: { entries: StyleEntry[] }) {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-4 md:p-6 space-y-6">
-      {/* 顶部品牌与全局筛选栏 */}
-      <header className="bg-[var(--card)] border border-[var(--border)] rounded-xl p-5 space-y-4">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2.5">
-              <span className="px-2 py-0.5 rounded text-xs font-mono font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]">
-                T.E.A. // v0.2
-              </span>
-              <h1 className="text-lg md:text-2xl font-bold tracking-tight">
-                {isEn
-                  ? "🍵 TEA.md · Tactile & Editorial Aesthetics"
-                  : "🍵 TEA.md · 触感与编辑美学图鉴"}
-              </h1>
-            </div>
-            <p className="text-xs md:text-sm text-[var(--muted-foreground)]">
-              {isEn ? (
-                <>
-                  No more instant AI slop. Browse all tactile blends below, or click any card to open the{" "}
-                  <strong>Live Benchmark Stage &amp; Steep Mixer</strong>.
-                </>
-              ) : (
-                <>
-                  No more instant AI slop. 浏览平铺风格样本，点击任意卡片进入
-                  <strong>交互沙盒、业务样板间切换与 DESIGN.md 调配台</strong>。
-                </>
-              )}
-            </p>
-          </div>
-
-          <div className="flex items-center gap-2 w-full sm:w-auto">
-            <button
-              type="button"
-              onClick={toggleLocale}
-              className="px-3 py-1.5 rounded-lg text-xs font-mono font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] shrink-0 cursor-pointer"
-              title="Switch Language / 切换中英文"
-            >
-              {isEn ? "中文 / EN" : "EN / 中文"}
-            </button>
-            <button
-              type="button"
-              onClick={() => document.documentElement.classList.toggle("dark")}
-              className="px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] shrink-0 cursor-pointer"
-            >
-              {isEn ? "☀/🌙 Theme" : "☀/🌙 明暗"}
-            </button>
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder={
-                isEn
-                  ? "Search: Wusilan / GC16 / Riso / Braun..."
-                  : "搜索风格：乌丝栏 / GC16 / Riso / 博朗..."
-              }
-              className="w-full sm:w-64 px-3 py-1.5 rounded-lg text-xs bg-[var(--background)] border border-[var(--border)] text-[var(--foreground)] placeholder-[var(--muted-foreground)] focus:outline-none focus:border-[var(--primary)]"
-            />
-          </div>
+    <div className="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-10 space-y-8">
+      {/* 极简首屏：仅保留右上角轻量工具与醒目的标题 + 一句话 Slogan */}
+      <header className="space-y-6">
+        <div className="flex items-center justify-end gap-2">
+          <button
+            type="button"
+            onClick={toggleLocale}
+            className="px-3 py-1.5 rounded-lg text-xs font-mono font-semibold bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] cursor-pointer"
+            title="Switch Language / 切换中英文"
+          >
+            {isEn ? "中文 / EN" : "EN / 中文"}
+          </button>
+          <button
+            type="button"
+            onClick={() => document.documentElement.classList.toggle("dark")}
+            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] cursor-pointer"
+          >
+            {isEn ? "☀/🌙 Theme" : "☀/🌙 明暗"}
+          </button>
         </div>
 
-        {/* 分类筛选胶囊 */}
+        <div className="text-center max-w-2xl mx-auto space-y-3 py-2">
+          <h1 className="text-3xl md:text-5xl font-bold tracking-tight">
+            🍵 TEA.md
+          </h1>
+          <p className="text-base md:text-lg text-[var(--muted-foreground)] font-medium">
+            {isEn
+              ? "Make your product look crafted, not AI-generated."
+              : "告别千篇一律的「AI 味」，让你的产品外观拥有真实质感。"}
+          </p>
+        </div>
+      </header>
+
+      {/* 画廊次级筛选与搜索条 */}
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[var(--border)]">
         <div className="flex flex-wrap gap-1.5">
           {CATEGORIES.map((c) => {
             const on = category === c.id;
@@ -111,7 +85,7 @@ export function GalleryHome({ entries }: { entries: StyleEntry[] }) {
                 className={`px-3 py-1.5 rounded-md text-xs font-medium transition cursor-pointer ${
                   on
                     ? "bg-[var(--primary)] text-[var(--primary-foreground)]"
-                    : "bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-90"
+                    : "bg-[var(--card)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-90"
                 }`}
               >
                 {isEn ? c.en : c.zh}
@@ -119,7 +93,19 @@ export function GalleryHome({ entries }: { entries: StyleEntry[] }) {
             );
           })}
         </div>
-      </header>
+
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={
+            isEn
+              ? "Search styles..."
+              : "搜索风格..."
+          }
+          className="w-full sm:w-56 px-3 py-1.5 rounded-lg text-xs bg-[var(--card)] border border-[var(--border)] text-[var(--foreground)] placeholder-[var(--muted-foreground)] focus:outline-none focus:border-[var(--primary)]"
+        />
+      </div>
 
       {/* 所有风格卡片平铺画廊 */}
       {filtered.length === 0 ? (
