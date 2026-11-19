@@ -2,6 +2,7 @@ export interface SoulPrimitiveSpec {
   componentName: string;
   fileName: string;
   summary: string;
+  summaryEn: string;
   code: string;
 }
 
@@ -10,6 +11,7 @@ export const SOUL_PRIMITIVES: Record<string, SoulPrimitiveSpec> = {
     componentName: "RotaryKnob & TactileKey",
     fileName: "tactile-synth-primitives.tsx",
     summary: "支持鼠标上下拖拽阻尼调参的工业刻度旋钮 + 3px 物理键程按压键帽",
+    summaryEn: "Vertical-drag tactile rotary encoder knob + physical 3px-travel mechanical keycap button",
     code: `"use client";
 import * as React from "react";
 
@@ -78,6 +80,7 @@ export function TactileKey({
     componentName: "BlueprintDimensionBox",
     fileName: "cad-blueprint-primitives.tsx",
     summary: "基于 ResizeObserver 实时测量自身像素宽度的 CAD 标尺线框与四角十字准星容器",
+    summaryEn: "ResizeObserver live pixel-measuring CAD wireframe container with 4-corner crosshair reticles",
     code: `"use client";
 import * as React from "react";
 
@@ -125,6 +128,7 @@ export function BlueprintDimensionBox({
     componentName: "ThermalReceiptSlip",
     fileName: "thermal-receipt-primitives.tsx",
     summary: "自带上下锯齿撕纸齿口、虚线撕裂副券与朱红盖章动画的热敏纸票据容器",
+    summaryEn: "POS thermal paper slip container with CSS serrated tear edges and vermilion rubber stamp",
     code: `"use client";
 import * as React from "react";
 
@@ -172,6 +176,7 @@ export function ThermalReceiptSlip({
     componentName: "EInkRefreshStage",
     fileName: "eink-gc16-primitives.tsx",
     summary: "切换视图时自动触发真实墨水屏 GC16 反色黑闪清残影波形的纸感容器",
+    summaryEn: "Electrophoretic E-Paper container that triggers an authentic GC16 invert-flash refresh on change",
     code: `"use client";
 import * as React from "react";
 
@@ -210,6 +215,7 @@ export function EInkRefreshStage({
     componentName: "MagiConsensusPanel",
     fileName: "magi-terminal-primitives.tsx",
     summary: "EVA MAGI 风格八角切角多智能体投票面板与 45° 黑橙斜纹工业警示栏",
+    summaryEn: "Octagonal chamfered 3-agent voting matrix with -45deg repeating industrial hazard stripes",
     code: `"use client";
 import * as React from "react";
 
@@ -251,6 +257,7 @@ export function MagiConsensusPanel({ votes }: { votes: AgentVote[] }) {
     componentName: "WusilanFrame & CinnabarSeal",
     fileName: "xuan-wusilan-primitives.tsx",
     summary: "宋刻本外粗内细乌丝栏版心容器与阳文/阴文朱砂石章徽章组件",
+    summaryEn: "Song-dynasty double-hairline Wusilan book frame paired with Yang/Yin carved cinnabar seals",
     code: `import * as React from "react";
 
 export function WusilanFrame({ children }: { children: React.ReactNode }) {
@@ -285,6 +292,7 @@ export function CinnabarSeal({
     componentName: "SplitFlapRow",
     fileName: "split-flap-primitives.tsx",
     summary: "单字符独立分叶转轴的机场 Solari 机械翻页时刻表组件",
+    summaryEn: "Single-character hinged mechanical Solari split-flap timetable tile row",
     code: `"use client";
 import * as React from "react";
 
@@ -311,6 +319,7 @@ export function SplitFlapRow({ text }: { text: string }) {
     componentName: "RisoMisprintCard",
     fileName: "risograph-print-primitives.tsx",
     summary: "内置 isolation 隔离与 mix-blend-mode: multiply 大豆油墨双版套色错位卡片",
+    summaryEn: "Isolated dual-drum Risograph card with mix-blend-mode: multiply soy-ink plate misregistration",
     code: `import * as React from "react";
 
 export function RisoMisprintCard({
@@ -353,6 +362,7 @@ export function RisoMisprintCard({
     componentName: "MeniscusMeter",
     fileName: "swiss-apothecary-primitives.tsx",
     summary: "带硼硅酸盐毫升刻度线与真实试剂弯月面液位边缘的垂直计量管",
+    summaryEn: "Borosilicate graduated cylinder liquid gauge with mL tick marks and amber meniscus rim",
     code: `import * as React from "react";
 
 export function MeniscusMeter({ percent, maxMl = 500 }: { percent: number; maxMl?: number }) {
@@ -383,6 +393,7 @@ export function MeniscusMeter({ percent, maxMl = 500 }: { percent: number; maxMl
     componentName: "AnalogVuMeter",
     fileName: "analog-tape-deck-primitives.tsx",
     summary: "钨丝暖琥珀径向背光 + 底部圆轴红针实时摆动的复古 Hi-Fi 电平表",
+    summaryEn: "Tungsten radial-backlit analog Hi-Fi VU meter with bottom-pivoted swinging red needle",
     code: `import * as React from "react";
 
 export function AnalogVuMeter({ level }: { level: number /* 0..100 */ }) {
@@ -416,6 +427,7 @@ export function AnalogVuMeter({ level }: { level: number /* 0..100 */ }) {
     componentName: "AtomicPcbShell",
     fileName: "atomic-purple-primitives.tsx",
     summary: "低模糊度半透明原子紫注塑外壳叠加 45° 布线镀金焊盘 SVG 电路板底座",
+    summaryEn: "Low-blur translucent Atomic Purple polycarbonate shell layered over 45° SVG PCB traces & gold pads",
     code: `import * as React from "react";
 
 export function AtomicPcbShell({
@@ -449,6 +461,7 @@ export function AtomicPcbShell({
     componentName: "RedactedSpoiler & CorkDossierCard",
     fileName: "corkboard-dossier-primitives.tsx",
     summary: "悬停或点击揭开荧光黄底明文的机密涂黑组件与立体红图钉牛皮纸档案卡",
+    summaryEn: "Click-to-reveal black redaction spoiler strip paired with a push-pinned manila dossier card",
     code: `"use client";
 import * as React from "react";
 

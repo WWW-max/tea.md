@@ -4,9 +4,17 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { StyleEntry } from "./almanac-data";
 import { BenchmarkScene, type SceneMode } from "./benchmark-scenes";
+import { useI18n } from "./i18n-context";
 import { SandboxStage } from "./sandbox-stage";
 import { compileMixerOutput, type MixerParams } from "./steep-mixer";
 import { SOUL_PRIMITIVES } from "@/app/lib/soul-primitives";
+
+interface NavNeighbor {
+  slug: string;
+  name: string;
+  en: string;
+  num: string;
+}
 
 export function StyleDetailClient({
   item,
@@ -14,15 +22,17 @@ export function StyleDetailClient({
   nextItem,
 }: {
   item: StyleEntry;
-  prevItem: { slug: string; name: string; num: string };
-  nextItem: { slug: string; name: string; num: string };
+  prevItem: NavNeighbor;
+  nextItem: NavNeighbor;
 }) {
+  const { locale, toggleLocale } = useI18n();
+  const isEn = locale === "en";
+
   const [sceneMode, setSceneMode] = useState<SceneMode>("sandbox");
   const [recipeTab, setRecipeTab] = useState<"mixer" | "registry" | "lore" | "prompt">("mixer");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [origin, setOrigin] = useState("https://tea-md.vercel.app");
 
-  // Steep Mixer 参数状态
   const [grain, setGrain] = useState(45);
   const [depth, setDepth] = useState<MixerParams["depth"]>("balanced");
   const [density, setDensity] = useState<MixerParams["density"]>("standard");
@@ -43,8 +53,9 @@ export function StyleDetailClient({
       density,
       accent: effectiveAccent,
       format: exportFormat,
+      locale,
     });
-  }, [item, grain, depth, density, effectiveAccent, exportFormat]);
+  }, [item, grain, depth, density, effectiveAccent, exportFormat, locale]);
 
   const copyWithFeedback = (text: string, key: string) => {
     navigator.clipboard?.writeText(text);
@@ -72,6 +83,8 @@ export function StyleDetailClient({
     density === "compact" ? "p-3" : density === "airy" ? "p-7 md:p-9" : "p-4 md:p-6";
 
   const prim = SOUL_PRIMITIVES[item.slug];
+  const activePrompt = isEn ? item.promptEn : item.prompt;
+  const activeDonts = isEn ? item.dontsEn : item.donts;
 
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-6 space-y-5">
@@ -82,20 +95,29 @@ export function StyleDetailClient({
             href="/"
             className="px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-90 transition"
           >
-            ← 返回全部风格画廊
+            {isEn ? "← All Blends" : "← 返回全部风格画廊"}
           </Link>
           <div className="flex items-center gap-2">
             <span className="px-2 py-0.5 rounded font-mono text-xs bg-[var(--primary)] text-[var(--primary-foreground)]">
               {item.num}
             </span>
-            <h1 className="text-base md:text-lg font-bold tracking-tight">{item.name}</h1>
+            <h1 className="text-base md:text-lg font-bold tracking-tight">
+              {isEn ? item.en : item.name}
+            </h1>
             <span className="text-xs text-[var(--muted-foreground)] hidden sm:inline">
-              {item.en} · {item.cat}
+              {isEn ? `${item.name} · ${item.catEn}` : `${item.en} · ${item.cat}`}
             </span>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-xs">
+        <div className="flex flex-wrap items-center gap-2 text-xs">
+          <button
+            type="button"
+            onClick={toggleLocale}
+            className="px-2.5 py-1.5 rounded-lg font-mono font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] cursor-pointer"
+          >
+            {isEn ? "中文 / EN" : "EN / 中文"}
+          </button>
           <button
             type="button"
             onClick={() => document.documentElement.classList.toggle("dark")}
@@ -107,28 +129,27 @@ export function StyleDetailClient({
             href={`/styles/${prevItem.slug}`}
             className="px-2.5 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--secondary)] transition"
           >
-            ‹ {prevItem.num} {prevItem.name}
+            ‹ {prevItem.num} {isEn ? prevItem.en : prevItem.name}
           </Link>
           <Link
             href={`/styles/${nextItem.slug}`}
             className="px-2.5 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--secondary)] transition"
           >
-            {nextItem.num} {nextItem.name} ›
+            {nextItem.num} {isEn ? nextItem.en : nextItem.name} ›
           </Link>
         </div>
       </header>
 
       {/* 详情双栏工作台 */}
       <main className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-        {/* 左栏：实时交互沙盒 + 3 大业务样板间切换 */}
+        {/* 左栏：实时交互沙盒 + 业务样板间切换 */}
         <section className="lg:col-span-7 bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden">
           <div className="px-4 py-3 border-b border-[var(--border)] flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2 text-xs">
-              <span className="font-semibold">实时交互舞台</span>
+              <span className="font-semibold">{isEn ? "Live Stage" : "实时交互舞台"}</span>
               <span
                 className="w-3 h-3 rounded-full border border-black/20"
                 style={{ backgroundColor: effectiveAccent }}
-                title={`当前强调色 ${effectiveAccent}`}
               />
               <span className="font-mono text-[var(--muted-foreground)]">
                 styles/{item.slug}/DESIGN.md
@@ -138,10 +159,10 @@ export function StyleDetailClient({
             <div className="flex rounded-lg border border-[var(--border)] overflow-hidden text-xs">
               {(
                 [
-                  ["sandbox", "🎛️ 物理沙盒"],
-                  ["chat", "🤖 AI 对话"],
-                  ["dashboard", "📊 数据看板"],
-                  ["landing", "📝 产品主页"],
+                  ["sandbox", isEn ? "🎛️ Sandbox" : "🎛️ 物理沙盒"],
+                  ["chat", isEn ? "🤖 AI Chat" : "🤖 AI 对话"],
+                  ["dashboard", isEn ? "📊 Dashboard" : "📊 数据看板"],
+                  ["landing", isEn ? "📝 Landing" : "📝 产品主页"],
                 ] as const
               ).map(([m, label]) => (
                 <button
@@ -183,12 +204,15 @@ export function StyleDetailClient({
               {sceneMode === "sandbox" ? (
                 <SandboxStage slug={item.slug} />
               ) : (
-                <BenchmarkScene slug={item.slug} styleName={item.name} mode={sceneMode} />
+                <BenchmarkScene
+                  slug={item.slug}
+                  styleName={isEn ? item.en : item.name}
+                  mode={sceneMode}
+                />
               )}
             </div>
           </div>
 
-          {/* shadcn Registry 一行命令直装栏 */}
           <div className="px-4 py-2.5 border-t border-[var(--border)] bg-[var(--card)] flex flex-wrap items-center justify-between gap-2 text-xs">
             <code className="font-mono text-[var(--muted-foreground)] truncate">
               npx shadcn@latest add {origin}/r/{item.slug}.json
@@ -203,7 +227,13 @@ export function StyleDetailClient({
               }
               className="px-2.5 py-1 rounded-md font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] shrink-0 cursor-pointer"
             >
-              {copiedKey === "cli" ? "✓ 已复制安装命令" : "⚡ 复制 shadcn 直装命令"}
+              {copiedKey === "cli"
+                ? isEn
+                  ? "✓ CLI Copied"
+                  : "✓ 已复制安装命令"
+                : isEn
+                  ? "⚡ Copy shadcn CLI"
+                  : "⚡ 复制 shadcn 直装命令"}
             </button>
           </div>
         </section>
@@ -213,10 +243,10 @@ export function StyleDetailClient({
           <div className="grid grid-cols-4 border-b border-[var(--border)] text-xs font-medium">
             {(
               [
-                ["mixer", "🎛️ 调配器"],
-                ["registry", "🧩 灵魂原件"],
-                ["lore", "📖 溯源色板"],
-                ["prompt", "⚡ 短指令"],
+                ["mixer", isEn ? "🎛️ Mixer" : "🎛️ 调配器"],
+                ["registry", isEn ? "🧩 Primitives" : "🧩 灵魂原件"],
+                ["lore", isEn ? "📖 Origin" : "📖 溯源色板"],
+                ["prompt", isEn ? "⚡ Prompt" : "⚡ 短指令"],
               ] as const
             ).map(([id, label]) => (
               <button
@@ -234,13 +264,12 @@ export function StyleDetailClient({
             ))}
           </div>
 
-          {/* Tab 1: 参数化调配器 */}
           {recipeTab === "mixer" && (
             <div className="p-4 space-y-4 text-xs">
               <div className="p-3 rounded-lg bg-[var(--background)] border border-[var(--border)] space-y-3">
                 <label className="block space-y-1">
                   <div className="flex justify-between font-medium">
-                    <span>肌理噪点浓度 (Surface Grain)</span>
+                    <span>{isEn ? "Surface Grain Intensity" : "肌理噪点浓度 (Surface Grain)"}</span>
                     <span className="font-mono">{grain}%</span>
                   </div>
                   <input
@@ -254,13 +283,15 @@ export function StyleDetailClient({
                 </label>
 
                 <div className="space-y-1">
-                  <div className="font-medium">物理拟物强度 (Tactile Depth)</div>
+                  <div className="font-medium">
+                    {isEn ? "Tactile Depth Profile" : "物理拟物强度 (Tactile Depth)"}
+                  </div>
                   <div className="grid grid-cols-3 gap-1.5">
                     {(
                       [
-                        ["subtle", "克制 (1px)"],
-                        ["balanced", "均衡 (3px)"],
-                        ["heavy", "重度机械 (5px)"],
+                        ["subtle", isEn ? "Subtle (1px)" : "克制 (1px)"],
+                        ["balanced", isEn ? "Balanced (3px)" : "均衡 (3px)"],
+                        ["heavy", isEn ? "Heavy (5px)" : "重度机械 (5px)"],
                       ] as const
                     ).map(([val, label]) => (
                       <button
@@ -281,13 +312,13 @@ export function StyleDetailClient({
 
                 <div className="grid grid-cols-12 gap-2 items-end">
                   <div className="col-span-8 space-y-1">
-                    <div className="font-medium">留白呼吸度 (Density)</div>
+                    <div className="font-medium">{isEn ? "Spatial Density" : "留白呼吸度"}</div>
                     <div className="grid grid-cols-3 gap-1">
                       {(
                         [
-                          ["compact", "紧凑"],
-                          ["standard", "标准"],
-                          ["airy", "疏朗"],
+                          ["compact", isEn ? "Compact" : "紧凑"],
+                          ["standard", isEn ? "Standard" : "标准"],
+                          ["airy", isEn ? "Airy" : "疏朗"],
                         ] as const
                       ).map(([val, label]) => (
                         <button
@@ -308,14 +339,14 @@ export function StyleDetailClient({
 
                   <div className="col-span-4 space-y-1">
                     <div className="flex justify-between items-center">
-                      <span className="font-medium">点缀色</span>
+                      <span className="font-medium">{isEn ? "Accent" : "点缀色"}</span>
                       {customAccent && (
                         <button
                           type="button"
                           onClick={() => setCustomAccent(null)}
                           className="text-[var(--muted-foreground)] underline cursor-pointer"
                         >
-                          重置
+                          {isEn ? "Reset" : "重置"}
                         </button>
                       )}
                     </div>
@@ -363,14 +394,20 @@ export function StyleDetailClient({
                       onClick={() => copyWithFeedback(mixerOutput, "mixer")}
                       className="px-2.5 py-1 rounded-md font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] cursor-pointer"
                     >
-                      {copiedKey === "mixer" ? "✓ 已复制" : "📋 复制"}
+                      {copiedKey === "mixer"
+                        ? isEn
+                          ? "✓ Copied"
+                          : "✓ 已复制"
+                        : isEn
+                          ? "📋 Copy"
+                          : "📋 复制"}
                     </button>
                     <button
                       type="button"
                       onClick={downloadCompiledFile}
                       className="px-2.5 py-1 rounded-md font-medium bg-[var(--primary)] text-[var(--primary-foreground)] cursor-pointer"
                     >
-                      ⬇ 导出文件
+                      {isEn ? "⬇ Download" : "⬇ 导出文件"}
                     </button>
                   </div>
                 </div>
@@ -382,7 +419,6 @@ export function StyleDetailClient({
             </div>
           )}
 
-          {/* Tab 2: 灵魂原件 */}
           {recipeTab === "registry" && prim && (
             <div className="p-4 space-y-3 text-xs">
               <div className="p-3 rounded-lg bg-[var(--background)] border border-[var(--border)] space-y-1.5">
@@ -394,7 +430,9 @@ export function StyleDetailClient({
                     registry:block
                   </span>
                 </div>
-                <p className="text-[var(--muted-foreground)] leading-relaxed">{prim.summary}</p>
+                <p className="text-[var(--muted-foreground)] leading-relaxed">
+                  {isEn ? prim.summaryEn : prim.summary}
+                </p>
               </div>
 
               <div className="flex items-center justify-between">
@@ -406,7 +444,13 @@ export function StyleDetailClient({
                   onClick={() => copyWithFeedback(prim.code, "prim")}
                   className="px-2.5 py-1 rounded-md font-medium bg-[var(--primary)] text-[var(--primary-foreground)] cursor-pointer"
                 >
-                  {copiedKey === "prim" ? "✓ 已复制源码" : "📋 复制 TSX 原件"}
+                  {copiedKey === "prim"
+                    ? isEn
+                      ? "✓ Copied"
+                      : "✓ 已复制源码"
+                    : isEn
+                      ? "📋 Copy TSX"
+                      : "📋 复制 TSX 原件"}
                 </button>
               </div>
 
@@ -416,36 +460,35 @@ export function StyleDetailClient({
             </div>
           )}
 
-          {/* Tab 3: 美学溯源与色板 */}
           {recipeTab === "lore" && (
             <div className="p-4 space-y-4 text-xs">
               <div className="space-y-1.5">
                 <div className="font-semibold text-[var(--muted-foreground)] uppercase tracking-wider">
-                  美学溯源 (Origin & Reference)
+                  {isEn ? "Origin & Material Reference" : "美学溯源 (Origin & Reference)"}
                 </div>
-                <p className="leading-relaxed">{item.origin}</p>
+                <p className="leading-relaxed">{isEn ? item.originEn : item.origin}</p>
               </div>
 
               <div className="space-y-1.5">
                 <div className="font-semibold text-[var(--muted-foreground)] uppercase tracking-wider">
-                  最佳适用场景 (Best For)
+                  {isEn ? "Best Use Cases" : "最佳适用场景 (Best For)"}
                 </div>
-                <p className="leading-relaxed">{item.bestFor}</p>
+                <p className="leading-relaxed">{isEn ? item.bestForEn : item.bestFor}</p>
               </div>
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="font-semibold text-[var(--muted-foreground)] uppercase tracking-wider">
-                    核心材质色板 (点击复制 HEX)
+                    {isEn ? "Material Swatches (Click to Copy)" : "核心材质色板 (点击复制 HEX)"}
                   </span>
                   {copiedKey?.startsWith("#") && (
                     <span className="text-xs font-mono text-[var(--primary)]">
-                      ✓ 已复制 {copiedKey}
+                      ✓ {copiedKey}
                     </span>
                   )}
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                  {item.swatches.map(([hex, label]) => (
+                  {item.swatches.map(([hex, zhLbl, enLbl]) => (
                     <button
                       key={hex}
                       type="button"
@@ -458,7 +501,9 @@ export function StyleDetailClient({
                       />
                       <span className="truncate">
                         <strong className="font-mono block">{hex}</strong>
-                        <span className="text-[var(--muted-foreground)]">{label}</span>
+                        <span className="text-[var(--muted-foreground)]">
+                          {isEn ? enLbl : zhLbl}
+                        </span>
                       </span>
                     </button>
                   ))}
@@ -467,10 +512,10 @@ export function StyleDetailClient({
 
               <div className="space-y-1.5 pt-1 border-t border-[var(--border)]">
                 <div className="font-semibold text-[var(--muted-foreground)] uppercase tracking-wider">
-                  Anti-Slop 禁忌护栏 (严禁 AI 踩坑)
+                  {isEn ? "Anti-Slop Guardrails (DON'Ts)" : "Anti-Slop 禁忌护栏 (严禁 AI 踩坑)"}
                 </div>
                 <ul className="space-y-1.5">
-                  {item.donts.map((d, i) => (
+                  {activeDonts.map((d, i) => (
                     <li key={i} className="flex items-start gap-1.5">
                       <span>❌</span>
                       <span>{d}</span>
@@ -481,23 +526,30 @@ export function StyleDetailClient({
             </div>
           )}
 
-          {/* Tab 4: 纯净短指令 */}
           {recipeTab === "prompt" && (
             <div className="p-4 space-y-3 text-xs">
               <div className="flex items-center justify-between gap-2">
                 <span className="text-[var(--muted-foreground)]">
-                  直接粘贴至 Claude / ChatGPT / v0 / Cursor：
+                  {isEn
+                    ? "Paste directly into Claude / ChatGPT / v0 / Cursor:"
+                    : "直接粘贴至 Claude / ChatGPT / v0 / Cursor："}
                 </span>
                 <button
                   type="button"
-                  onClick={() => copyWithFeedback(item.prompt, "prompt")}
+                  onClick={() => copyWithFeedback(activePrompt, "prompt")}
                   className="px-3 py-1.5 rounded-lg font-medium bg-[var(--primary)] text-[var(--primary-foreground)] transition cursor-pointer"
                 >
-                  {copiedKey === "prompt" ? "✓ 已复制！" : "📋 一键复制 Prompt"}
+                  {copiedKey === "prompt"
+                    ? isEn
+                      ? "✓ Copied!"
+                      : "✓ 已复制！"
+                    : isEn
+                      ? "📋 Copy Prompt"
+                      : "📋 一键复制 Prompt"}
                 </button>
               </div>
               <pre className="p-3.5 rounded-lg bg-[var(--background)] border border-[var(--border)] font-mono text-xs whitespace-pre-wrap leading-relaxed select-all">
-                {item.prompt}
+                {activePrompt}
               </pre>
             </div>
           )}

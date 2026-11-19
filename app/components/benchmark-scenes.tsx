@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useI18n } from "./i18n-context";
 
 export type SceneMode = "sandbox" | "chat" | "dashboard" | "landing";
 
@@ -159,31 +160,49 @@ export function BenchmarkScene({
   styleName: string;
   mode: Exclude<SceneMode, "sandbox">;
 }) {
+  const { locale } = useI18n();
+  const isEn = locale === "en";
   const skin = SKINS[slug] ?? SKINS["tactile-synth"];
   const [chatInput, setChatInput] = useState("");
-  const [messages, setMessages] = useState([
-    { role: "user", text: "帮我检查当前节点延迟并生成优化方案" },
-    {
-      role: "agent",
-      text: "已完成扫描：P99 延迟由 142ms 降至 38ms，物理材质渲染帧率稳定 60fps。",
-    },
-  ]);
+  const [extraMessages, setExtraMessages] = useState<{ role: string; text: string }[]>([]);
+
+  const baseMessages = isEn
+    ? [
+        { role: "user", text: "Audit node latency and apply material UI tokens." },
+        {
+          role: "agent",
+          text: "Scan complete: P99 latency dropped from 142ms to 38ms at steady 60fps.",
+        },
+      ]
+    : [
+        { role: "user", text: "帮我检查当前节点延迟并生成优化方案" },
+        {
+          role: "agent",
+          text: "已完成扫描：P99 延迟由 142ms 降至 38ms，物理材质渲染帧率稳定 60fps。",
+        },
+      ];
 
   const sendReply = () => {
     if (!chatInput.trim()) return;
-    setMessages((prev) => [
+    setExtraMessages((prev) => [
       ...prev,
       { role: "user", text: chatInput.trim() },
-      { role: "agent", text: `[${slug.toUpperCase()}] 已按当前美学规范执行指令。` },
+      {
+        role: "agent",
+        text: isEn
+          ? `[${slug.toUpperCase()}] Executed under active aesthetic constraints.`
+          : `[${slug.toUpperCase()}] 已按当前美学规范执行指令。`,
+      },
     ]);
     setChatInput("");
   };
+
+  const allMessages = [...baseMessages, ...extraMessages];
 
   const innerContent = (
     <div className="space-y-4 text-xs">
       {skin.hazard && <div className="magi-hazard h-2.5 w-full" />}
 
-      {/* ================= 场景 1：AI Chat 对话样板间 ================= */}
       {mode === "chat" && (
         <div className="space-y-3">
           <div className="flex items-center justify-between gap-2 pb-2 border-b border-current/15">
@@ -192,7 +211,7 @@ export function BenchmarkScene({
           </div>
 
           <div className="space-y-2.5 max-h-52 overflow-y-auto pr-1">
-            {messages.map((m, idx) => (
+            {allMessages.map((m, idx) => (
               <div key={idx} className={m.role === "user" ? skin.card : skin.recess}>
                 <div className="font-bold opacity-70 mb-1">
                   {m.role === "user" ? "USER //" : "TEA_AGENT //"}
@@ -208,17 +227,18 @@ export function BenchmarkScene({
               value={chatInput}
               onChange={(e) => setChatInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && sendReply()}
-              placeholder="输入测试消息体验当前皮肤对话态..."
+              placeholder={
+                isEn ? "Send a test message in this aesthetic..." : "输入测试消息体验当前皮肤对话态..."
+              }
               className="flex-1 bg-transparent border border-current/40 px-3 py-1.5 text-xs focus:outline-none"
             />
             <button type="button" onClick={sendReply} className={skin.primaryBtn}>
-              发送指令
+              {isEn ? "SEND" : "发送指令"}
             </button>
           </div>
         </div>
       )}
 
-      {/* ================= 场景 2：SaaS 数据控制台样板间 ================= */}
       {mode === "dashboard" && (
         <div className="space-y-4">
           <div className="flex items-center justify-between gap-2">
@@ -256,27 +276,32 @@ export function BenchmarkScene({
         </div>
       )}
 
-      {/* ================= 场景 3：产品落地页 Hero 样板间 ================= */}
       {mode === "landing" && (
         <div className="space-y-4 py-1">
           <span className={skin.badge}>EDITION 2026 // {slug.toUpperCase()}</span>
           <div className="space-y-2">
             <h3 className="text-xl font-bold tracking-tight">
-              告别千篇一律的 AI 塑料感界面
+              {isEn
+                ? "Break Free From Generic Plastic AI Slop"
+                : "告别千篇一律的 AI 塑料感界面"}
             </h3>
             <p className={`leading-relaxed ${skin.muted}`}>
-              同一套业务结构，在「{styleName}」材质体系下自动呈现独特的器物触感、边框秩序与物理交互反馈。
+              {isEn
+                ? `The exact same layout transformed under "${styleName}" — complete with physical tactility, crisp rule hierarchy, and authentic surface grain.`
+                : `同一套业务结构，在「${styleName}」材质体系下自动呈现独特的器物触感、边框秩序与物理交互反馈。`}
             </p>
           </div>
           <div className={skin.recess}>
-            ✓ 零毛玻璃泛滥 &nbsp; · &nbsp; ✓ 真实物理隐喻 &nbsp; · &nbsp; ✓ 开箱即用 DESIGN.md
+            {isEn
+              ? "✓ Zero Slop Gradients   ·   ✓ Tactile Physics   ·   ✓ Ready-to-Use DESIGN.md"
+              : "✓ 零毛玻璃泛滥   ·   ✓ 真实物理隐喻   ·   ✓ 开箱即用 DESIGN.md"}
           </div>
           <div className="flex flex-wrap gap-2.5 pt-1">
             <button type="button" className={skin.primaryBtn}>
-              立即应用此茶方 →
+              {isEn ? "Steep This Blend →" : "立即应用此茶方 →"}
             </button>
             <button type="button" className={skin.secondaryBtn}>
-              查看规范文档
+              {isEn ? "Read Spec" : "查看规范文档"}
             </button>
           </div>
         </div>
@@ -284,7 +309,6 @@ export function BenchmarkScene({
     </div>
   );
 
-  // 特殊外框包装器（锯齿热敏纸、乌丝栏双框、透明紫底层 PCB）
   if (skin.sawtooth) {
     return (
       <div className="bg-[#dcd8cf] p-4 rounded-xl">

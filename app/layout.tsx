@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { I18nProvider } from "./components/i18n-context";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,7 +16,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" suppressHydrationWarning>
       <body className="bg-[var(--background)] text-[var(--foreground)] antialiased min-h-screen">
-        {children}
+        <I18nProvider>{children}</I18nProvider>
       </body>
     </html>
   );

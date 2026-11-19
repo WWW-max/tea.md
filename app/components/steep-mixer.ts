@@ -1,4 +1,5 @@
 import type { StyleEntry } from "./almanac-data";
+import type { Locale } from "./i18n-context";
 
 export interface MixerParams {
   grain: number; // 0 - 100
@@ -6,6 +7,7 @@ export interface MixerParams {
   density: "compact" | "standard" | "airy";
   accent: string;
   format: "design-md" | "tailwind-css" | "agent-rules";
+  locale?: Locale;
 }
 
 export const DEPTH_SCALE: Record<MixerParams["depth"], number> = {
@@ -26,6 +28,7 @@ export function compileMixerOutput(item: StyleEntry, params: MixerParams): strin
   const offsetPx = Math.max(1, Math.round(4 * scale));
   const borderPx = params.depth === "heavy" ? "2px" : params.depth === "subtle" ? "1px" : "1.5px";
   const grainAlpha = (params.grain / 1000).toFixed(3);
+  const isEn = params.locale === "en";
 
   if (params.format === "tailwind-css") {
     return `/* TEA.md Compiled Tokens — ${item.en} (${item.slug}) */
@@ -63,26 +66,28 @@ export function compileMixerOutput(item: StyleEntry, params: MixerParams): strin
   }
 
   if (params.format === "agent-rules") {
+    const SwatchDesc = (idx: number) =>
+      `${item.swatches[idx]?.[0]} (${isEn ? item.swatches[idx]?.[2] : item.swatches[idx]?.[1]})`;
+    const dontList = isEn ? item.dontsEn : item.donts;
     return `# .cursorrules / CLAUDE.md — TEA.md [${item.slug}]
 
 You MUST enforce the "${item.en} (${item.name})" aesthetic system across all UI components:
 
 ## Calibrated Physical Parameters
-- Primary Substrate: ${item.swatches[0]?.[0]} (${item.swatches[0]?.[1]})
-- Primary Ink / Secondary: ${item.swatches[1]?.[0]} (${item.swatches[1]?.[1]})
+- Primary Substrate: ${SwatchDesc(0)}
+- Primary Ink / Secondary: ${SwatchDesc(1)}
 - Active Accent Override: ${params.accent}
 - Surface Grain Intensity: ${params.grain}% (radial noise alpha: ${grainAlpha})
 - Tactile Depth Profile: ${params.depth.toUpperCase()} (button travel: ${travelPx}px, plate offset: ${offsetPx}px, border: ${borderPx})
 - Spatial Density: ${DENSITY_LABEL[params.density]}
 
 ## Core Directive
-${item.prompt}
+${isEn ? item.promptEn : item.prompt}
 
 ## Strict Anti-Slop Guardrails
-${item.donts.map((d) => `- NEVER: ${d}`).join("\n")}`;
+${dontList.map((d) => `- NEVER: ${d}`).join("\n")}`;
   }
 
-  // Default: Parameterized DESIGN.md
   const calibratedHeader = `<!-- TEA.md Steep Mixer Calibration: grain=${params.grain}% | depth=${params.depth} (${travelPx}px travel) | density=${params.density} | accent=${params.accent} -->
 
 ## Steep Mixer Calibrated Tokens

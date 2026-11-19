@@ -1,39 +1,43 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useI18n } from "./i18n-context";
 
 export function SandboxStage({ slug }: { slug: string }) {
+  const { locale } = useI18n();
+  const isEn = locale === "en";
+
   switch (slug) {
     case "tactile-synth":
-      return <TactileDemo />;
+      return <TactileDemo isEn={isEn} />;
     case "cad-blueprint":
-      return <BlueprintDemo />;
+      return <BlueprintDemo isEn={isEn} />;
     case "thermal-receipt":
-      return <ReceiptDemo />;
+      return <ReceiptDemo isEn={isEn} />;
     case "eink-gc16":
-      return <EinkDemo />;
+      return <EinkDemo isEn={isEn} />;
     case "magi-terminal":
-      return <MagiDemo />;
+      return <MagiDemo isEn={isEn} />;
     case "xuan-wusilan":
-      return <XuanDemo />;
+      return <XuanDemo isEn={isEn} />;
     case "split-flap":
-      return <SplitFlapDemo />;
+      return <SplitFlapDemo isEn={isEn} />;
     case "risograph-print":
-      return <RisoDemo />;
+      return <RisoDemo isEn={isEn} />;
     case "swiss-apothecary":
       return <ApothecaryDemo />;
     case "analog-tape-deck":
       return <TapeDeckDemo />;
     case "atomic-purple":
-      return <AtomicPurpleDemo />;
+      return <AtomicPurpleDemo isEn={isEn} />;
     case "corkboard-dossier":
-      return <CorkboardDemo />;
+      return <CorkboardDemo isEn={isEn} />;
     default:
       return null;
   }
 }
 
-function TactileDemo() {
+function TactileDemo({ isEn }: { isEn: boolean }) {
   const [val, setVal] = useState(75);
   const [status, setStatus] = useState("READY");
 
@@ -71,7 +75,7 @@ function TactileDemo() {
               type="button"
               onClick={() => setVal((v) => (v >= 95 ? 15 : v + 15))}
               className="w-16 h-16 rounded-full bg-[#26272b] shadow-lg flex items-center justify-center cursor-pointer"
-              title="点击步进旋转阻尼旋钮"
+              title={isEn ? "Click to step rotary knob" : "点击步进旋转阻尼旋钮"}
             >
               <div
                 className="w-full h-full rounded-full relative transition-transform"
@@ -81,9 +85,19 @@ function TactileDemo() {
               </div>
             </button>
             <div className="text-xs font-bold text-[#4a4944]">
-              点击旋钮
-              <br />
-              或按压琴键
+              {isEn ? (
+                <>
+                  CLICK KNOB
+                  <br />
+                  OR KEYCAPS
+                </>
+              ) : (
+                <>
+                  点击旋钮
+                  <br />
+                  或按压琴键
+                </>
+              )}
             </div>
           </div>
           <div className="grid grid-cols-2 gap-2">
@@ -108,7 +122,7 @@ function TactileDemo() {
   );
 }
 
-function BlueprintDemo() {
+function BlueprintDemo({ isEn }: { isEn: boolean }) {
   const [dark, setDark] = useState(true);
   const [compact, setCompact] = useState(false);
   const [coords, setCoords] = useState("X:120 Y:064");
@@ -138,7 +152,7 @@ function BlueprintDemo() {
         <span className="font-bold">DWG // AG-2049</span>
         <span>{coords}</span>
         <button type="button" onClick={() => setDark((d) => !d)} className="px-2 py-0.5 border bp-b cursor-pointer">
-          切换深蓝 / 硫酸纸白
+          {isEn ? "Toggle Cyan / Vellum" : "切换深蓝 / 硫酸纸白"}
         </button>
       </div>
       <div className="flex items-center gap-2 text-xs opacity-80">
@@ -166,14 +180,14 @@ function BlueprintDemo() {
           onClick={toggleResize}
           className="px-3 py-1.5 border bp-b text-xs font-bold bg-sky-400/20 cursor-pointer"
         >
-          ↔ 伸缩模块并实时测量像素尺寸
+          {isEn ? "↔ Resize & Measure Live Width" : "↔ 伸缩模块并实时测量像素尺寸"}
         </button>
       </div>
     </div>
   );
 }
 
-function ReceiptDemo() {
+function ReceiptDemo({ isEn }: { isEn: boolean }) {
   const [items, setItems] = useState([
     { label: "1x HALFTONE-RENDER", price: "$0.04" },
     { label: "2x PROMPT-COMPILE", price: "$0.02" },
@@ -224,7 +238,7 @@ function ReceiptDemo() {
               onClick={() => setItems((prev) => [...prev, { label: "1x EXTRA-STEEP", price: "$0.03" }])}
               className="px-2.5 py-1 border border-[#191918] font-bold hover:bg-[#191918] hover:text-white cursor-pointer"
             >
-              + 吐小票
+              {isEn ? "+ Print Row" : "+ 吐小票"}
             </button>
             <input
               type="range"
@@ -233,14 +247,14 @@ function ReceiptDemo() {
               value={dotStep}
               onChange={(e) => setDotStep(Number(e.target.value))}
               className="w-24 accent-[#191918]"
-              title="调节半调网点颗粒度"
+              title={isEn ? "Halftone dot spacing" : "调节半调网点颗粒度"}
             />
             <button
               type="button"
               onClick={() => setStamped((n) => n + 1)}
               className="px-2.5 py-1 border border-[#c82824] text-[#c82824] font-bold cursor-pointer"
             >
-              盖章
+              {isEn ? "Stamp" : "盖章"}
             </button>
           </div>
           {stamped > 0 && (
@@ -258,7 +272,7 @@ function ReceiptDemo() {
   );
 }
 
-function EinkDemo() {
+function EinkDemo({ isEn }: { isEn: boolean }) {
   const [flashKey, setFlashKey] = useState(0);
 
   return (
@@ -274,11 +288,21 @@ function EinkDemo() {
             onClick={() => setFlashKey((k) => k + 1)}
             className="px-2.5 py-1 bg-[#141413] text-[#f1eee7] cursor-pointer"
           >
-            ⚡ 触发 GC16 全局反色黑闪
+            {isEn ? "⚡ Trigger GC16 Flash" : "⚡ 触发 GC16 全局反色黑闪"}
           </button>
         </div>
         <p className="font-serif text-xs leading-relaxed">
-          电子墨水屏拒绝一切彩色与模糊阴影。下方柱状图完全使用 <b>1-bit 棋盘点阵抖动（Dithering）</b> 表达灰阶：
+          {isEn ? (
+            <>
+              Zero-glare electrophoretic paper rejects colors and blurred shadows. Bars below use{" "}
+              <b>1-bit Bayer stipple dithering</b>:
+            </>
+          ) : (
+            <>
+              电子墨水屏拒绝一切彩色与模糊阴影。下方柱状图完全使用 <b>1-bit 棋盘点阵抖动（Dithering）</b>{" "}
+              表达灰阶：
+            </>
+          )}
         </p>
         <div className="grid grid-cols-4 gap-3 items-end h-20 pt-2 border-b-2 border-[#141413] font-mono text-xs text-center">
           <div>
@@ -303,7 +327,7 @@ function EinkDemo() {
   );
 }
 
-function MagiDemo() {
+function MagiDemo({ isEn }: { isEn: boolean }) {
   const [votes, setVotes] = useState([true, true, true]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -369,13 +393,13 @@ function MagiDemo() {
         onClick={() => setVotes([Math.random() > 0.28, Math.random() > 0.28, Math.random() > 0.28])}
         className="w-full py-1.5 bg-[#ff9d00] text-black font-bold text-xs cursor-pointer"
       >
-        ⚡ 重新发起智能体表决
+        {isEn ? "⚡ Re-Run Agent Consensus Vote" : "⚡ 重新发起智能体表决"}
       </button>
     </div>
   );
 }
 
-function XuanDemo() {
+function XuanDemo({ isEn }: { isEn: boolean }) {
   const [sealed, setSealed] = useState(0);
 
   return (
@@ -383,17 +407,25 @@ function XuanDemo() {
       <div className="wusilan-outer">
         <div className="wusilan-inner p-5 space-y-4 relative font-serif">
           <div className="flex items-center justify-between border-b border-[#22201d]/25 pb-3 text-xs">
-            <span className="px-3 py-1 bg-[#22201d] text-[#f7f4eb] tracking-widest">卷一 · 宋刻规制</span>
+            <span className="px-3 py-1 bg-[#22201d] text-[#f7f4eb] tracking-widest">
+              {isEn ? "VOL. I · WOODBLOCK" : "卷一 · 宋刻规制"}
+            </span>
             <div className="flex gap-2">
               <span className="px-2 py-0.5 border border-[#b82925] text-[#b82925] font-bold">「审定」</span>
               <span className="px-2 py-0.5 bg-[#b82925] text-[#f7f4eb] font-bold">珍本</span>
             </div>
           </div>
-          <h3 className="text-base font-bold text-[#1c1a17]">乌丝双细线栏格与宣纸留白</h3>
-          <p className="text-xs leading-6 text-[#4a463f]">外粗内细双线为栏，一点朱砂印泥压阵。点击下方按钮体验钤印交互：</p>
+          <h3 className="text-base font-bold text-[#1c1a17]">
+            {isEn ? "Wusilan Double Rules & Xuan Paper Whitespace" : "乌丝双细线栏格与宣纸留白"}
+          </h3>
+          <p className="text-xs leading-6 text-[#4a463f]">
+            {isEn
+              ? "Outer heavy rule paired with an inner hairline frame, anchored by a single cinnabar stone seal:"
+              : "外粗内细双线为栏，一点朱砂印泥压阵。点击下方按钮体验钤印交互："}
+          </p>
           <div className="flex items-center gap-3">
             <input
-              placeholder="题写批注…"
+              placeholder={isEn ? "Inscribe margin note..." : "题写批注…"}
               className="bg-transparent border-b border-[#22201d]/50 py-1 text-xs text-[#22201d] focus:outline-none focus:border-[#b82925]"
             />
             <button
@@ -401,7 +433,7 @@ function XuanDemo() {
               onClick={() => setSealed((s) => s + 1)}
               className="px-3.5 py-1.5 bg-[#b82925] text-[#f7f4eb] text-xs tracking-widest cursor-pointer"
             >
-              钤印准奏
+              {isEn ? "Press Seal" : "钤印准奏"}
             </button>
           </div>
           {sealed > 0 && (
@@ -422,7 +454,7 @@ function XuanDemo() {
 
 const FLAP_MSGS = ["BUILD · PASSED", "DEPLOY · LIVE ", "GATE 07 · OPEN"];
 
-function SplitFlapDemo() {
+function SplitFlapDemo({ isEn }: { isEn: boolean }) {
   const [idx, setIdx] = useState(0);
   const str = FLAP_MSGS[idx % FLAP_MSGS.length];
 
@@ -448,13 +480,13 @@ function SplitFlapDemo() {
         onClick={() => setIdx((n) => n + 1)}
         className="px-3.5 py-1.5 rounded bg-[#ffd100] text-[#141414] text-xs font-bold cursor-pointer"
       >
-        ↻ 点击翻动机械叶片
+        {isEn ? "↻ Flip Mechanical Leaves" : "↻ 点击翻动机械叶片"}
       </button>
     </div>
   );
 }
 
-function RisoDemo() {
+function RisoDemo({ isEn }: { isEn: boolean }) {
   const [offset, setOffset] = useState(5);
 
   return (
@@ -462,7 +494,7 @@ function RisoDemo() {
       <div className="flex items-center justify-between text-xs font-mono">
         <span className="font-bold">RISO SOY-INK OVERPRINT</span>
         <label className="flex items-center gap-2">
-          错位偏移:
+          {isEn ? "Offset:" : "错位偏移:"}
           <input
             type="range"
             min={0}
@@ -483,7 +515,11 @@ function RisoDemo() {
             ZINE ISSUE № 08
           </span>
           <div className="text-lg font-black text-[#0078bf]">MISREGISTERED BEAUTY</div>
-          <p className="text-xs">拖动上方滑块观察荧光粉与群青蓝双色版面的正片叠底错位效果。</p>
+          <p className="text-xs">
+            {isEn
+              ? "Slide the offset control above to inspect Fluorescent Pink × Risograph Blue multiply overprinting."
+              : "拖动上方滑块观察荧光粉与群青蓝双色版面的正片叠底错位效果。"}
+          </p>
         </div>
       </div>
     </div>
@@ -581,7 +617,7 @@ function TapeDeckDemo() {
   );
 }
 
-function AtomicPurpleDemo() {
+function AtomicPurpleDemo({ isEn }: { isEn: boolean }) {
   const [alpha, setAlpha] = useState(42);
   const [lcd, setLcd] = useState("▶ PRESS A OR B RUBBER BUTTON");
 
@@ -609,7 +645,7 @@ function AtomicPurpleDemo() {
         <div className="flex justify-between items-center">
           <b>ATOMIC PURPLE SHELL</b>
           <label className="flex items-center gap-1.5">
-            透光度
+            {isEn ? "Translucency" : "透光度"}
             <input
               type="range"
               min={15}
@@ -642,7 +678,7 @@ function AtomicPurpleDemo() {
   );
 }
 
-function CorkboardDemo() {
+function CorkboardDemo({ isEn }: { isEn: boolean }) {
   const [revA, setRevA] = useState(false);
   const [revB, setRevB] = useState(false);
 
@@ -660,22 +696,22 @@ function CorkboardDemo() {
           <div className="w-4 h-4 rounded-full bg-rose-600 border-2 border-white mx-auto -mt-5 shadow" />
           <b className="text-rose-700 block">DOSSIER #A</b>
           <p>
-            代号{" "}
+            {isEn ? "Codename " : "代号 "}
             <span onClick={() => setRevA((r) => !r)} className={`redacted ${revA ? "revealed" : ""}`}>
               PROJECT-OWL
-            </span>{" "}
-            已于凌晨接入（点击黑条揭秘）。
+            </span>
+            {isEn ? " connected at dawn (click bar)." : " 已于凌晨接入（点击黑条揭秘）。"}
           </p>
         </div>
         <div className="bg-[#fef08a] text-[#1c1917] p-3.5 shadow-md rotate-1 space-y-1.5">
           <div className="w-4 h-4 rounded-full bg-rose-600 border-2 border-white mx-auto -mt-5 shadow" />
           <b className="underline block">CLUE #B</b>
           <p>
-            密钥散列指向{" "}
+            {isEn ? "Key hash points to " : "密钥散列指向 "}
             <span onClick={() => setRevB((r) => !r)} className={`redacted ${revB ? "revealed" : ""}`}>
               SECTOR-09
-            </span>{" "}
-            节点。
+            </span>
+            {isEn ? " node." : " 节点。"}
           </p>
         </div>
       </div>

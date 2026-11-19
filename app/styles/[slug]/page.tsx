@@ -42,8 +42,8 @@ export default async function StyleDetailPage({
   return (
     <StyleDetailClient
       item={{ ...entry, designMd }}
-      prevItem={{ slug: prev.slug, name: prev.name, num: prev.num }}
-      nextItem={{ slug: next.slug, name: next.name, num: next.num }}
+      prevItem={{ slug: prev.slug, name: prev.name, en: prev.en, num: prev.num }}
+      nextItem={{ slug: next.slug, name: next.name, en: next.en, num: next.num }}
     />
   );
 }
