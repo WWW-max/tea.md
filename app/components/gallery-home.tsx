@@ -2,12 +2,18 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { ArrowRight, Check, Copy, Plug, Search } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { CATEGORIES, type StyleEntry } from "./almanac-data";
 import { useI18n } from "./i18n-context";
 import { SandboxStage } from "./sandbox-stage";
+import { SiteControls } from "./site-controls";
 
 export function GalleryHome({ entries }: { entries: StyleEntry[] }) {
-  const { locale, toggleLocale } = useI18n();
+  const { locale } = useI18n();
   const isEn = locale === "en";
 
   const [category, setCategory] = useState<string>("all");
@@ -40,31 +46,15 @@ export function GalleryHome({ entries }: { entries: StyleEntry[] }) {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 md:px-6 md:py-10 space-y-8">
-      {/* 极简首屏：仅保留右上角轻量工具与醒目的标题 + 一句话 Slogan */}
+      {/* 极简首屏：右上角 shadcn 语言/主题控件 + 居中大标题与一句话 Slogan */}
       <header className="space-y-6">
-        <div className="flex items-center justify-end gap-2">
-          <button
-            type="button"
-            onClick={toggleLocale}
-            className="px-3 py-1.5 rounded-lg text-xs font-mono font-semibold bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] cursor-pointer"
-            title="Switch Language / 切换中英文"
-          >
-            {isEn ? "中文 / EN" : "EN / 中文"}
-          </button>
-          <button
-            type="button"
-            onClick={() => document.documentElement.classList.toggle("dark")}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] cursor-pointer"
-          >
-            {isEn ? "☀/🌙 Theme" : "☀/🌙 明暗"}
-          </button>
+        <div className="flex items-center justify-end">
+          <SiteControls />
         </div>
 
         <div className="text-center max-w-2xl mx-auto space-y-3 py-2">
-          <h1 className="text-3xl md:text-5xl font-bold tracking-tight">
-            🍵 TEA.md
-          </h1>
-          <p className="text-base md:text-lg text-[var(--muted-foreground)] font-medium">
+          <h1 className="text-3xl md:text-5xl font-bold tracking-tight">TEA.md</h1>
+          <p className="text-base md:text-lg text-muted-foreground font-medium">
             {isEn
               ? "Make your product look crafted, not AI-generated."
               : "告别千篇一律的「AI 味」，让你的产品外观拥有真实质感。"}
@@ -72,134 +62,134 @@ export function GalleryHome({ entries }: { entries: StyleEntry[] }) {
         </div>
       </header>
 
-      {/* 画廊次级筛选与搜索条 */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[var(--border)]">
+      {/* 画廊筛选与搜索栏 */}
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-border">
         <div className="flex flex-wrap gap-1.5">
           {CATEGORIES.map((c) => {
             const on = category === c.id;
             return (
-              <button
+              <Button
                 key={c.id}
-                type="button"
+                variant={on ? "default" : "outline"}
+                size="sm"
                 onClick={() => setCategory(c.id)}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition cursor-pointer ${
-                  on
-                    ? "bg-[var(--primary)] text-[var(--primary-foreground)]"
-                    : "bg-[var(--card)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-90"
-                }`}
               >
                 {isEn ? c.en : c.zh}
-              </button>
+              </Button>
             );
           })}
         </div>
 
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder={
-            isEn
-              ? "Search styles..."
-              : "搜索风格..."
-          }
-          className="w-full sm:w-56 px-3 py-1.5 rounded-lg text-xs bg-[var(--card)] border border-[var(--border)] text-[var(--foreground)] placeholder-[var(--muted-foreground)] focus:outline-none focus:border-[var(--primary)]"
-        />
+        <div className="relative w-full sm:w-60">
+          <Search className="size-3.5 text-muted-foreground absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={isEn ? "Search styles..." : "搜索风格..."}
+            className="pl-8"
+          />
+        </div>
       </div>
 
       {/* 所有风格卡片平铺画廊 */}
       {filtered.length === 0 ? (
-        <div className="bg-[var(--card)] border border-[var(--border)] rounded-xl p-10 text-center text-sm text-[var(--muted-foreground)]">
+        <Card className="p-10 text-center text-sm text-muted-foreground">
           {isEn
             ? "No matching aesthetic blends found. Try another keyword."
             : "未找到匹配的美学词条，请尝试其他搜索关键词。"}
-        </div>
+        </Card>
       ) : (
         <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {filtered.map((item) => (
-            <div
+            <Card
               key={item.slug}
-              className="group bg-[var(--card)] border border-[var(--border)] hover:border-[var(--primary)] rounded-xl overflow-hidden flex flex-col justify-between transition-all hover:-translate-y-0.5 hover:shadow-md"
+              className="group overflow-hidden flex flex-col justify-between transition-all hover:-translate-y-0.5 hover:border-foreground/40 hover:shadow-md"
             >
               <Link href={`/styles/${item.slug}`} className="block flex-1">
-                <div className="px-4 py-3 border-b border-[var(--border)] flex items-center justify-between gap-2">
+                <CardHeader className="border-b border-border flex flex-row items-center justify-between gap-2">
                   <div className="flex items-center gap-2 min-w-0">
-                    <span className="px-2 py-0.5 rounded font-mono text-xs bg-[var(--secondary)] text-[var(--secondary-foreground)] shrink-0">
+                    <Badge variant="secondary" className="font-mono shrink-0">
                       {item.num}
-                    </span>
+                    </Badge>
                     <h2 className="text-sm font-semibold truncate">
                       {isEn ? item.en : item.name}
                     </h2>
-                    <span className="text-xs text-[var(--muted-foreground)] truncate hidden sm:inline">
+                    <span className="text-xs text-muted-foreground truncate hidden sm:inline">
                       {isEn ? item.name : item.en}
                     </span>
                   </div>
-                  <span className="text-xs px-2 py-0.5 rounded border border-[var(--border)] text-[var(--muted-foreground)] shrink-0">
+                  <Badge variant="outline" className="shrink-0">
                     {isEn ? item.catEn : item.cat}
-                  </span>
-                </div>
+                  </Badge>
+                </CardHeader>
 
-                <div className="p-4 bg-[var(--background)] border-b border-[var(--border)] relative overflow-hidden">
+                <CardContent className="bg-background border-b border-border relative overflow-hidden">
                   <div className="pointer-events-none select-none">
                     <SandboxStage slug={item.slug} />
                   </div>
-                </div>
+                </CardContent>
               </Link>
 
-              <div className="px-4 py-3 flex items-center justify-between gap-3 text-xs bg-[var(--card)]">
+              <CardFooter className="justify-between gap-3">
                 <div className="flex items-center gap-1.5">
                   {item.swatches.map(([hex, zhLbl, enLbl]) => (
                     <span
                       key={hex}
                       title={`${isEn ? enLbl : zhLbl}: ${hex}`}
-                      className="w-4 h-4 rounded-full border border-black/20"
+                      className="size-4 rounded-full border border-black/20"
                       style={{ backgroundColor: hex }}
                     />
                   ))}
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <button
-                    type="button"
+                  <Button
+                    variant="outline"
+                    size="sm"
                     onClick={() => copyText(isEn ? item.promptEn : item.prompt, item.slug)}
-                    className="px-2.5 py-1 rounded-md border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] font-medium transition cursor-pointer"
                   >
-                    {copiedKey === item.slug
-                      ? isEn
-                        ? "✓ Copied"
-                        : "✓ 已复制"
-                      : isEn
-                        ? "📋 Copy Prompt"
-                        : "📋 复制 Prompt"}
-                  </button>
-                  <Link
-                    href={`/styles/${item.slug}`}
-                    className="px-3 py-1 rounded-md bg-[var(--primary)] text-[var(--primary-foreground)] font-medium transition group-hover:opacity-90"
-                  >
-                    {isEn ? "Inspect & Mix →" : "进入详情 & 调参 →"}
-                  </Link>
+                    {copiedKey === item.slug ? (
+                      <>
+                        <Check className="size-3.5" />
+                        <span>{isEn ? "Copied" : "已复制"}</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="size-3.5" />
+                        <span>{isEn ? "Copy Prompt" : "复制 Prompt"}</span>
+                      </>
+                    )}
+                  </Button>
+                  <Button size="sm" asChild>
+                    <Link href={`/styles/${item.slug}`}>
+                      <span>{isEn ? "Inspect" : "查看详情"}</span>
+                      <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+                    </Link>
+                  </Button>
                 </div>
-              </div>
-            </div>
+              </CardFooter>
+            </Card>
           ))}
         </section>
       )}
 
-      {/* 底部远程 MCP Server 接入栏 */}
-      <footer className="bg-[var(--card)] border border-[var(--border)] rounded-xl px-4 py-3 flex flex-wrap items-center justify-between gap-3 text-xs">
+      {/* 底部远程 MCP Server 接入卡片 */}
+      <Card className="px-4 py-3 flex flex-wrap items-center justify-between gap-3 text-xs">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="px-2 py-0.5 rounded font-mono font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)]">
+          <Badge variant="secondary" className="font-mono gap-1">
+            <Plug className="size-3" />
             MCP SERVER
-          </span>
-          <span className="text-[var(--muted-foreground)]">
+          </Badge>
+          <span className="text-muted-foreground">
             {isEn
               ? "Connect Cursor / Claude Code / Antigravity to fetch recipes & primitives:"
               : "支持 Cursor / Claude Code / Antigravity 远程检索美学配方与原件："}
           </span>
-          <code className="font-mono text-[var(--foreground)]">{origin}/api/mcp</code>
+          <code className="font-mono text-foreground">{origin}/api/mcp</code>
         </div>
-        <button
-          type="button"
+        <Button
+          size="sm"
           onClick={() =>
             copyText(
               JSON.stringify(
@@ -210,17 +200,20 @@ export function GalleryHome({ entries }: { entries: StyleEntry[] }) {
               "mcp"
             )
           }
-          className="px-3 py-1.5 rounded-lg font-medium bg-[var(--primary)] text-[var(--primary-foreground)] cursor-pointer transition"
         >
-          {copiedKey === "mcp"
-            ? isEn
-              ? "✓ Copied mcpServers JSON"
-              : "✓ 已复制 mcpServers 配置"
-            : isEn
-              ? "🔌 Copy Remote MCP Config"
-              : "🔌 复制远程 MCP 配置 JSON"}
-        </button>
-      </footer>
+          {copiedKey === "mcp" ? (
+            <>
+              <Check className="size-3.5" />
+              <span>{isEn ? "Copied mcpServers" : "已复制配置"}</span>
+            </>
+          ) : (
+            <>
+              <Copy className="size-3.5" />
+              <span>{isEn ? "Copy MCP Config" : "复制远程 MCP 配置"}</span>
+            </>
+          )}
+        </Button>
+      </Card>
     </div>
   );
 }

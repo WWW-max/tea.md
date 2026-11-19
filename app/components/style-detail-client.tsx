@@ -2,9 +2,30 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import {
+  ArrowLeft,
+  Blocks,
+  BookOpen,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Copy,
+  Download,
+  Maximize2,
+  Minimize2,
+  SlidersHorizontal,
+  Sparkles,
+  Terminal,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Slider } from "@/components/ui/slider";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { StyleEntry } from "./almanac-data";
 import { useI18n } from "./i18n-context";
 import { RichStyleShowcase } from "./rich-style-showcase";
+import { SiteControls } from "./site-controls";
 import { compileMixerOutput, type MixerParams } from "./steep-mixer";
 import { SOUL_PRIMITIVES } from "@/app/lib/soul-primitives";
 
@@ -24,11 +45,10 @@ export function StyleDetailClient({
   prevItem: NavNeighbor;
   nextItem: NavNeighbor;
 }) {
-  const { locale, toggleLocale } = useI18n();
+  const { locale } = useI18n();
   const isEn = locale === "en";
 
   const [fullWidth, setFullWidth] = useState(false);
-  const [recipeTab, setRecipeTab] = useState<"mixer" | "registry" | "lore" | "prompt">("mixer");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [origin, setOrigin] = useState("https://tea-md.vercel.app");
 
@@ -87,95 +107,93 @@ export function StyleDetailClient({
 
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-6 space-y-5">
-      {/* 详情页顶部返回与切换导航 */}
-      <header className="bg-[var(--card)] border border-[var(--border)] rounded-xl px-4 py-3.5 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-3">
-          <Link
-            href="/"
-            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-90 transition"
-          >
-            {isEn ? "← All Blends" : "← 返回全部风格画廊"}
-          </Link>
+      {/* 详情页顶部 shadcn 工具导航栏 */}
+      <Card className="px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <Button variant="outline" size="sm" asChild>
+            <Link href="/">
+              <ArrowLeft className="size-3.5" />
+              <span>{isEn ? "All Styles" : "返回画廊"}</span>
+            </Link>
+          </Button>
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded font-mono text-xs bg-[var(--primary)] text-[var(--primary-foreground)]">
-              {item.num}
-            </span>
-            <h1 className="text-base md:text-lg font-bold tracking-tight">
+            <Badge className="font-mono">{item.num}</Badge>
+            <h1 className="text-sm md:text-base font-bold tracking-tight">
               {isEn ? item.en : item.name}
             </h1>
-            <span className="text-xs text-[var(--muted-foreground)] hidden sm:inline">
+            <span className="text-xs text-muted-foreground hidden sm:inline">
               {isEn ? `${item.name} · ${item.catEn}` : `${item.en} · ${item.cat}`}
             </span>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 text-xs">
-          <button
-            type="button"
+        <div className="flex flex-wrap items-center gap-1.5">
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => setFullWidth((f) => !f)}
-            className="px-2.5 py-1.5 rounded-lg bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] cursor-pointer font-medium"
+            className="hidden lg:inline-flex"
           >
-            {fullWidth
-              ? isEn
-                ? "◫ Show Inspector"
-                : "◫ 展开右侧调配栏"
-              : isEn
-                ? "⛶ Full-Width Demo"
-                : "⛶ 全宽沉浸预览"}
-          </button>
-          <button
-            type="button"
-            onClick={toggleLocale}
-            className="px-2.5 py-1.5 rounded-lg font-mono font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] cursor-pointer"
-          >
-            {isEn ? "中文 / EN" : "EN / 中文"}
-          </button>
-          <button
-            type="button"
-            onClick={() => document.documentElement.classList.toggle("dark")}
-            className="px-2.5 py-1.5 rounded-lg bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] cursor-pointer"
-          >
-            ☀/🌙
-          </button>
-          <Link
-            href={`/styles/${prevItem.slug}`}
-            className="px-2.5 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--secondary)] transition"
-          >
-            ‹ {prevItem.num} {isEn ? prevItem.en : prevItem.name}
-          </Link>
-          <Link
-            href={`/styles/${nextItem.slug}`}
-            className="px-2.5 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--secondary)] transition"
-          >
-            {nextItem.num} {isEn ? nextItem.en : nextItem.name} ›
-          </Link>
-        </div>
-      </header>
+            {fullWidth ? (
+              <>
+                <Minimize2 className="size-3.5" />
+                <span>{isEn ? "Show Inspector" : "展开调配栏"}</span>
+              </>
+            ) : (
+              <>
+                <Maximize2 className="size-3.5" />
+                <span>{isEn ? "Full Width" : "全宽预览"}</span>
+              </>
+            )}
+          </Button>
 
-      {/* 主体：左 8 栏完整丰富样板页面 + 右 4 栏参数化调配与提示词面板 */}
+          <Button variant="outline" size="sm" asChild>
+            <Link href={`/styles/${prevItem.slug}`}>
+              <ChevronLeft className="size-3.5" />
+              <span className="hidden sm:inline">
+                {prevItem.num} {isEn ? prevItem.en : prevItem.name}
+              </span>
+            </Link>
+          </Button>
+          <Button variant="outline" size="sm" asChild>
+            <Link href={`/styles/${nextItem.slug}`}>
+              <span className="hidden sm:inline">
+                {nextItem.num} {isEn ? nextItem.en : nextItem.name}
+              </span>
+              <ChevronRight className="size-3.5" />
+            </Link>
+          </Button>
+
+          <SiteControls />
+        </div>
+      </Card>
+
+      {/* 主体：左 8 栏完整丰富样板页面 + 右 4 栏 shadcn Tabs 调配与提示词面板 */}
       <main className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-        <section
+        <Card
           className={`${
             fullWidth ? "lg:col-span-12" : "lg:col-span-8"
-          } bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden`}
+          } overflow-hidden`}
         >
-          <div className="px-4 py-3 border-b border-[var(--border)] flex flex-wrap items-center justify-between gap-2 text-xs">
+          <CardHeader className="border-b border-border flex flex-row flex-wrap items-center justify-between gap-2 text-xs">
             <div className="flex items-center gap-2">
               <span className="font-semibold">
-                {isEn ? "Interactive Full Specimen Showcase" : "完整交互样板间（含核心装置、控件表单与卡片矩阵）"}
+                {isEn
+                  ? "Interactive Full Specimen Showcase"
+                  : "完整交互样板间"}
               </span>
               <span
-                className="w-3 h-3 rounded-full border border-black/20"
+                className="size-3 rounded-full border border-black/20"
                 style={{ backgroundColor: effectiveAccent }}
               />
             </div>
-            <span className="font-mono text-[var(--muted-foreground)]">
+            <code className="font-mono text-muted-foreground">
               styles/{item.slug}/DESIGN.md
-            </span>
-          </div>
+            </code>
+          </CardHeader>
 
-          <div
-            className={`tea-mixer-stage ${stagePadClass} bg-[var(--background)]`}
+          <CardContent
+            className={`tea-mixer-stage ${stagePadClass} bg-background`}
             style={
               {
                 "--tea-grain-alpha": (grain / 600).toFixed(3),
@@ -196,84 +214,86 @@ export function StyleDetailClient({
             >
               <RichStyleShowcase slug={item.slug} />
             </div>
-          </div>
+          </CardContent>
 
-          <div className="px-4 py-2.5 border-t border-[var(--border)] bg-[var(--card)] flex flex-wrap items-center justify-between gap-2 text-xs">
-            <code className="font-mono text-[var(--muted-foreground)] truncate">
-              npx shadcn@latest add {origin}/r/{item.slug}.json
-            </code>
-            <button
-              type="button"
+          <CardFooter className="border-t border-border justify-between gap-2 text-xs flex-wrap">
+            <div className="flex items-center gap-2 min-w-0">
+              <Terminal className="size-3.5 text-muted-foreground shrink-0" />
+              <code className="font-mono text-muted-foreground truncate">
+                npx shadcn@latest add {origin}/r/{item.slug}.json
+              </code>
+            </div>
+            <Button
+              variant="secondary"
+              size="sm"
               onClick={() =>
                 copyWithFeedback(
                   `npx shadcn@latest add ${origin}/r/${item.slug}.json`,
                   "cli"
                 )
               }
-              className="px-2.5 py-1 rounded-md font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] shrink-0 cursor-pointer"
             >
-              {copiedKey === "cli"
-                ? isEn
-                  ? "✓ CLI Copied"
-                  : "✓ 已复制安装命令"
-                : isEn
-                  ? "⚡ Copy shadcn CLI"
-                  : "⚡ 复制 shadcn 直装命令"}
-            </button>
-          </div>
-        </section>
+              {copiedKey === "cli" ? (
+                <>
+                  <Check className="size-3.5" />
+                  <span>{isEn ? "CLI Copied" : "已复制命令"}</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="size-3.5" />
+                  <span>{isEn ? "Copy shadcn CLI" : "复制 shadcn 直装命令"}</span>
+                </>
+              )}
+            </Button>
+          </CardFooter>
+        </Card>
 
-        {/* 右栏：参数化茶方调配台 & 词条检视器 */}
-        <aside
+        {/* 右栏：基于 shadcn Tabs + Slider 的参数化调配台 */}
+        <Card
           className={`${
             fullWidth ? "lg:col-span-12" : "lg:col-span-4 lg:sticky lg:top-4"
-          } bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden flex flex-col`}
+          } p-4`}
         >
-          <div className="grid grid-cols-4 border-b border-[var(--border)] text-xs font-medium">
-            {(
-              [
-                ["mixer", isEn ? "🎛️ Mixer" : "🎛️ 调配器"],
-                ["registry", isEn ? "🧩 Primitives" : "🧩 灵魂原件"],
-                ["lore", isEn ? "📖 Origin" : "📖 溯源色板"],
-                ["prompt", isEn ? "⚡ Prompt" : "⚡ 短指令"],
-              ] as const
-            ).map(([id, label]) => (
-              <button
-                key={id}
-                type="button"
-                onClick={() => setRecipeTab(id)}
-                className={`py-3 px-2 text-center border-b-2 transition cursor-pointer ${
-                  recipeTab === id
-                    ? "border-[var(--primary)] text-[var(--foreground)] font-semibold"
-                    : "border-transparent text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
-                }`}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
+          <Tabs defaultValue="mixer" className="space-y-4">
+            <TabsList className="grid grid-cols-4 w-full">
+              <TabsTrigger value="mixer">
+                <SlidersHorizontal className="size-3.5" />
+                <span>{isEn ? "Mixer" : "调配"}</span>
+              </TabsTrigger>
+              <TabsTrigger value="registry">
+                <Blocks className="size-3.5" />
+                <span>{isEn ? "Code" : "原件"}</span>
+              </TabsTrigger>
+              <TabsTrigger value="lore">
+                <BookOpen className="size-3.5" />
+                <span>{isEn ? "Origin" : "溯源"}</span>
+              </TabsTrigger>
+              <TabsTrigger value="prompt">
+                <Sparkles className="size-3.5" />
+                <span>Prompt</span>
+              </TabsTrigger>
+            </TabsList>
 
-          {recipeTab === "mixer" && (
-            <div className="p-4 space-y-4 text-xs">
-              <div className="p-3 rounded-lg bg-[var(--background)] border border-[var(--border)] space-y-3">
-                <label className="block space-y-1">
+            {/* Tab 1: 参数化调配器 */}
+            <TabsContent value="mixer" className="space-y-4 text-xs">
+              <div className="p-3.5 rounded-lg bg-background border border-border space-y-4">
+                <div className="space-y-2">
                   <div className="flex justify-between font-medium">
-                    <span>{isEn ? "Surface Grain Intensity" : "肌理噪点浓度 (Surface Grain)"}</span>
-                    <span className="font-mono">{grain}%</span>
+                    <span>{isEn ? "Surface Grain" : "肌理噪点浓度"}</span>
+                    <span className="font-mono text-muted-foreground">{grain}%</span>
                   </div>
-                  <input
-                    type="range"
+                  <Slider
                     min={0}
                     max={100}
-                    value={grain}
-                    onChange={(e) => setGrain(Number(e.target.value))}
-                    className="w-full accent-[var(--primary)]"
+                    step={1}
+                    value={[grain]}
+                    onValueChange={([v]) => setGrain(v)}
                   />
-                </label>
+                </div>
 
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   <div className="font-medium">
-                    {isEn ? "Tactile Depth Profile" : "物理拟物强度 (Tactile Depth)"}
+                    {isEn ? "Tactile Depth" : "物理拟物强度"}
                   </div>
                   <div className="grid grid-cols-3 gap-1.5">
                     {(
@@ -283,24 +303,20 @@ export function StyleDetailClient({
                         ["heavy", isEn ? "Heavy" : "重度"],
                       ] as const
                     ).map(([val, label]) => (
-                      <button
+                      <Button
                         key={val}
-                        type="button"
+                        variant={depth === val ? "default" : "outline"}
+                        size="sm"
                         onClick={() => setDepth(val)}
-                        className={`py-1.5 px-2 rounded border font-medium cursor-pointer ${
-                          depth === val
-                            ? "bg-[var(--primary)] text-[var(--primary-foreground)] border-[var(--primary)]"
-                            : "border-[var(--border)] bg-[var(--card)]"
-                        }`}
                       >
                         {label}
-                      </button>
+                      </Button>
                     ))}
                   </div>
                 </div>
 
                 <div className="grid grid-cols-12 gap-2 items-end">
-                  <div className="col-span-7 space-y-1">
+                  <div className="col-span-7 space-y-1.5">
                     <div className="font-medium">{isEn ? "Density" : "留白密度"}</div>
                     <div className="grid grid-cols-3 gap-1">
                       {(
@@ -310,41 +326,38 @@ export function StyleDetailClient({
                           ["airy", isEn ? "Airy" : "疏朗"],
                         ] as const
                       ).map(([val, label]) => (
-                        <button
+                        <Button
                           key={val}
-                          type="button"
+                          variant={density === val ? "default" : "outline"}
+                          size="sm"
+                          className="px-1.5"
                           onClick={() => setDensity(val)}
-                          className={`py-1 rounded border cursor-pointer ${
-                            density === val
-                              ? "bg-[var(--primary)] text-[var(--primary-foreground)] border-[var(--primary)]"
-                              : "border-[var(--border)] bg-[var(--card)]"
-                          }`}
                         >
                           {label}
-                        </button>
+                        </Button>
                       ))}
                     </div>
                   </div>
 
-                  <div className="col-span-5 space-y-1">
+                  <div className="col-span-5 space-y-1.5">
                     <div className="flex justify-between items-center">
                       <span className="font-medium">{isEn ? "Accent" : "点缀色"}</span>
                       {customAccent && (
                         <button
                           type="button"
                           onClick={() => setCustomAccent(null)}
-                          className="text-[var(--muted-foreground)] underline cursor-pointer"
+                          className="text-muted-foreground underline cursor-pointer"
                         >
                           {isEn ? "Reset" : "重置"}
                         </button>
                       )}
                     </div>
-                    <label className="flex items-center gap-1.5 px-2 py-1 rounded border border-[var(--border)] bg-[var(--card)] cursor-pointer">
+                    <label className="flex h-7 items-center gap-1.5 px-2 rounded-md border border-border bg-card cursor-pointer">
                       <input
                         type="color"
                         value={effectiveAccent}
                         onChange={(e) => setCustomAccent(e.target.value)}
-                        className="w-4 h-4 border-0 p-0 bg-transparent cursor-pointer"
+                        className="size-4 border-0 p-0 bg-transparent cursor-pointer"
                       />
                       <span className="font-mono truncate">{effectiveAccent}</span>
                     </label>
@@ -354,7 +367,7 @@ export function StyleDetailClient({
 
               <div className="space-y-2">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex rounded-lg border border-[var(--border)] overflow-hidden">
+                  <div className="flex gap-1">
                     {(
                       [
                         ["design-md", "DESIGN.md"],
@@ -362,118 +375,115 @@ export function StyleDetailClient({
                         ["agent-rules", "Rules"],
                       ] as const
                     ).map(([fmt, label]) => (
-                      <button
+                      <Button
                         key={fmt}
-                        type="button"
+                        variant={exportFormat === fmt ? "default" : "outline"}
+                        size="sm"
+                        className="font-mono px-2"
                         onClick={() => setExportFormat(fmt)}
-                        className={`px-2.5 py-1 text-xs font-mono cursor-pointer ${
-                          exportFormat === fmt
-                            ? "bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold"
-                            : "bg-[var(--background)] text-[var(--muted-foreground)]"
-                        }`}
                       >
                         {label}
-                      </button>
+                      </Button>
                     ))}
                   </div>
 
                   <div className="flex items-center gap-1.5">
-                    <button
-                      type="button"
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() => copyWithFeedback(mixerOutput, "mixer")}
-                      className="px-2.5 py-1 rounded-md font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] cursor-pointer"
                     >
-                      {copiedKey === "mixer"
-                        ? isEn
-                          ? "✓ Copied"
-                          : "✓ 已复制"
-                        : isEn
-                          ? "📋 Copy"
-                          : "📋 复制"}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={downloadCompiledFile}
-                      className="px-2.5 py-1 rounded-md font-medium bg-[var(--primary)] text-[var(--primary-foreground)] cursor-pointer"
-                    >
-                      {isEn ? "⬇ Save" : "⬇ 导出"}
-                    </button>
+                      {copiedKey === "mixer" ? (
+                        <Check className="size-3.5" />
+                      ) : (
+                        <Copy className="size-3.5" />
+                      )}
+                      <span>{copiedKey === "mixer" ? (isEn ? "Copied" : "已复制") : isEn ? "Copy" : "复制"}</span>
+                    </Button>
+                    <Button size="sm" onClick={downloadCompiledFile}>
+                      <Download className="size-3.5" />
+                      <span>{isEn ? "Save" : "导出"}</span>
+                    </Button>
                   </div>
                 </div>
 
-                <pre className="p-3 rounded-lg bg-[var(--background)] border border-[var(--border)] font-mono text-xs whitespace-pre-wrap leading-relaxed max-h-72 overflow-y-auto">
+                <pre className="p-3 rounded-lg bg-background border border-border font-mono text-xs whitespace-pre-wrap leading-relaxed max-h-72 overflow-y-auto">
                   {mixerOutput}
                 </pre>
               </div>
-            </div>
-          )}
+            </TabsContent>
 
-          {recipeTab === "registry" && prim && (
-            <div className="p-4 space-y-3 text-xs">
-              <div className="p-3 rounded-lg bg-[var(--background)] border border-[var(--border)] space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <span className="font-mono font-bold text-[var(--foreground)]">
-                    {prim.componentName}
-                  </span>
-                  <span className="px-1.5 py-0.5 rounded bg-[var(--secondary)] font-mono text-[11px]">
-                    registry:block
-                  </span>
+            {/* Tab 2: 灵魂原件源码 */}
+            {prim && (
+              <TabsContent value="registry" className="space-y-3 text-xs">
+                <div className="p-3 rounded-lg bg-background border border-border space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono font-bold">{prim.componentName}</span>
+                    <Badge variant="secondary" className="font-mono">
+                      registry:block
+                    </Badge>
+                  </div>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {isEn ? prim.summaryEn : prim.summary}
+                  </p>
                 </div>
-                <p className="text-[var(--muted-foreground)] leading-relaxed">
-                  {isEn ? prim.summaryEn : prim.summary}
-                </p>
-              </div>
 
-              <div className="flex items-center justify-between">
-                <span className="font-mono text-[var(--muted-foreground)] truncate">
-                  components/tea/{prim.fileName}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => copyWithFeedback(prim.code, "prim")}
-                  className="px-2.5 py-1 rounded-md font-medium bg-[var(--primary)] text-[var(--primary-foreground)] cursor-pointer shrink-0"
-                >
-                  {copiedKey === "prim"
-                    ? isEn
-                      ? "✓ Copied"
-                      : "✓ 已复制"
-                    : isEn
-                      ? "📋 Copy TSX"
-                      : "📋 复制 TSX"}
-                </button>
-              </div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-mono text-muted-foreground truncate">
+                    components/tea/{prim.fileName}
+                  </span>
+                  <Button
+                    size="sm"
+                    onClick={() => copyWithFeedback(prim.code, "prim")}
+                  >
+                    {copiedKey === "prim" ? (
+                      <Check className="size-3.5" />
+                    ) : (
+                      <Copy className="size-3.5" />
+                    )}
+                    <span>
+                      {copiedKey === "prim"
+                        ? isEn
+                          ? "Copied"
+                          : "已复制"
+                        : isEn
+                          ? "Copy TSX"
+                          : "复制 TSX"}
+                    </span>
+                  </Button>
+                </div>
 
-              <pre className="p-3 rounded-lg bg-[var(--background)] border border-[var(--border)] font-mono text-xs whitespace-pre-wrap leading-relaxed max-h-80 overflow-y-auto">
-                {prim.code}
-              </pre>
-            </div>
-          )}
+                <pre className="p-3 rounded-lg bg-background border border-border font-mono text-xs whitespace-pre-wrap leading-relaxed max-h-80 overflow-y-auto">
+                  {prim.code}
+                </pre>
+              </TabsContent>
+            )}
 
-          {recipeTab === "lore" && (
-            <div className="p-4 space-y-4 text-xs">
+            {/* Tab 3: 美学溯源与色板 */}
+            <TabsContent value="lore" className="space-y-4 text-xs">
               <div className="space-y-1.5">
-                <div className="font-semibold text-[var(--muted-foreground)] uppercase tracking-wider">
-                  {isEn ? "Origin & Material Reference" : "美学溯源 (Origin & Reference)"}
+                <div className="font-semibold text-muted-foreground uppercase tracking-wider">
+                  {isEn ? "Origin & Material Reference" : "美学溯源"}
                 </div>
                 <p className="leading-relaxed">{isEn ? item.originEn : item.origin}</p>
               </div>
 
               <div className="space-y-1.5">
-                <div className="font-semibold text-[var(--muted-foreground)] uppercase tracking-wider">
-                  {isEn ? "Best Use Cases" : "最佳适用场景 (Best For)"}
+                <div className="font-semibold text-muted-foreground uppercase tracking-wider">
+                  {isEn ? "Best Use Cases" : "适用场景"}
                 </div>
                 <p className="leading-relaxed">{isEn ? item.bestForEn : item.bestFor}</p>
               </div>
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-[var(--muted-foreground)] uppercase tracking-wider">
-                    {isEn ? "Material Swatches (Click to Copy)" : "核心材质色板 (点击复制 HEX)"}
+                  <span className="font-semibold text-muted-foreground uppercase tracking-wider">
+                    {isEn ? "Material Swatches" : "材质色板 (点击复制)"}
                   </span>
                   {copiedKey?.startsWith("#") && (
-                    <span className="text-xs font-mono text-[var(--primary)]">
+                    <Badge variant="secondary" className="font-mono">
                       ✓ {copiedKey}
-                    </span>
+                    </Badge>
                   )}
                 </div>
                 <div className="grid grid-cols-2 gap-2">
@@ -482,15 +492,15 @@ export function StyleDetailClient({
                       key={hex}
                       type="button"
                       onClick={() => copyWithFeedback(hex, hex)}
-                      className="flex items-center gap-2 p-2 rounded-lg border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] text-left transition cursor-pointer"
+                      className="flex items-center gap-2 p-2 rounded-lg border border-border bg-background hover:bg-secondary text-left transition cursor-pointer"
                     >
                       <span
-                        className="w-5 h-5 rounded border border-black/20 shrink-0"
+                        className="size-5 rounded border border-black/20 shrink-0"
                         style={{ background: hex }}
                       />
                       <span className="truncate">
                         <strong className="font-mono block">{hex}</strong>
-                        <span className="text-[var(--muted-foreground)]">
+                        <span className="text-muted-foreground">
                           {isEn ? enLbl : zhLbl}
                         </span>
                       </span>
@@ -499,50 +509,55 @@ export function StyleDetailClient({
                 </div>
               </div>
 
-              <div className="space-y-1.5 pt-1 border-t border-[var(--border)]">
-                <div className="font-semibold text-[var(--muted-foreground)] uppercase tracking-wider">
-                  {isEn ? "Anti-Slop Guardrails (DON'Ts)" : "Anti-Slop 禁忌护栏 (严禁 AI 踩坑)"}
+              <div className="space-y-1.5 pt-2 border-t border-border">
+                <div className="font-semibold text-muted-foreground uppercase tracking-wider">
+                  {isEn ? "Anti-Slop Guardrails" : "禁忌护栏 (DON'Ts)"}
                 </div>
                 <ul className="space-y-1.5">
                   {activeDonts.map((d, i) => (
-                    <li key={i} className="flex items-start gap-1.5">
-                      <span>❌</span>
+                    <li key={i} className="flex items-start gap-2 text-muted-foreground">
+                      <span className="font-mono text-foreground">—</span>
                       <span>{d}</span>
                     </li>
                   ))}
                 </ul>
               </div>
-            </div>
-          )}
+            </TabsContent>
 
-          {recipeTab === "prompt" && (
-            <div className="p-4 space-y-3 text-xs">
+            {/* Tab 4: 纯净短指令 */}
+            <TabsContent value="prompt" className="space-y-3 text-xs">
               <div className="flex items-center justify-between gap-2">
-                <span className="text-[var(--muted-foreground)]">
+                <span className="text-muted-foreground">
                   {isEn
-                    ? "Paste directly into Claude / ChatGPT / v0 / Cursor:"
-                    : "直接粘贴至 Claude / ChatGPT / v0 / Cursor："}
+                    ? "Paste into Claude / ChatGPT / v0 / Cursor:"
+                    : "粘贴至 Claude / ChatGPT / v0 / Cursor："}
                 </span>
-                <button
-                  type="button"
+                <Button
+                  size="sm"
                   onClick={() => copyWithFeedback(activePrompt, "prompt")}
-                  className="px-3 py-1.5 rounded-lg font-medium bg-[var(--primary)] text-[var(--primary-foreground)] transition cursor-pointer shrink-0"
                 >
-                  {copiedKey === "prompt"
-                    ? isEn
-                      ? "✓ Copied!"
-                      : "✓ 已复制！"
-                    : isEn
-                      ? "📋 Copy"
-                      : "📋 复制"}
-                </button>
+                  {copiedKey === "prompt" ? (
+                    <Check className="size-3.5" />
+                  ) : (
+                    <Copy className="size-3.5" />
+                  )}
+                  <span>
+                    {copiedKey === "prompt"
+                      ? isEn
+                        ? "Copied"
+                        : "已复制"
+                      : isEn
+                        ? "Copy"
+                        : "复制"}
+                  </span>
+                </Button>
               </div>
-              <pre className="p-3.5 rounded-lg bg-[var(--background)] border border-[var(--border)] font-mono text-xs whitespace-pre-wrap leading-relaxed select-all">
+              <pre className="p-3.5 rounded-lg bg-background border border-border font-mono text-xs whitespace-pre-wrap leading-relaxed select-all">
                 {activePrompt}
               </pre>
-            </div>
-          )}
-        </aside>
+            </TabsContent>
+          </Tabs>
+        </Card>
       </main>
     </div>
   );

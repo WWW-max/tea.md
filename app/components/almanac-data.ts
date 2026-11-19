@@ -23,12 +23,12 @@ export interface StyleEntry {
 }
 
 export const CATEGORIES = [
-  { id: "all", zh: "全部词条 (12)", en: "All Blends (12)" },
-  { id: "工业硬件", zh: "🎛️ 工业硬件 (4)", en: "🎛️ Hardware (4)" },
-  { id: "印刷纸品", zh: "🖨️ 印刷纸品 (2)", en: "🖨️ Print & Paper (2)" },
-  { id: "技术制图", zh: "📐 技术制图 (2)", en: "📐 Technical (2)" },
-  { id: "复古屏幕", zh: "📺 复古屏幕 (2)", en: "📺 Retro Displays (2)" },
-  { id: "文化古籍", zh: "📜 文化古籍 (2)", en: "📜 Cultural & Archival (2)" },
+  { id: "all", zh: "全部 (12)", en: "All (12)" },
+  { id: "工业硬件", zh: "工业硬件 (4)", en: "Hardware (4)" },
+  { id: "印刷纸品", zh: "印刷纸品 (2)", en: "Print & Paper (2)" },
+  { id: "技术制图", zh: "技术制图 (2)", en: "Technical (2)" },
+  { id: "复古屏幕", zh: "复古屏幕 (2)", en: "Retro Displays (2)" },
+  { id: "文化古籍", zh: "文化古籍 (2)", en: "Cultural & Archival (2)" },
 ] as const;
 
 export const ALMANAC_CATALOG: StyleEntry[] = [
