@@ -1,0 +1,185 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f8f8f6;
+  --card: #ffffff;
+  --border: #e4e4e0;
+  --foreground: #18181b;
+  --muted-foreground: #71717a;
+  --primary: #18181b;
+  --primary-foreground: #fafafa;
+  --secondary: #f1f1ee;
+  --secondary-foreground: #18181b;
+}
+
+html.dark {
+  --background: #0c0c0e;
+  --card: #151518;
+  --border: #27272a;
+  --foreground: #f4f4f5;
+  --muted-foreground: #a1a1aa;
+  --primary: #f4f4f5;
+  --primary-foreground: #18181b;
+  --secondary: #222226;
+  --secondary-foreground: #f4f4f5;
+}
+
+/* ================= 12 套美学沙盒专属物理材质样式 ================= */
+
+/* 01. 工业硬件合成器 */
+.te-chassis {
+  background-color: #e5e3dc;
+  color: #1e1f22;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), inset 0 -2px 0 rgba(0, 0, 0, 0.08), 0 10px 24px -8px rgba(0, 0, 0, 0.22);
+}
+.te-recess {
+  background-color: #d5d2c8;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.16), 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+.te-lcd {
+  background-color: #9ba88d;
+  color: #1b2416;
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.28), 0 1px 0 rgba(255, 255, 255, 0.65);
+  background-image: radial-gradient(rgba(27, 36, 22, 0.08) 1px, transparent 0);
+  background-size: 3px 3px;
+}
+.te-key {
+  transition: transform 0.06s ease, box-shadow 0.06s ease;
+  box-shadow: 0 4px 0 #aba79c, 0 6px 8px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+.te-key:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #aba79c;
+}
+.te-key-orange {
+  background-color: #ff5500;
+  color: #fff;
+  box-shadow: 0 4px 0 #b83b00, 0 6px 8px rgba(0, 0, 0, 0.22);
+}
+.te-key-orange:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #b83b00;
+}
+
+/* 02. 工程蓝图 CAD */
+.bp-dark {
+  --bp-line: rgba(56, 189, 248, 0.55);
+  --bp-soft: rgba(56, 189, 248, 0.28);
+  background-color: #09223b;
+  color: #e0f2fe;
+  background-image:
+    linear-gradient(rgba(56, 189, 248, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.18) 1px, transparent 1px),
+    linear-gradient(rgba(56, 189, 248, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.07) 1px, transparent 1px);
+  background-size: 80px 80px, 80px 80px, 16px 16px, 16px 16px;
+}
+.bp-light {
+  --bp-line: rgba(37, 99, 235, 0.55);
+  --bp-soft: rgba(37, 99, 235, 0.28);
+  background-color: #f6f9fc;
+  color: #0f2942;
+  background-image:
+    linear-gradient(rgba(37, 99, 235, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37, 99, 235, 0.15) 1px, transparent 1px),
+    linear-gradient(rgba(37, 99, 235, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37, 99, 235, 0.06) 1px, transparent 1px);
+  background-size: 80px 80px, 80px 80px, 16px 16px, 16px 16px;
+}
+.bp-b { border-color: var(--bp-line); }
+.bp-bs { border-color: var(--bp-soft); }
+
+/* 03. 热敏小票与邮戳 */
+.receipt-saw-top {
+  height: 10px;
+  background: linear-gradient(-45deg, #faf7ef 5px, transparent 0), linear-gradient(45deg, #faf7ef 5px, transparent 0);
+  background-size: 10px 10px;
+  background-repeat: repeat-x;
+}
+.receipt-saw-bottom {
+  height: 10px;
+  background: linear-gradient(-135deg, #faf7ef 5px, transparent 0), linear-gradient(135deg, #faf7ef 5px, transparent 0);
+  background-size: 10px 10px;
+  background-repeat: repeat-x;
+}
+@keyframes stampSlam {
+  0% { transform: scale(2.1) rotate(-18deg); opacity: 0; }
+  75% { transform: scale(0.95) rotate(-8deg); opacity: 1; }
+  100% { transform: scale(1) rotate(-10deg); opacity: 0.9; }
+}
+.stamp-anim { animation: stampSlam 0.24s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+
+/* 04. 电子墨水屏 GC16 */
+@keyframes einkFlashGC16 {
+  0% { filter: invert(0); }
+  25% { filter: invert(1) contrast(1.5); background-color: #141413; }
+  55% { filter: invert(0) brightness(1.1); background-color: #ffffff; }
+  80% { filter: invert(0.85); }
+  100% { filter: invert(0); background-color: #f1eee7; }
+}
+.eink-flash { animation: einkFlashGC16 0.34s steps(1, end); }
+.dither-50 {
+  background-image:
+    linear-gradient(45deg, #141413 25%, transparent 25%),
+    linear-gradient(-45deg, #141413 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #141413 75%),
+    linear-gradient(-45deg, transparent 75%, #141413 75%);
+  background-size: 4px 4px;
+  background-position: 0 0, 0 2px, 2px -2px, -2px 0;
+}
+.dither-25 {
+  background-image: radial-gradient(#141413 1px, transparent 0);
+  background-size: 4px 4px;
+}
+
+/* 05. MAGI 终端 */
+.magi-hazard { background: repeating-linear-gradient(-45deg, #ff9d00, #ff9d00 8px, #080a09 8px, #080a09 16px); }
+.magi-oct { clip-path: polygon(9px 0, calc(100% - 9px) 0, 100% 9px, 100% calc(100% - 9px), calc(100% - 9px) 100%, 9px 100%, 0 calc(100% - 9px), 0 9px); }
+
+/* 06. 宋刻乌丝栏 */
+.wusilan-outer { background-color: #f7f4eb; color: #22201d; border: 1.5px solid #2b2824; padding: 3px; }
+.wusilan-inner { border: 0.75px solid rgba(43, 40, 36, 0.55); }
+
+/* 07. 机械翻页牌 */
+.flap-cell {
+  background: linear-gradient(180deg, #26282d 0%, #202226 49%, #0d0e10 50%, #1c1e22 51%, #17181c 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+@keyframes flapFlip { 0% { transform: rotateX(0); } 50% { transform: rotateX(-88deg); } 100% { transform: rotateX(0); } }
+.flap-anim { animation: flapFlip 0.18s ease-in-out; }
+
+/* 08. Risograph 孔版错位油印 */
+.riso-paper {
+  isolation: isolate;
+  background-color: #f8f4ea;
+  color: #1a2433;
+  background-image: radial-gradient(rgba(0, 120, 191, 0.06) 1px, transparent 0), radial-gradient(rgba(255, 72, 176, 0.06) 1px, transparent 0);
+  background-size: 7px 7px, 11px 11px;
+}
+.riso-mul { mix-blend-mode: multiply; }
+
+/* 10. 磁带卡座 VU 指针表 */
+.vu-window {
+  background: radial-gradient(circle at 50% 85%, #ffe6a3 0%, #f3c46b 62%, #cfa04e 100%);
+  box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.42);
+  color: #2b1d08;
+}
+@keyframes spinReel { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.reel-spin { animation: spinReel 2.5s linear infinite; }
+
+/* 11. 千禧透明紫外壳 */
+.atomic-frost {
+  backdrop-filter: blur(2.5px);
+  -webkit-backdrop-filter: blur(2.5px);
+  box-shadow: inset 0 2px 3px rgba(255, 255, 255, 0.35), inset 0 -3px 6px rgba(20, 5, 42, 0.55);
+}
+
+/* 12. 侦探软木塞与机密涂黑 */
+.cork-surface {
+  background-color: #b88b58;
+  background-image: radial-gradient(rgba(74, 46, 18, 0.22) 1.2px, transparent 0), radial-gradient(rgba(255, 232, 200, 0.16) 1px, transparent 0);
+  background-size: 10px 10px, 14px 14px;
+  box-shadow: inset 0 0 24px rgba(45, 25, 8, 0.45);
+}
+.redacted { background: #161615; color: transparent; padding: 0 4px; border-radius: 2px; cursor: pointer; transition: 0.18s; }
+.redacted:hover, .redacted.revealed { background: #fef08a; color: #161615; }

@@ -42,9 +42,13 @@ AI 编程工具让写页面快了 10 倍，但也制造了严重的**「AI 审�
 ## 🚀 三种使用方式（How to Use）
 
 ### 方式 1：在线预览 & 一键复制短 Prompt
-直接用浏览器打开仓库根目录下的 [`index.html`](./index.html)（或部署至 GitHub Pages）：
+本地启动或一键部署至 Vercel：
+```bash
+pnpm install
+pnpm dev
+```
 1. 在左侧交互沙盒实时体验旋钮、盖章、翻牌与墨水屏闪烁；
-2. 点击右侧 **「一键复制 Prompt」**，直接粘贴给 Claude / ChatGPT / v0 / Lovable 生成页面。
+2. 点击右侧 **「一键复制 Prompt」** 或下载 `DESIGN.md`，直接交给 Claude / ChatGPT / v0 / Cursor 生成页面。
 
 ### 方式 2：将 `DESIGN.md` 放入你的项目根目录（推荐）
 挑选心仪的风格，将对应的 `styles/<style-id>/DESIGN.md` 复制到你项目的根目录并命名为 `DESIGN.md`，然后对 Cursor / Claude Code / Antigravity 说：
@@ -55,22 +59,23 @@ AI 编程工具让写页面快了 10 倍，但也制造了严重的**「AI 审�
 
 ---
 
-## 🗂 仓库目录结构（Zero-Build Architecture）
+## 🗂 仓库目录结构（Next.js App Router）
 
-本项目坚持**零编译依赖（Zero-Build）**设计，无需 `npm install`，克隆即跑，方便任何人提交 PR：
+服务端构建时自动读取 `styles/<slug>/DESIGN.md` 原文作为唯一数据源，无需重复维护字符串，部署至 Vercel 零配置即用：
 
 ```text
 tea.md/
-├── index.html                 # 零依赖交互式图鉴主站（直接双击或静态托管即可运行）
-├── README.md                  # 项目说明文档
+├── app/                       # Next.js App Router 交互图鉴站点
+│   ├── page.tsx               # 服务端直读 styles/*/DESIGN.md
+│   └── components/            # 12 套物理交互沙盒与配方检视器
+├── styles/                    # 美学配方词条库（1 个文件夹 = 1 套完整美学体系）
+│   ├── tactile-synth/
+│   │   └── DESIGN.md
+│   ├── risograph-print/
+│   │   └── DESIGN.md
+│   └── ... (共 12 套首发配方)
 ├── SKILL.md                   # 供 Claude Code / Cursor / Antigravity 加载的技能入口
-├── TEMPLATE_DESIGN.md         # 社区贡献新美学词条的标准规范模板
-└── styles/                    # 美学配方词条库（1 个文件夹 = 1 套完整美学体系）
-    ├── tactile-synth/
-    │   └── DESIGN.md
-    ├── risograph-print/
-    │   └── DESIGN.md
-    └── ... (共 12 套首发配方)
+└── TEMPLATE_DESIGN.md         # 社区贡献新美学词条的标准规范模板
 ```
 
 ---
@@ -81,7 +86,7 @@ tea.md/
 
 1. 复制 [`TEMPLATE_DESIGN.md`](./TEMPLATE_DESIGN.md) 到 `styles/<your-style-slug>/DESIGN.md`；
 2. 确保包含**明确的物理实现代码片段（Physical Anchors）**与**至少 4 条防 AI 跑偏禁忌（DON'Ts）**；
-3. 在 `index.html` 注册预览卡片并发起 Pull Request。
+3. 在 `app/components/almanac-data.ts` 与 `sandbox-stage.tsx` 注册预览并发起 Pull Request。
 
 ## 📄 License
 MIT License
