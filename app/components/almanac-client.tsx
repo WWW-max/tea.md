@@ -1,16 +1,22 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CATEGORIES, type StyleEntry } from "./almanac-data";
 import { SandboxStage } from "./sandbox-stage";
 import { compileMixerOutput, DEPTH_SCALE, type MixerParams } from "./steep-mixer";
+import { SOUL_PRIMITIVES } from "@/app/lib/soul-primitives";
 
 export function AlmanacClient({ entries }: { entries: StyleEntry[] }) {
   const [category, setCategory] = useState<string>("all");
   const [query, setQuery] = useState("");
   const [selectedSlug, setSelectedSlug] = useState(entries[0]?.slug ?? "tactile-synth");
-  const [recipeTab, setRecipeTab] = useState<"mixer" | "lore" | "prompt">("mixer");
+  const [recipeTab, setRecipeTab] = useState<"mixer" | "registry" | "lore" | "prompt">("mixer");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const [origin, setOrigin] = useState("https://tea-md.vercel.app");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") setOrigin(window.location.origin);
+  }, []);
 
   // Steep Mixer 参数状态
   const [grain, setGrain] = useState(45);
@@ -227,16 +233,36 @@ export function AlmanacClient({ entries }: { entries: StyleEntry[] }) {
                 <SandboxStage slug={activeItem.slug} />
               </div>
             </div>
+
+            {/* shadcn Registry 一行命令直装栏 */}
+            <div className="px-4 py-2.5 border-t border-[var(--border)] bg-[var(--card)] flex flex-wrap items-center justify-between gap-2 text-xs">
+              <code className="font-mono text-[var(--muted-foreground)] truncate">
+                npx shadcn@latest add {origin}/r/{activeItem.slug}.json
+              </code>
+              <button
+                type="button"
+                onClick={() =>
+                  copyWithFeedback(
+                    `npx shadcn@latest add ${origin}/r/${activeItem.slug}.json`,
+                    "cli"
+                  )
+                }
+                className="px-2.5 py-1 rounded-md font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] shrink-0 cursor-pointer"
+              >
+                {copiedKey === "cli" ? "✓ 已复制安装命令" : "⚡ 复制 shadcn 直装命令"}
+              </button>
+            </div>
           </section>
 
           {/* 右栏：参数化茶方调配台 & 词条检视器 */}
           <aside className="lg:col-span-5 bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden flex flex-col">
-            <div className="grid grid-cols-3 border-b border-[var(--border)] text-xs font-medium">
+            <div className="grid grid-cols-4 border-b border-[var(--border)] text-xs font-medium">
               {(
                 [
-                  ["mixer", "🎛️ 茶方调配器"],
-                  ["lore", "📖 溯源 & 色板"],
-                  ["prompt", "⚡ 纯净短指令"],
+                  ["mixer", "🎛️ 调配器"],
+                  ["registry", "🧩 灵魂原件"],
+                  ["lore", "📖 溯源色板"],
+                  ["prompt", "⚡ 短指令"],
                 ] as const
               ).map(([id, label]) => (
                 <button
@@ -469,6 +495,48 @@ export function AlmanacClient({ entries }: { entries: StyleEntry[] }) {
                     ))}
                   </ul>
                 </div>
+              </div>
+            )}
+
+            {/* Tab: 灵魂原件 (shadcn Registry) */}
+            {recipeTab === "registry" && SOUL_PRIMITIVES[activeItem.slug] && (
+              <div className="p-4 space-y-3 text-xs">
+                <div className="p-3 rounded-lg bg-[var(--background)] border border-[var(--border)] space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono font-bold text-[var(--foreground)]">
+                      {SOUL_PRIMITIVES[activeItem.slug].componentName}
+                    </span>
+                    <span className="px-1.5 py-0.5 rounded bg-[var(--secondary)] font-mono text-[11px]">
+                      registry:block
+                    </span>
+                  </div>
+                  <p className="text-[var(--muted-foreground)] leading-relaxed">
+                    {SOUL_PRIMITIVES[activeItem.slug].summary}
+                  </p>
+                  <p className="text-[var(--muted-foreground)] pt-1">
+                    运行上方 <code className="font-mono">npx shadcn@latest add</code> 将自动向你的工程写入{" "}
+                    <code className="font-mono">DESIGN.md</code> 与下列物理原件源码：
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-[var(--muted-foreground)]">
+                    components/tea/{SOUL_PRIMITIVES[activeItem.slug].fileName}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      copyWithFeedback(SOUL_PRIMITIVES[activeItem.slug].code, "prim")
+                    }
+                    className="px-2.5 py-1 rounded-md font-medium bg-[var(--primary)] text-[var(--primary-foreground)] cursor-pointer"
+                  >
+                    {copiedKey === "prim" ? "✓ 已复制源码" : "📋 复制 TSX 原件"}
+                  </button>
+                </div>
+
+                <pre className="p-3 rounded-lg bg-[var(--background)] border border-[var(--border)] font-mono text-xs whitespace-pre-wrap leading-relaxed max-h-72 overflow-y-auto">
+                  {SOUL_PRIMITIVES[activeItem.slug].code}
+                </pre>
               </div>
             )}
 
