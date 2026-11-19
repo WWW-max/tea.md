@@ -2,14 +2,16 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { CATEGORIES, type StyleEntry } from "./almanac-data";
+import { BenchmarkScene, type SceneMode } from "./benchmark-scenes";
 import { SandboxStage } from "./sandbox-stage";
-import { compileMixerOutput, DEPTH_SCALE, type MixerParams } from "./steep-mixer";
+import { compileMixerOutput, type MixerParams } from "./steep-mixer";
 import { SOUL_PRIMITIVES } from "@/app/lib/soul-primitives";
 
 export function AlmanacClient({ entries }: { entries: StyleEntry[] }) {
   const [category, setCategory] = useState<string>("all");
   const [query, setQuery] = useState("");
   const [selectedSlug, setSelectedSlug] = useState(entries[0]?.slug ?? "tactile-synth");
+  const [sceneMode, setSceneMode] = useState<SceneMode>("sandbox");
   const [recipeTab, setRecipeTab] = useState<"mixer" | "registry" | "lore" | "prompt">("mixer");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [origin, setOrigin] = useState("https://tea-md.vercel.app");
@@ -203,10 +205,30 @@ export function AlmanacClient({ entries }: { entries: StyleEntry[] }) {
                   title={`当前强调色 ${effectiveAccent}`}
                 />
               </div>
-              <div className="flex items-center gap-2 text-xs font-mono text-[var(--muted-foreground)]">
-                <span>噪点 {grain}%</span>
-                <span>·</span>
-                <span>键程 {Math.max(1, Math.round(3 * DEPTH_SCALE[depth]))}px</span>
+
+              {/* CSS Zen Garden 真实业务样板间切换器 */}
+              <div className="flex rounded-lg border border-[var(--border)] overflow-hidden text-xs">
+                {(
+                  [
+                    ["sandbox", "🎛️ 物理沙盒"],
+                    ["chat", "🤖 AI 对话"],
+                    ["dashboard", "📊 数据看板"],
+                    ["landing", "📝 产品主页"],
+                  ] as const
+                ).map(([m, label]) => (
+                  <button
+                    key={m}
+                    type="button"
+                    onClick={() => setSceneMode(m)}
+                    className={`px-2.5 py-1 font-medium cursor-pointer transition ${
+                      sceneMode === m
+                        ? "bg-[var(--primary)] text-[var(--primary-foreground)]"
+                        : "bg-[var(--background)] text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
               </div>
             </div>
 
@@ -230,7 +252,15 @@ export function AlmanacClient({ entries }: { entries: StyleEntry[] }) {
                   transition: "transform 160ms ease",
                 }}
               >
-                <SandboxStage slug={activeItem.slug} />
+                {sceneMode === "sandbox" ? (
+                  <SandboxStage slug={activeItem.slug} />
+                ) : (
+                  <BenchmarkScene
+                    slug={activeItem.slug}
+                    styleName={activeItem.name}
+                    mode={sceneMode}
+                  />
+                )}
               </div>
             </div>
 
