@@ -3,13 +3,21 @@
 import { useMemo, useState } from "react";
 import { CATEGORIES, type StyleEntry } from "./almanac-data";
 import { SandboxStage } from "./sandbox-stage";
+import { compileMixerOutput, DEPTH_SCALE, type MixerParams } from "./steep-mixer";
 
 export function AlmanacClient({ entries }: { entries: StyleEntry[] }) {
   const [category, setCategory] = useState<string>("all");
   const [query, setQuery] = useState("");
   const [selectedSlug, setSelectedSlug] = useState(entries[0]?.slug ?? "tactile-synth");
-  const [recipeTab, setRecipeTab] = useState<"lore" | "prompt" | "designmd">("lore");
+  const [recipeTab, setRecipeTab] = useState<"mixer" | "lore" | "prompt">("mixer");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+
+  // Steep Mixer 参数状态
+  const [grain, setGrain] = useState(45);
+  const [depth, setDepth] = useState<MixerParams["depth"]>("balanced");
+  const [density, setDensity] = useState<MixerParams["density"]>("standard");
+  const [customAccent, setCustomAccent] = useState<string | null>(null);
+  const [exportFormat, setExportFormat] = useState<MixerParams["format"]>("design-md");
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -25,12 +33,27 @@ export function AlmanacClient({ entries }: { entries: StyleEntry[] }) {
   }, [entries, category, query]);
 
   const activeItem = useMemo(() => {
-    return (
-      filtered.find((x) => x.slug === selectedSlug) ??
-      filtered[0] ??
-      entries[0]
-    );
+    return filtered.find((x) => x.slug === selectedSlug) ?? filtered[0] ?? entries[0];
   }, [filtered, selectedSlug, entries]);
+
+  const defaultAccent = activeItem?.swatches[2]?.[0] ?? activeItem?.swatches[1]?.[0] ?? "#ff5500";
+  const effectiveAccent = customAccent ?? defaultAccent;
+
+  const mixerOutput = useMemo(() => {
+    if (!activeItem) return "";
+    return compileMixerOutput(activeItem, {
+      grain,
+      depth,
+      density,
+      accent: effectiveAccent,
+      format: exportFormat,
+    });
+  }, [activeItem, grain, depth, density, effectiveAccent, exportFormat]);
+
+  const handleSelectStyle = (slug: string) => {
+    setSelectedSlug(slug);
+    setCustomAccent(null);
+  };
 
   const copyWithFeedback = (text: string, key: string) => {
     navigator.clipboard?.writeText(text);
@@ -38,20 +61,25 @@ export function AlmanacClient({ entries }: { entries: StyleEntry[] }) {
     setTimeout(() => setCopiedKey((k) => (k === key ? null : k)), 1400);
   };
 
-  const downloadDesignMd = () => {
-    if (!activeItem?.designMd) return;
-    const blob = new Blob([activeItem.designMd], { type: "text/markdown;charset=utf-8" });
+  const downloadCompiledFile = () => {
+    if (!activeItem) return;
+    const ext =
+      exportFormat === "tailwind-css"
+        ? `${activeItem.slug}-tokens.css`
+        : exportFormat === "agent-rules"
+          ? `.cursorrules-${activeItem.slug}`
+          : `DESIGN-${activeItem.slug}.md`;
+    const blob = new Blob([mixerOutput], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `DESIGN-${activeItem.slug}.md`;
+    a.download = ext;
     a.click();
     URL.revokeObjectURL(url);
   };
 
-  const toggleTheme = () => {
-    document.documentElement.classList.toggle("dark");
-  };
+  const stagePadClass =
+    density === "compact" ? "p-3" : density === "airy" ? "p-7 md:p-9" : "p-4 md:p-6";
 
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-6 space-y-5">
@@ -61,22 +89,22 @@ export function AlmanacClient({ entries }: { entries: StyleEntry[] }) {
           <div className="space-y-1">
             <div className="flex items-center gap-2.5">
               <span className="px-2 py-0.5 rounded text-xs font-mono font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]">
-                T.E.A. // v0.1
+                T.E.A. // v0.2
               </span>
               <h1 className="text-lg md:text-xl font-bold tracking-tight">
-                🍵 TEA.md · 触感与编辑美学图鉴
+                🍵 TEA.md · 触感与编辑美学引擎
               </h1>
             </div>
             <p className="text-xs text-[var(--muted-foreground)]">
-              No more instant AI slop. 左看<strong>实时物理交互 Demo</strong>，右抄{" "}
-              <strong>Prompt / DESIGN.md 规范配方</strong>
+              No more instant AI slop. 左看<strong>实时物理交互预览</strong>，右用{" "}
+              <strong>Steep Mixer 动态调参编译 DESIGN.md / CSS Tokens</strong>
             </p>
           </div>
 
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <button
               type="button"
-              onClick={toggleTheme}
+              onClick={() => document.documentElement.classList.toggle("dark")}
               className="px-3 py-1.5 rounded-lg text-xs font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] shrink-0 cursor-pointer"
             >
               ☀/🌙 外框明暗
@@ -125,7 +153,7 @@ export function AlmanacClient({ entries }: { entries: StyleEntry[] }) {
                 <button
                   key={item.slug}
                   type="button"
-                  onClick={() => setSelectedSlug(item.slug)}
+                  onClick={() => handleSelectStyle(item.slug)}
                   className={`text-left p-2.5 rounded-lg border text-xs transition flex flex-col justify-between gap-1.5 cursor-pointer ${
                     selected
                       ? "border-[var(--primary)] bg-[var(--secondary)] text-[var(--foreground)] shadow-sm"
@@ -163,25 +191,52 @@ export function AlmanacClient({ entries }: { entries: StyleEntry[] }) {
                   {activeItem.num}
                 </span>
                 <h2 className="text-sm font-semibold">{activeItem.name}</h2>
-                <span className="text-xs font-mono text-[var(--muted-foreground)]">
-                  styles/{activeItem.slug}/DESIGN.md
-                </span>
+                <span
+                  className="w-3 h-3 rounded-full border border-black/20"
+                  style={{ backgroundColor: effectiveAccent }}
+                  title={`当前强调色 ${effectiveAccent}`}
+                />
               </div>
-              <span className="text-xs text-[var(--muted-foreground)]">🎮 可直接点击交互预览</span>
+              <div className="flex items-center gap-2 text-xs font-mono text-[var(--muted-foreground)]">
+                <span>噪点 {grain}%</span>
+                <span>·</span>
+                <span>键程 {Math.max(1, Math.round(3 * DEPTH_SCALE[depth]))}px</span>
+              </div>
             </div>
-            <div className="p-4 md:p-6 bg-[var(--background)]">
-              <SandboxStage slug={activeItem.slug} />
+
+            <div
+              className={`tea-mixer-stage ${stagePadClass} bg-[var(--background)]`}
+              style={
+                {
+                  "--tea-grain-alpha": (grain / 600).toFixed(3),
+                  "--tea-accent": effectiveAccent,
+                } as React.CSSProperties
+              }
+            >
+              <div
+                style={{
+                  transform:
+                    depth === "heavy"
+                      ? "scale(1.01)"
+                      : depth === "subtle"
+                        ? "scale(0.99)"
+                        : "none",
+                  transition: "transform 160ms ease",
+                }}
+              >
+                <SandboxStage slug={activeItem.slug} />
+              </div>
             </div>
           </section>
 
-          {/* 右栏：配方检视器 */}
+          {/* 右栏：参数化茶方调配台 & 词条检视器 */}
           <aside className="lg:col-span-5 bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden flex flex-col">
             <div className="grid grid-cols-3 border-b border-[var(--border)] text-xs font-medium">
               {(
                 [
-                  ["lore", "📖 美学词条 & 色板"],
-                  ["prompt", "⚡ 短提示词 Prompt"],
-                  ["designmd", "📄 DESIGN.md 源码"],
+                  ["mixer", "🎛️ 茶方调配器"],
+                  ["lore", "📖 溯源 & 色板"],
+                  ["prompt", "⚡ 纯净短指令"],
                 ] as const
               ).map(([id, label]) => (
                 <button
@@ -199,6 +254,160 @@ export function AlmanacClient({ entries }: { entries: StyleEntry[] }) {
               ))}
             </div>
 
+            {/* Tab 1: 参数化实时编译器 (Steep Mixer) */}
+            {recipeTab === "mixer" && (
+              <div className="p-4 space-y-4 text-xs">
+                {/* 4 项物理滑块控制 */}
+                <div className="p-3 rounded-lg bg-[var(--background)] border border-[var(--border)] space-y-3">
+                  {/* 颗粒浓度 */}
+                  <label className="block space-y-1">
+                    <div className="flex justify-between font-medium">
+                      <span>肌理噪点浓度 (Surface Grain)</span>
+                      <span className="font-mono">{grain}%</span>
+                    </div>
+                    <input
+                      type="range"
+                      min={0}
+                      max={100}
+                      value={grain}
+                      onChange={(e) => setGrain(Number(e.target.value))}
+                      className="w-full accent-[var(--primary)]"
+                    />
+                  </label>
+
+                  {/* 拟物深度 */}
+                  <div className="space-y-1">
+                    <div className="font-medium">物理拟物强度 (Tactile Depth)</div>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      {(
+                        [
+                          ["subtle", "克制 (1px)"],
+                          ["balanced", "均衡 (3px)"],
+                          ["heavy", "重度机械 (5px)"],
+                        ] as const
+                      ).map(([val, label]) => (
+                        <button
+                          key={val}
+                          type="button"
+                          onClick={() => setDepth(val)}
+                          className={`py-1.5 px-2 rounded border font-medium cursor-pointer ${
+                            depth === val
+                              ? "bg-[var(--primary)] text-[var(--primary-foreground)] border-[var(--primary)]"
+                              : "border-[var(--border)] bg-[var(--card)]"
+                          }`}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 版面密度与主色 */}
+                  <div className="grid grid-cols-12 gap-2 items-end">
+                    <div className="col-span-8 space-y-1">
+                      <div className="font-medium">留白呼吸度 (Density)</div>
+                      <div className="grid grid-cols-3 gap-1">
+                        {(
+                          [
+                            ["compact", "紧凑"],
+                            ["standard", "标准"],
+                            ["airy", "疏朗"],
+                          ] as const
+                        ).map(([val, label]) => (
+                          <button
+                            key={val}
+                            type="button"
+                            onClick={() => setDensity(val)}
+                            className={`py-1 rounded border cursor-pointer ${
+                              density === val
+                                ? "bg-[var(--primary)] text-[var(--primary-foreground)] border-[var(--primary)]"
+                                : "border-[var(--border)] bg-[var(--card)]"
+                            }`}
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="col-span-4 space-y-1">
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium">点缀色</span>
+                        {customAccent && (
+                          <button
+                            type="button"
+                            onClick={() => setCustomAccent(null)}
+                            className="text-[var(--muted-foreground)] underline cursor-pointer"
+                          >
+                            重置
+                          </button>
+                        )}
+                      </div>
+                      <label className="flex items-center gap-1.5 px-2 py-1 rounded border border-[var(--border)] bg-[var(--card)] cursor-pointer">
+                        <input
+                          type="color"
+                          value={effectiveAccent}
+                          onChange={(e) => setCustomAccent(e.target.value)}
+                          className="w-4 h-4 border-0 p-0 bg-transparent cursor-pointer"
+                        />
+                        <span className="font-mono truncate">{effectiveAccent}</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 输出格式切换器 + 复制/下载 */}
+                <div className="space-y-2">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex rounded-lg border border-[var(--border)] overflow-hidden">
+                      {(
+                        [
+                          ["design-md", "DESIGN.md"],
+                          ["tailwind-css", "Tailwind CSS"],
+                          ["agent-rules", "Cursor Rules"],
+                        ] as const
+                      ).map(([fmt, label]) => (
+                        <button
+                          key={fmt}
+                          type="button"
+                          onClick={() => setExportFormat(fmt)}
+                          className={`px-2.5 py-1 text-xs font-mono cursor-pointer ${
+                            exportFormat === fmt
+                              ? "bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold"
+                              : "bg-[var(--background)] text-[var(--muted-foreground)]"
+                          }`}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => copyWithFeedback(mixerOutput, "mixer")}
+                        className="px-2.5 py-1 rounded-md font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] cursor-pointer"
+                      >
+                        {copiedKey === "mixer" ? "✓ 已复制" : "📋 复制"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={downloadCompiledFile}
+                        className="px-2.5 py-1 rounded-md font-medium bg-[var(--primary)] text-[var(--primary-foreground)] cursor-pointer"
+                      >
+                        ⬇ 导出文件
+                      </button>
+                    </div>
+                  </div>
+
+                  <pre className="p-3 rounded-lg bg-[var(--background)] border border-[var(--border)] font-mono text-xs whitespace-pre-wrap leading-relaxed max-h-64 overflow-y-auto">
+                    {mixerOutput}
+                  </pre>
+                </div>
+              </div>
+            )}
+
+            {/* Tab 2: 美学溯源与色板 */}
             {recipeTab === "lore" && (
               <div className="p-4 space-y-4 text-xs">
                 <div className="space-y-1.5">
@@ -263,6 +472,7 @@ export function AlmanacClient({ entries }: { entries: StyleEntry[] }) {
               </div>
             )}
 
+            {/* Tab 3: 纯净短指令 */}
             {recipeTab === "prompt" && (
               <div className="p-4 space-y-3 text-xs">
                 <div className="flex items-center justify-between gap-2">
@@ -279,35 +489,6 @@ export function AlmanacClient({ entries }: { entries: StyleEntry[] }) {
                 </div>
                 <pre className="p-3.5 rounded-lg bg-[var(--background)] border border-[var(--border)] font-mono text-xs whitespace-pre-wrap leading-relaxed select-all">
                   {activeItem.prompt}
-                </pre>
-              </div>
-            )}
-
-            {recipeTab === "designmd" && (
-              <div className="p-4 space-y-3 text-xs">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className="text-[var(--muted-foreground)]">
-                    读取自 <code className="font-mono">styles/{activeItem.slug}/DESIGN.md</code>：
-                  </span>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => copyWithFeedback(activeItem.designMd ?? "", "md")}
-                      className="px-3 py-1.5 rounded-lg font-medium bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition cursor-pointer"
-                    >
-                      {copiedKey === "md" ? "✓ 已复制！" : "📋 复制全文"}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={downloadDesignMd}
-                      className="px-3 py-1.5 rounded-lg font-medium bg-[var(--primary)] text-[var(--primary-foreground)] transition cursor-pointer"
-                    >
-                      ⬇ 下载 DESIGN.md
-                    </button>
-                  </div>
-                </div>
-                <pre className="p-3.5 rounded-lg bg-[var(--background)] border border-[var(--border)] font-mono text-xs whitespace-pre-wrap leading-relaxed max-h-96 overflow-y-auto">
-                  {activeItem.designMd}
                 </pre>
               </div>
             )}

@@ -183,3 +183,18 @@ html.dark {
 }
 .redacted { background: #161615; color: transparent; padding: 0 4px; border-radius: 2px; cursor: pointer; transition: 0.18s; }
 .redacted:hover, .redacted.revealed { background: #fef08a; color: #161615; }
+
+/* Steep Mixer 实时物理叠加层 */
+.tea-mixer-stage {
+  position: relative;
+  transition: padding 180ms ease;
+}
+.tea-mixer-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background-image: radial-gradient(rgba(0, 0, 0, var(--tea-grain-alpha, 0.04)) 1px, transparent 0);
+  background-size: 5px 5px;
+}
