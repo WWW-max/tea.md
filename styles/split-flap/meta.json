@@ -1,0 +1,55 @@
+{
+  "order": 7,
+  "slug": "split-flap",
+  "name": "机械翻页牌与登机牌",
+  "en": "Solari Split-Flap & Boarding Pass",
+  "cat": "工业硬件",
+  "catEn": "Industrial Hardware",
+  "origin": "源自意大利 Solari Udine 经典机场/火车站机械翻页时刻表、Vignelli 航站楼亮黄导视灯箱，以及带半圆撕裂缺口的纸质航空登机牌。",
+  "originEn": "Modeled after 1960s Solari Udine airport mechanical split-flap departure boards, Massimo Vignelli signal-yellow wayfinding lightboxes, and perforated IATA boarding passes.",
+  "bestFor": "CI/CD 部署流水线监控大屏、新品发售倒计时、活动票务与日程表、实时排行榜。",
+  "bestForEn": "CI/CD deployment boards, launch countdowns, event ticketing, live leaderboards.",
+  "swatches": [
+    [
+      "#16171A",
+      "翻页牌炭黑箱",
+      "Flap Housing"
+    ],
+    [
+      "#FFD100",
+      "航站导视亮黄",
+      "Signal Yellow"
+    ],
+    [
+      "#4ADE80",
+      "准点通行绿",
+      "On-Time Green"
+    ],
+    [
+      "#F6F4EE",
+      "登机牌卡纸",
+      "Boarding Stock"
+    ]
+  ],
+  "donts": [
+    "核心状态严禁直接渲染成一整行普通字符串，应拆成单字符一格的独立翻页叶片（带中间 50% 转轴黑缝）",
+    "导视黄 #FFD100 严禁调淡成奶油黄，必须维持机场级高对比视觉穿透力"
+  ],
+  "dontsEn": [
+    "NEVER render primary board statuses as plain inline strings — split every character into individual hinged flap tiles",
+    "NEVER mute Signal Yellow #FFD100 into pale cream; preserve high-contrast terminal legibility"
+  ],
+  "prompt": "请采用「Solari 机场机械翻页牌与登机牌美学（Split-Flap UI）」构建此界面：\n1. 导视配色：炭黑机械展板 #16171A 搭配高对比航站楼导视黄灯箱条 #FFD100（配纯黑粗体字）。\n2. 机械翻页格：关键指标与实时状态按单字符拆分为独立翻页格（上下两半微渐变并在 50% 高度处留 1px 转轴黑缝），数值更新时按 20ms 错峰触发 rotateX 翻牌动画。\n3. 登机牌卡片：信息卡采用米白卡纸 #F6F4EE，左右边缘做半圆打孔缺口，主副联之间用 2px 竖向虚线分割。",
+  "promptEn": "Build this interface using the \"Solari Split-Flap & Boarding Pass\" aesthetic:\n1. Wayfinding Contrast: Matte charcoal board #16171A paired with bold #FFD100 airport wayfinding header strips.\n2. Split-Flap Tiles: Render key metrics and statuses as single-character mechanical flap cells with a 1px horizontal hinge seam at 50% height and staggered 20ms rotateX flip animations.\n3. Boarding Pass Cards: Off-white #F6F4EE cards featuring semicircular side punch-out notches and 2px dashed vertical tear stubs.",
+  "tokens": {
+    "font": "mono",
+    "radius": "8px",
+    "borderWidth": "1px",
+    "shadow": "soft"
+  },
+  "primitive": {
+    "componentName": "SplitFlapRow",
+    "summary": "单字符独立分叶转轴的机场 Solari 机械翻页时刻表组件",
+    "summaryEn": "Single-character hinged mechanical Solari split-flap timetable tile row"
+  }
+}

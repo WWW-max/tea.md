@@ -1,0 +1,57 @@
+{
+  "order": 6,
+  "slug": "xuan-wusilan",
+  "name": "宋刻乌丝栏与宣纸朱砂印",
+  "en": "Song Wusilan & Cinnabar Seal",
+  "cat": "文化古籍",
+  "catEn": "Cultural & Archival",
+  "origin": "汲取中国宋代刻本书籍的「乌丝栏」双细线版框规制、安徽手工宣纸留白呼吸感与寿山石阴阳文朱砂印章，做极度克制、现代且不土气的东方编辑美学。",
+  "originEn": "Draws from Song-dynasty woodblock editions (Wusilan double-hairline frames), handmade Anhui Xuan paper whitespace, and carved Shou-shan stone cinnabar seals.",
+  "bestFor": "东方美学/茶香设计品牌出海、人文播客与诗歌长文、独立游戏官网、精选知识册。",
+  "bestForEn": "Cultural & lifestyle brands, literary essays, indie game portals, curated anthologies.",
+  "swatches": [
+    [
+      "#F7F4EB",
+      "手工生宣白",
+      "Unbleached Xuan"
+    ],
+    [
+      "#22201D",
+      "松烟浓墨黑",
+      "Pine-Soot Ink"
+    ],
+    [
+      "#5C574F",
+      "淡墨批注灰",
+      "Diluted Wash Ink"
+    ],
+    [
+      "#B82925",
+      "朱砂印泥红",
+      "Cinnabar Paste"
+    ]
+  ],
+  "donts": [
+    "严禁堆砌祥云、金龙、大红灯笼或浮夸毛笔飞白贴图——保持宋代建筑与刻本般的极简秩序",
+    "严禁使用圆角胶囊标签（Tag 必须做成直角微瑕的阳文红框章或阴文红底章）",
+    "朱砂红 #B82925 全屏占比严禁超过 8%，留足 35% 以上宣纸留白"
+  ],
+  "dontsEn": [
+    "NEVER add kitschy dragon clipart, red lanterns, or heavy faux-brushstrokes — keep it architectural & Song-minimalist",
+    "NEVER use rounded-full pill tags — style all badges as crisp square Yang (red-border) or Yin (red-fill) stone seals",
+    "NEVER let Cinnabar Red #B82925 exceed 8% of the viewport; preserve at least 35% calm paper whitespace"
+  ],
+  "prompt": "请采用「现代克制版宋刻乌丝栏与宣纸朱砂印美学（Xuan & Wusilan UI）」构建此界面：\n1. 宣纸与乌丝栏：基底采用温润生宣白 #F7F4EB，主版心四周采用宋刻本“乌丝栏”双线外框（外框 1.5px solid #2B2824，留 3px 间隙套内框 0.75px 细线）。\n2. 排版与朱砂点睛：标题与正文采用高对比宋体/衬线体并留足字距与留白；全站唯一点缀色为朱砂印泥红 #B82925（占比不超过 8%）。\n3. 组件转译：所有状态标签改为方正直角阳文印（红框白底「审定」）或阴文印（红底白字），顶部导航改为向下垂挂的丝质书签条，输入框仅保留底边 1px 墨线。",
+  "promptEn": "Build this interface using the \"Song-Dynasty Wusilan & Cinnabar Seal\" editorial aesthetic:\n1. Xuan Paper & Wusilan Frame: Unbleached warm paper #F7F4EB framed by a traditional double-line Wusilan border (1.5px solid #2B2824 outer frame + 3px gap + 0.75px inner hairline).\n2. Typography & Cinnabar Restraint: High-contrast editorial serif/Songti with generous tracking and 35%+ whitespace; sole chromatic accent is Cinnabar Red #B82925 (≤8% area).\n3. Component Translation: Replace pill badges with square Yang/Yin stone seals, style nav tabs as vertical hanging bookmark ribbons, and use bottom-only 1px ink hairlines for inputs.",
+  "tokens": {
+    "font": "serif",
+    "radius": "2px",
+    "borderWidth": "1.5px",
+    "shadow": "none"
+  },
+  "primitive": {
+    "componentName": "WusilanFrame & CinnabarSeal",
+    "summary": "宋刻本外粗内细乌丝栏版心容器与阳文/阴文朱砂石章徽章组件",
+    "summaryEn": "Song-dynasty double-hairline Wusilan book frame paired with Yang/Yin carved cinnabar seals"
+  }
+}

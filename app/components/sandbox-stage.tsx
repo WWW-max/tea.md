@@ -1,9 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { StyleEntry } from "./almanac-data";
 import { useI18n } from "./i18n-context";
 
-export function SandboxStage({ slug }: { slug: string }) {
+export function SandboxStage({
+  slug,
+  fallbackItem,
+}: {
+  slug: string;
+  fallbackItem?: StyleEntry;
+}) {
   const { locale } = useI18n();
   const isEn = locale === "en";
 
@@ -33,8 +40,70 @@ export function SandboxStage({ slug }: { slug: string }) {
     case "corkboard-dossier":
       return <CorkboardDemo isEn={isEn} />;
     default:
-      return null;
+      return fallbackItem ? <AutoCommunityMiniStage item={fallbackItem} isEn={isEn} /> : null;
   }
+}
+
+function AutoCommunityMiniStage({ item, isEn }: { item: StyleEntry; isEn: boolean }) {
+  const bg = item.swatches[0]?.[0] ?? "#f5f5f0";
+  const ink = item.swatches[1]?.[0] ?? "#18181b";
+  const accent = item.swatches[2]?.[0] ?? ink;
+  const sub = item.swatches[3]?.[0] ?? accent;
+  const radius = item.tokens?.radius ?? "8px";
+  const bw = item.tokens?.borderWidth ?? "1.5px";
+  const fontCls =
+    item.tokens?.font === "serif"
+      ? "font-serif"
+      : item.tokens?.font === "sans"
+        ? "font-sans"
+        : "font-mono";
+  const shadow =
+    item.tokens?.shadow === "hard"
+      ? `4px 4px 0 ${ink}`
+      : item.tokens?.shadow === "soft"
+        ? "0 8px 20px rgba(0,0,0,0.12)"
+        : "none";
+
+  return (
+    <div
+      style={{
+        backgroundColor: bg,
+        color: ink,
+        borderRadius: radius,
+        border: `${bw} solid ${ink}`,
+        boxShadow: shadow,
+      }}
+      className={`${fontCls} p-4 space-y-3 text-xs`}
+    >
+      <div className="flex items-center justify-between pb-2 border-b border-current/20">
+        <span className="font-bold uppercase tracking-wider">{item.slug}</span>
+        <span
+          style={{ backgroundColor: accent, color: bg, borderRadius: radius }}
+          className="px-2 py-0.5 font-bold"
+        >
+          {isEn ? "COMMUNITY BLEND" : "社区配方"}
+        </span>
+      </div>
+      <div className="text-sm font-bold">{isEn ? item.en : item.name}</div>
+      <p className="opacity-80 line-clamp-2 leading-relaxed">
+        {isEn ? item.originEn : item.origin}
+      </p>
+      <div className="flex items-center gap-2 pt-1">
+        <span
+          style={{ backgroundColor: accent, color: bg, borderRadius: radius }}
+          className="px-3 py-1 font-bold"
+        >
+          {isEn ? "Primary" : "主按钮"}
+        </span>
+        <span
+          style={{ border: `1px solid ${sub}`, borderRadius: radius }}
+          className="px-3 py-1 font-bold"
+        >
+          {isEn ? "Secondary" : "次按钮"}
+        </span>
+      </div>
+    </div>
+  );
 }
 
 function TactileDemo({ isEn }: { isEn: boolean }) {

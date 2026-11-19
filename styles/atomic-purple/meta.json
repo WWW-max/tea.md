@@ -1,0 +1,55 @@
+{
+  "order": 11,
+  "slug": "atomic-purple",
+  "name": "千禧透明紫掌机透视电路",
+  "en": "Y2K Atomic Purple PCB Shell",
+  "cat": "工业硬件",
+  "catEn": "Industrial Hardware",
+  "origin": "源自 1998 年任天堂 Game Boy Color「Atomic Purple（原子透明紫）」与 iMac G3 半透明注塑聚碳酸酯外壳，隐约透出内部铜箔走线与镀金焊点。",
+  "originEn": "Evokes the 1998 Nintendo Game Boy Color 'Atomic Purple' & iMac G3 translucent injection-molded polycarbonate shells revealing internal 45° copper PCB traces and gold solder pads.",
+  "bestFor": "独立游戏启动器与社区、潮玩/数字藏品主页、Z 世代创意小工具、极客个人名片页。",
+  "bestForEn": "Indie game launchers, collectible communities, Y2K creative toys, developer bio pages.",
+  "swatches": [
+    [
+      "#231636",
+      "底层紫黑基板",
+      "PCB Substrate"
+    ],
+    [
+      "#7E3AF2",
+      "半透聚碳酸酯",
+      "Atomic Polycarbonate"
+    ],
+    [
+      "#FBBF24",
+      "沉金焊盘圆点",
+      "Gold Solder Pad"
+    ],
+    [
+      "#34D399",
+      "导电硅胶 A 键",
+      "Silicone A-Btn"
+    ]
+  ],
+  "donts": [
+    "磨砂模糊度严禁超过 4px（一旦写成 blur(20px) 底下的电路板就彻底糊没了，退化成普通毛玻璃！）",
+    "底层 SVG 电路走线严禁画成弯曲波浪线——真实 PCB 铜箔走线只能按 45° 与 90° 折角布线"
+  ],
+  "dontsEn": [
+    "NEVER exceed backdrop-filter: blur(3.5px) — heavy blur obliterates the underlying PCB traces into generic glassmorphism",
+    "NEVER draw wavy curved circuit lines — authentic PCB traces bend strictly at 45° and 90° angles"
+  ],
+  "prompt": "请采用「千禧 Game Boy 透明紫外壳透视电路美学（Atomic Purple Y2K UI）」构建此界面：\n1. 双层透视结构（关键！）：底层容器 #231636 内铺设一张 45°/90° 折角布线的 SVG 电路板路径（淡紫铜箔线 #C084FC + 镀金圆焊盘 #FBBF24）；上层卡片覆盖 rgba(126,58,242,0.42) 半透明紫塑料壳并严格限制 backdrop-filter: blur(2.5px)（确保清晰透出底层焊点！）。\n2. 控制器质感：交互按钮采用导电硅胶十字方向键与微倾 -12deg 的红绿立体圆键（带 4px 硅胶按压阴影）。",
+  "promptEn": "Build this interface using the \"Y2K Atomic Purple Translucent PCB Shell\" aesthetic:\n1. Two-Layer See-Through Architecture: Place an inline SVG of 45°/90°-routed PCB traces (#C084FC) and gold circular solder pads (#FBBF24) over #231636, then layer a rgba(126,58,242,0.42) shell with tight backdrop-filter: blur(2.5px) on top so traces remain visible.\n2. Tactile Controls: Use conductive dark D-Pads and -12deg angled rubber-dome A/B circular buttons with 3px hard travel shadows.",
+  "tokens": {
+    "font": "mono",
+    "radius": "14px",
+    "borderWidth": "1px",
+    "shadow": "hard"
+  },
+  "primitive": {
+    "componentName": "AtomicPcbShell",
+    "summary": "低模糊度半透明原子紫注塑外壳叠加 45° 布线镀金焊盘 SVG 电路板底座",
+    "summaryEn": "Low-blur translucent Atomic Purple polycarbonate shell layered over 45° SVG PCB traces & gold pads"
+  }
+}

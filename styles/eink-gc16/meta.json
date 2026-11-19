@@ -1,0 +1,57 @@
+{
+  "order": 4,
+  "slug": "eink-gc16",
+  "name": "电子墨水屏 GC16 显影",
+  "en": "E-Ink Paper & Bayer Dither",
+  "cat": "复古屏幕",
+  "catEn": "Retro Displays",
+  "origin": "还原 E-Ink Carta 电泳微胶囊墨水屏（Kindle / reMarkable）与 Playdate 1-bit 单色屏的反射式纸感体验，以及标志性的 GC16 全刷反色清残影波形。",
+  "originEn": "Recreates E-Ink Carta electrophoretic displays (Kindle / reMarkable) and 1-bit Playdate stipple screens — featuring zero-glare carbon contrast and authentic GC16 invert-flash refreshes.",
+  "bestFor": "AI 深度研究报告、沉浸式长文阅读器、个人知识库、极简无干扰仪表盘。",
+  "bestForEn": "Deep AI research reports, distraction-free readers, documentation hubs, calm analytics.",
+  "swatches": [
+    [
+      "#F1EEE7",
+      "电泳微胶囊白",
+      "E-Paper Substrate"
+    ],
+    [
+      "#141413",
+      "高对比纯碳墨",
+      "Carbon Pigment"
+    ],
+    [
+      "#DFDCD3",
+      "折角纸阴面",
+      "Dog-Ear Shade"
+    ],
+    [
+      "#2C2C2A",
+      "阅读器外框",
+      "Reader Bezel"
+    ]
+  ],
+  "donts": [
+    "严禁出现任何彩色像素（零蓝链、零红绿灯——全部用反色黑块或下划线表达）",
+    "严禁使用平滑淡入淡出（ease-in-out）或模糊阴影——视图切换只能用 steps() 阶跃反色闪烁",
+    "图表严禁使用半透明灰，必须用 1-bit 棋盘点阵抖动（Bayer Dithering）表现灰阶"
+  ],
+  "dontsEn": [
+    "NEVER render any chromatic color (zero blue links or green/red pills — use inverted black blocks or underlines)",
+    "NEVER use smooth ease-in-out fades or blurred shadows — transitions must use stepped invert() GC16 flashes",
+    "NEVER use CSS opacity for chart shading — use 4px×4px 1-bit checkerboard Bayer dithering patterns"
+  ],
+  "prompt": "请采用「电子墨水屏 GC16 与 1-bit 点阵抖动美学（E-Ink Paper UI）」构建此界面：\n1. 纯粹双色：全站严格限制为哑光墨水纸底 #F1EEE7 与纯碳墨黑 #141413（零彩色、零渐变、零模糊阴影）。\n2. 像素抖动灰阶：图表或次要填充区严禁使用 opacity 半透明，改用 4px×4px 棋盘格/圆点 Bayer Dither 图案模拟 25%/50% 灰阶。\n3. 灵魂微交互：禁用一切平滑过渡动画，切换 Tab 或弹窗时触发 340ms steps(1, end) 的 invert(1) 黑白反色全刷显影动画（模拟真实墨水屏清残影）。",
+  "promptEn": "Build this interface using the \"E-Ink GC16 & 1-Bit Bayer Dither\" aesthetic:\n1. Strict Monochrome: Restrict the entire palette to matte E-Paper #F1EEE7 and crisp carbon pigment #141413 (zero color, zero gradients, zero drop shadows).\n2. Stipple Dithering: Replace all translucent greys/chart fills with 4px×4px checkerboard and radial stipple dither patterns (25% / 50% / 75% density).\n3. Waveform Refresh: Disable smooth CSS transitions; trigger a 340ms steps(1, end) invert(1) black-flash animation whenever tabs or panels switch.",
+  "tokens": {
+    "font": "serif",
+    "radius": "2px",
+    "borderWidth": "2px",
+    "shadow": "none"
+  },
+  "primitive": {
+    "componentName": "EInkRefreshStage",
+    "summary": "切换视图时自动触发真实墨水屏 GC16 反色黑闪清残影波形的纸感容器",
+    "summaryEn": "Electrophoretic E-Paper container that triggers an authentic GC16 invert-flash refresh on change"
+  }
+}

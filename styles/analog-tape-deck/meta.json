@@ -1,0 +1,55 @@
+{
+  "order": 10,
+  "slug": "analog-tape-deck",
+  "name": "磁带卡座与暖光指针表",
+  "en": "Analog Tape Deck & VU Meter",
+  "cat": "工业硬件",
+  "catEn": "Industrial Hardware",
+  "origin": "致敬 1970 年代末 Nakamichi Dragon 与 Sony Hi-Fi 立体声磁带卡座——拉丝香槟银金属面板、钨丝暖黄背光 VU 摆动红针表头与双轴磁带观察窗。",
+  "originEn": "Salutes late-1970s Nakamichi & Sony Hi-Fi stereo cassette decks — brushed champagne-silver faceplates, tungsten-backlit swinging red VU needles, and spinning dual tape hubs.",
+  "bestFor": "AI 实时语音通话前端、播客与有声书播放器、AI 作曲配音工具、白噪音专注软件。",
+  "bestForEn": "Realtime Voice AI frontends, podcast/audiobook players, music tools, ambient focus apps.",
+  "swatches": [
+    [
+      "#CFCBC0",
+      "拉丝香槟银铝",
+      "Brushed Champagne"
+    ],
+    [
+      "#232220",
+      "深灰磁带暗仓",
+      "Tape Well Dark"
+    ],
+    [
+      "#F3C46B",
+      "钨丝灯暖背光",
+      "Tungsten VU Glow"
+    ],
+    [
+      "#B91C1C",
+      "VU 峰值红指针",
+      "Peak Red Needle"
+    ]
+  ],
+  "donts": [
+    "VU 表头严禁使用冰冷刺眼的纯白或蓝光背景——必须是底部向上晕开的钨丝暖琥珀背光",
+    "流式加载状态优先使用同步旋转的双磁带卷轴，而非千篇一律的圆环菊花 Loading"
+  ],
+  "dontsEn": [
+    "NEVER light the VU meter with cold white or blue LEDs — use a warm tungsten radial glow (#FFE6A3 -> #CFA04E)",
+    "NEVER use generic circular spinners when dual synchronized cassette tape reels can indicate streaming/loading"
+  ],
+  "prompt": "请采用「复古 Hi-Fi 磁带卡座与模拟指针 VU 表美学（Analog Tape Deck UI）」构建此界面：\n1. 金属面板：外框采用拉丝香槟银铝纵向微渐变（#DCD9D0 -> #C2BEB2）配顶部高光边，内嵌深炭黑磁带仓 #232220 与四位黑底机械里程计数字窗（0142）。\n2. 灵魂组件：右侧配置钨丝灯暖黄径向背光（#FFE6A3 -> #CFA04E）的模拟 VU 电平表，底部圆轴支起一根随信号实时摆动的细红指针（#B91C1C）；流式等待态采用双齿轮磁带轴同步旋转表现。",
+  "promptEn": "Build this interface using the \"Analog Hi-Fi Tape Deck & VU Meter\" aesthetic:\n1. Brushed Faceplate: Metallic champagne-silver vertical gradient (#DCD9D0 -> #C2BEB2) housing a recessed #232220 cassette bay and a 4-digit black mechanical odometer counter (0142).\n2. Soul Widgets: Pair dual spinning cassette tape hubs with a warm tungsten radial-backlit (#FFE6A3 -> #CFA04E) analog VU meter featuring a bottom-pivoted swinging red needle (#B91C1C).",
+  "tokens": {
+    "font": "mono",
+    "radius": "12px",
+    "borderWidth": "1px",
+    "shadow": "soft"
+  },
+  "primitive": {
+    "componentName": "AnalogVuMeter",
+    "summary": "钨丝暖琥珀径向背光 + 底部圆轴红针实时摆动的复古 Hi-Fi 电平表",
+    "summaryEn": "Tungsten radial-backlit analog Hi-Fi VU meter with bottom-pivoted swinging red needle"
+  }
+}

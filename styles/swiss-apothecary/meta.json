@@ -1,0 +1,55 @@
+{
+  "order": 9,
+  "slug": "swiss-apothecary",
+  "name": "瑞士药剂标签与实验刻度",
+  "en": "Swiss Apothecary & Meniscus",
+  "cat": "技术制图",
+  "catEn": "Technical & Schematic",
+  "origin": "结合 Aesop 琥珀遮光药剂瓶配方签、1950 年代瑞士国际主义粗细黑线排版，以及硼硅酸盐实验室量筒的液体弯月面（Meniscus）计量美学。",
+  "originEn": "Combines Aesop compounding apothecary labels, 1950s Swiss International Typographic rule hierarchy, and borosilicate laboratory graduated cylinder meniscus gauges.",
+  "bestFor": "大模型评测基准对比页、Prompt/RAG 配方参数卡、健康/护肤/精品咖啡品牌站。",
+  "bestForEn": "LLM benchmark tables, RAG/prompt formulation cards, skincare/coffee/wellness brands.",
+  "swatches": [
+    [
+      "#F4F1EA",
+      "无菌棉质签纸",
+      "Cotton Label"
+    ],
+    [
+      "#121211",
+      "瑞士印刷纯黑",
+      "Printer's Black"
+    ],
+    [
+      "#5C2D0C",
+      "遮光琥珀玻璃",
+      "Amber Vial"
+    ],
+    [
+      "#B45309",
+      "试剂弯月面液",
+      "Reagent Meniscus"
+    ]
+  ],
+  "donts": [
+    "规格表格内严禁塞入花哨彩色小图标或 Emoji——完全依靠 4px / 2px / 1px 纯黑横线粗细对比建立秩序",
+    "严禁居中对齐段落——严格遵守瑞士网格左对齐键名、右对齐等宽批号与百分比数值"
+  ],
+  "dontsEn": [
+    "NEVER clutter specification tables with decorative icons or emojis — rely on stark 4px / 2px / 1px black rule contrast",
+    "NEVER center-align copy inside labels — enforce flush-left uppercase keys and flush-right monospace batch numbers"
+  ],
+  "prompt": "请采用「瑞士药剂处方签与实验量筒美学（Swiss Apothecary UI）」构建此界面：\n1. 琥珀衬底与棉纸签：外围衬以深琥珀遮光玻璃质感（#4B2509 -> #7C3F11），核心内容承载于棉白标签纸 #F4F1EA（2px 纯黑实线外框 #121211）。\n2. 瑞士粗细线秩序：主标题下方压 4px 粗黑线，参数表行间用 1px 纯黑细线分割，左侧粗体大写参数名，右侧等宽对齐浓度/批号（如 BATCH 26-K // 75.0% v/v）。\n3. 进度与配比改用带右侧毫升刻度线（mL）的垂直玻璃液位量筒组件展示。",
+  "promptEn": "Build this interface using the \"Swiss Apothecary Label & Lab Meniscus\" aesthetic:\n1. Label on Amber Glass: Frame crisp #F4F1EA cotton paper labels (2px solid #121211 border) over a deep UV-protective amber backdrop (#4B2509 -> #7C3F11).\n2. Rule Hierarchy: Anchor headings with a 4px solid #121211 bottom rule, divide spec rows with 1px rules, pairing left-aligned bold keys with right-aligned monospace values (BATCH 26-K // 75.0% v/v).\n3. Replace standard progress bars with vertical graduated cylinders featuring mL ticks and an amber meniscus rim.",
+  "tokens": {
+    "font": "mono",
+    "radius": "0px",
+    "borderWidth": "2px",
+    "shadow": "none"
+  },
+  "primitive": {
+    "componentName": "MeniscusMeter",
+    "summary": "带硼硅酸盐毫升刻度线与真实试剂弯月面液位边缘的垂直计量管",
+    "summaryEn": "Borosilicate graduated cylinder liquid gauge with mL tick marks and amber meniscus rim"
+  }
+}

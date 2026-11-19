@@ -1,13 +1,11 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
 import { NextResponse } from "next/server";
-import { ALMANAC_CATALOG } from "@/app/components/almanac-data";
-import { SOUL_PRIMITIVES } from "@/app/lib/soul-primitives";
+import { loadAllStyles } from "@/app/lib/styles-loader";
 
 export const dynamic = "force-static";
 
-export function generateStaticParams() {
-  return ALMANAC_CATALOG.flatMap((item) => [
+export async function generateStaticParams() {
+  const all = await loadAllStyles();
+  return all.flatMap((item) => [
     { slug: item.slug },
     { slug: `${item.slug}.json` },
   ]);
@@ -20,14 +18,11 @@ export async function GET(
   const { slug: rawSlug } = await params;
   const slug = rawSlug.replace(/\.json$/, "");
 
-  const entry = ALMANAC_CATALOG.find((x) => x.slug === slug);
-  const prim = SOUL_PRIMITIVES[slug];
-  if (!entry || !prim) {
+  const all = await loadAllStyles();
+  const entry = all.find((x) => x.slug === slug);
+  if (!entry || !entry.primitive) {
     return NextResponse.json({ error: "Style not found" }, { status: 404 });
   }
-
-  const mdPath = path.join(process.cwd(), "styles", slug, "DESIGN.md");
-  const designMd = await readFile(mdPath, "utf-8");
 
   return NextResponse.json(
     {
@@ -35,22 +30,22 @@ export async function GET(
       name: entry.slug,
       type: "registry:block",
       title: `${entry.en} (${entry.name})`,
-      description: prim.summary,
+      description: entry.primitive.summaryEn,
       files: [
         {
-          path: `components/tea/${prim.fileName}`,
+          path: `components/tea/${entry.primitive.fileName}`,
           type: "registry:component",
-          target: `components/tea/${prim.fileName}`,
-          content: prim.code,
+          target: `components/tea/${entry.primitive.fileName}`,
+          content: entry.primitive.code,
         },
         {
           path: `styles/${entry.slug}/DESIGN.md`,
           type: "registry:file",
           target: "~/DESIGN.md",
-          content: designMd,
+          content: entry.designMd ?? "",
         },
       ],
-      docs: `Installed TEA.md [${entry.slug}]: ~/DESIGN.md + components/tea/${prim.fileName}`,
+      docs: `Installed TEA.md [${entry.slug}]: ~/DESIGN.md + components/tea/${entry.primitive.fileName}`,
     },
     {
       headers: {

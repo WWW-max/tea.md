@@ -1,0 +1,55 @@
+{
+  "order": 12,
+  "slug": "corkboard-dossier",
+  "name": "侦探线索板红绳与机密档案",
+  "en": "Corkboard Red-String & Dossier",
+  "cat": "文化古籍",
+  "catEn": "Cultural & Archival",
+  "origin": "源自黑色侦探电影中的软木塞案件推理墙、FBI 解密牛皮纸档案袋（涂黑脱敏文字）以及拍立得白边证据快照，用自然下垂的红毛线串联节点。",
+  "originEn": "Inspired by neo-noir investigative corkboards, declassified FOIA manila folders with black-marker redactions, Polaroid evidence prints, and gravity-sagging red yarn links.",
+  "bestFor": "AI 深度调查/OSINT 情报图谱、悬疑解谜游戏官网、非线性头脑风暴白板、播客专题。",
+  "bestForEn": "OSINT / AI investigative graph explorers, mystery/ARG games, brainstorming boards, true-crime podcasts.",
+  "swatches": [
+    [
+      "#B88B58",
+      "天然软木塞板",
+      "Natural Corkboard"
+    ],
+    [
+      "#EFE4C8",
+      "牛皮纸档案卡",
+      "Manila Dossier"
+    ],
+    [
+      "#DC2626",
+      "立体图钉红绳",
+      "Push-Pin Red Yarn"
+    ],
+    [
+      "#FEF08A",
+      "解密高亮便签",
+      "Canary Sticky Note"
+    ]
+  ],
+  "donts": [
+    "严禁把所有证据卡片排成横平竖直 0° 的死板网格——赋予 -1deg 至 +1.5deg 的自然手工钉挂倾角",
+    "图钉之间的红绳严禁画成笔直的尺规直线——必须用二次贝塞尔曲线向下偏移 25px+ 模拟重力自然垂坠"
+  ],
+  "dontsEn": [
+    "NEVER align every evidence card into a sterile 0° SaaS grid — apply subtle -1deg to +1.5deg organic pin rotations",
+    "NEVER connect push-pins with straight ruler lines — use quadratic Bézier curves sagging downward (+25px Y) under gravity"
+  ],
+  "prompt": "请采用「侦探软木塞线索板与机密档案美学（Corkboard & Redacted Dossier UI）」构建此界面：\n1. 材质层次：外框与背景为颗粒感软木塞底板 #B88B58（四周带内暗角阴影），卡片分三种纸品：牛皮档案纸 #EFE4C8、拍立得白边相框、明黄推理便签 #FEF08A，各自带 ±1deg 微倾角并在顶部正中钉入红色立体圆图钉。\n2. 红绳与机密涂黑：关联卡片之间通过顶层 SVG 绘制带重力下垂弧度的 #DC2626 红色二次贝塞尔曲线连接；敏感词使用黑条涂抹（.redacted），悬停或点击时揭晓明文。",
+  "promptEn": "Build this interface using the \"Detective Corkboard, Red-String & Redacted Dossier\" aesthetic:\n1. Board & Paper Stock: Textured cork substrate #B88B58 (inset vignette shadow) holding slightly tilted (±1deg) #EFE4C8 manila dossiers, white Polaroid frames, and #FEF08A sticky notes anchored by glossy red push-pins.\n2. Red Yarn & Redactions: Link related pins via overlaid #DC2626 SVG quadratic Bézier curves with downward gravity sag, and mask sensitive keywords behind #161615 redaction bars that reveal on hover/click.",
+  "tokens": {
+    "font": "mono",
+    "radius": "2px",
+    "borderWidth": "2px",
+    "shadow": "soft"
+  },
+  "primitive": {
+    "componentName": "RedactedSpoiler & CorkDossierCard",
+    "summary": "悬停或点击揭开荧光黄底明文的机密涂黑组件与立体红图钉牛皮纸档案卡",
+    "summaryEn": "Click-to-reveal black redaction spoiler strip paired with a push-pinned manila dossier card"
+  }
+}

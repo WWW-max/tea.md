@@ -1,0 +1,57 @@
+{
+  "order": 8,
+  "slug": "risograph-print",
+  "name": "Risograph 孔版套色错位",
+  "en": "Risograph Multiply & Misprint",
+  "cat": "印刷纸品",
+  "catEn": "Print & Paper",
+  "origin": "源自日本理想科学（Riso）数字孔版油印机与独立艺术书（Zine）文化——半透明植物大豆油墨在粗糙纸面上正片叠底，并保留迷人的手工套色微错位。",
+  "originEn": "Inspired by Riso Kagaku stencil duplicators in indie zine publishing — translucent soy inks multiplying over uncoated paper with charming 3px–5px plate misregistration.",
+  "bestFor": "独立设计师作品集、音乐节/艺术展专题页、创意工作室官网、数字杂志 Zine。",
+  "bestForEn": "Designer portfolios, music/art festival sites, creative studios, digital zines.",
+  "swatches": [
+    [
+      "#F8F4EA",
+      "未涂布艺术纸",
+      "Uncoated Paper"
+    ],
+    [
+      "#FF48B0",
+      "Riso 荧光粉鼓",
+      "Fluorescent Pink"
+    ],
+    [
+      "#0078BF",
+      "Riso 群青蓝鼓",
+      "Risograph Blue"
+    ],
+    [
+      "#3D2673",
+      "正片叠底紫",
+      "Overprint Violet"
+    ]
+  ],
+  "donts": [
+    "外层纸张容器严禁漏写 isolation: isolate（否则 mix-blend-mode: multiply 会穿透污染外部背景）",
+    "严禁同时使用超过 2 种彩色油墨（真实双滚筒油印只靠两色交叠自动产生第 3 种叠印色）",
+    "严禁使用模糊投影——立体感完全由偏移 3px~5px 的双色版面错位塑造"
+  ],
+  "dontsEn": [
+    "NEVER omit isolation: isolate on the paper container (otherwise mix-blend-mode: multiply bleeds into dark parent backgrounds)",
+    "NEVER introduce more than 2 chromatic ink colors at once — let multiply overprinting create the 3rd violet shade naturally",
+    "NEVER use Gaussian box-shadow — create depth strictly via 3px–5px offset ink plates"
+  ],
+  "prompt": "请采用「Risograph 孔版双色套色错位油印美学（Risograph Print UI）」构建此界面：\n1. 双滚筒油墨限制：纸面基底为米白未涂布纸 #F8F4EA（必须声明 isolation: isolate），全页严格只用两种大豆油墨色：荧光粉 #FF48B0 与群青蓝 #0078BF。\n2. 正片叠底与套色错位：重叠图层与双层按钮统一设置 mix-blend-mode: multiply，背景色版相对前景线框故意偏移 translate(4px, 4px)，在按钮 :hover 时归零对齐（模拟套准合拢）。\n3. 禁用一切模糊阴影与渐变色。",
+  "promptEn": "Build this interface using the \"Risograph Soy-Ink Multiply & Misregistration\" aesthetic:\n1. Two-Drum Discipline: Uncoated warm paper #F8F4EA (with isolation: isolate!) printed strictly with two soy inks: Fluorescent Pink #FF48B0 and Risograph Blue #0078BF.\n2. Multiply & Misregistration: Apply mix-blend-mode: multiply to overlapping frames and buttons, shifting the secondary ink plate by translate(4px, 4px) and snapping to (0, 0) on :hover.\n3. Strictly NO soft shadows or gradients.",
+  "tokens": {
+    "font": "mono",
+    "radius": "6px",
+    "borderWidth": "2px",
+    "shadow": "hard"
+  },
+  "primitive": {
+    "componentName": "RisoMisprintCard",
+    "summary": "内置 isolation 隔离与 mix-blend-mode: multiply 大豆油墨双版套色错位卡片",
+    "summaryEn": "Isolated dual-drum Risograph card with mix-blend-mode: multiply soy-ink plate misregistration"
+  }
+}

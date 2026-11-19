@@ -81,11 +81,14 @@ Link or copy [`SKILL.md`](./SKILL.md) and `./styles` into your agent skills dire
 
 ---
 
-## 🤝 Contributing a New Aesthetic Blend
+## 🤝 Contributing a New Aesthetic Blend (Zero Core Files Touched!)
 
-1. Copy [`TEMPLATE_DESIGN.md`](./TEMPLATE_DESIGN.md) to `styles/<your-slug>/DESIGN.md`.
-2. Include concrete **Signature Physical Anchors (CSS/SVG)** and at least 3 **Anti-Slop Guardrails (`DON'Ts`)**.
-3. Register the entry in `app/components/almanac-data.ts`, `sandbox-stage.tsx`, and `soul-primitives.ts`, then open a Pull Request!
+Every subfolder under `styles/<slug>/` is **auto-discovered** at build time — zero central files to edit, zero merge conflicts:
+
+```bash
+pnpm new-style bauhaus-poster
+```
+Fill out `styles/bauhaus-poster/meta.json` + `DESIGN.md` (and optionally `preview.html` or `primitive.tsx`) and open a PR! See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the 1-minute AI prompt guide.
 
 ## 📄 License
 MIT License

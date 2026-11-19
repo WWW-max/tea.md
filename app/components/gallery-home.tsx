@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { CATEGORIES, type StyleEntry } from "./almanac-data";
+import { CATEGORY_DEFS, type StyleEntry } from "./almanac-data";
 import { useI18n } from "./i18n-context";
 import { SandboxStage } from "./sandbox-stage";
 import { SiteControls } from "./site-controls";
@@ -65,8 +65,12 @@ export function GalleryHome({ entries }: { entries: StyleEntry[] }) {
       {/* 画廊筛选与搜索栏 */}
       <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-border">
         <div className="flex flex-wrap gap-1.5">
-          {CATEGORIES.map((c) => {
+          {CATEGORY_DEFS.map((c) => {
             const on = category === c.id;
+            const count =
+              c.id === "all"
+                ? entries.length
+                : entries.filter((e) => e.cat === c.id).length;
             return (
               <Button
                 key={c.id}
@@ -74,7 +78,7 @@ export function GalleryHome({ entries }: { entries: StyleEntry[] }) {
                 size="sm"
                 onClick={() => setCategory(c.id)}
               >
-                {isEn ? c.en : c.zh}
+                {isEn ? `${c.en} (${count})` : `${c.zh} (${count})`}
               </Button>
             );
           })}
@@ -126,7 +130,7 @@ export function GalleryHome({ entries }: { entries: StyleEntry[] }) {
 
                 <CardContent className="bg-background border-b border-border relative overflow-hidden">
                   <div className="pointer-events-none select-none">
-                    <SandboxStage slug={item.slug} />
+                    <SandboxStage slug={item.slug} fallbackItem={item} />
                   </div>
                 </CardContent>
               </Link>

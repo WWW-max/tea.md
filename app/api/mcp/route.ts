@@ -1,9 +1,6 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
 import { NextResponse } from "next/server";
-import { ALMANAC_CATALOG } from "@/app/components/almanac-data";
 import { compileMixerOutput, type MixerParams } from "@/app/components/steep-mixer";
-import { SOUL_PRIMITIVES } from "@/app/lib/soul-primitives";
+import { loadAllStyles } from "@/app/lib/styles-loader";
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -53,7 +50,7 @@ const MCP_TOOLS = [
   {
     name: "get_soul_primitive",
     description:
-      "Fetch the self-contained React TypeScript soul component (e.g. RotaryKnob, EInkRefreshStage, RisoMisprintCard) for a style.",
+      "Fetch the self-contained React TypeScript soul component for a style.",
     inputSchema: {
       type: "object",
       properties: {
@@ -72,13 +69,13 @@ export async function OPTIONS() {
 }
 
 export async function GET() {
+  const all = await loadAllStyles();
   return NextResponse.json(
     {
       name: "tea-md",
       version: "0.2.0",
       protocol: "Model Context Protocol (Streamable HTTP JSON-RPC 2.0)",
-      description:
-        "TEA.md (Tactile & Editorial Aesthetics) remote MCP server for AI coding agents.",
+      stylesCount: all.length,
       tools: MCP_TOOLS.map((t) => t.name),
     },
     { headers: CORS_HEADERS }
@@ -104,7 +101,6 @@ export async function POST(req: Request) {
 
   const { id = null, method, params = {} } = body;
 
-  // Notifications require no response body
   if (method?.startsWith("notifications/")) {
     return new NextResponse(null, { status: 202, headers: CORS_HEADERS });
   }
@@ -136,22 +132,23 @@ export async function POST(req: Request) {
   }
 
   if (method === "tools/call") {
+    const all = await loadAllStyles();
     const toolName = params.name as string | undefined;
     const args = (params.arguments as Record<string, unknown> | undefined) ?? {};
 
     if (toolName === "list_aesthetics") {
       const q = String(args.query ?? "").trim().toLowerCase();
-      const matches = ALMANAC_CATALOG.filter(
+      const matches = all.filter(
         (x) =>
           !q ||
-          `${x.slug} ${x.en} ${x.name} ${x.cat} ${x.bestFor} ${x.origin}`
+          `${x.slug} ${x.en} ${x.name} ${x.cat} ${x.catEn} ${x.bestFor} ${x.bestForEn}`
             .toLowerCase()
             .includes(q)
       );
       const text = matches
         .map(
           (x) =>
-            `- \`${x.slug}\` (${x.en} / ${x.name}) [${x.cat}]\n  Best for: ${x.bestFor}\n  Palette: ${x.swatches.map((s) => `${s[0]} (${s[1]})`).join(", ")}`
+            `- \`${x.slug}\` (${x.en} / ${x.name}) [${x.catEn}]\n  Best for: ${x.bestForEn}\n  Palette: ${x.swatches.map((s) => `${s[0]} (${s[2]})`).join(", ")}`
         )
         .join("\n\n");
 
@@ -167,7 +164,7 @@ export async function POST(req: Request) {
 
     if (toolName === "get_design_recipe") {
       const slug = String(args.slug ?? "");
-      const item = ALMANAC_CATALOG.find((x) => x.slug === slug);
+      const item = all.find((x) => x.slug === slug);
       if (!item) {
         return NextResponse.json(
           {
@@ -182,23 +179,18 @@ export async function POST(req: Request) {
         );
       }
 
-      const mdPath = path.join(process.cwd(), "styles", slug, "DESIGN.md");
-      const designMd = await readFile(mdPath, "utf-8");
       const depth = (["subtle", "balanced", "heavy"].includes(String(args.depth))
         ? String(args.depth)
         : "balanced") as MixerParams["depth"];
       const grain = typeof args.grain === "number" ? Math.min(100, Math.max(0, args.grain)) : 45;
 
-      const compiled = compileMixerOutput(
-        { ...item, designMd },
-        {
-          grain,
-          depth,
-          density: "standard",
-          accent: item.swatches[2]?.[0] ?? item.swatches[1]?.[0] ?? "#ff5500",
-          format: "design-md",
-        }
-      );
+      const compiled = compileMixerOutput(item, {
+        grain,
+        depth,
+        density: "standard",
+        accent: item.swatches[2]?.[0] ?? item.swatches[1]?.[0] ?? "#ff5500",
+        format: "design-md",
+      });
 
       return NextResponse.json(
         {
@@ -212,8 +204,8 @@ export async function POST(req: Request) {
 
     if (toolName === "get_soul_primitive") {
       const slug = String(args.slug ?? "");
-      const prim = SOUL_PRIMITIVES[slug];
-      if (!prim) {
+      const item = all.find((x) => x.slug === slug);
+      if (!item || !item.primitive) {
         return NextResponse.json(
           {
             jsonrpc: "2.0",
@@ -235,7 +227,7 @@ export async function POST(req: Request) {
             content: [
               {
                 type: "text",
-                text: `// File: components/tea/${prim.fileName}\n// ${prim.summary}\n\n${prim.code}`,
+                text: `// File: components/tea/${item.primitive.fileName}\n// ${item.primitive.summaryEn}\n\n${item.primitive.code}`,
               },
             ],
           },

@@ -27,7 +27,6 @@ import { useI18n } from "./i18n-context";
 import { RichStyleShowcase } from "./rich-style-showcase";
 import { SiteControls } from "./site-controls";
 import { compileMixerOutput, type MixerParams } from "./steep-mixer";
-import { SOUL_PRIMITIVES } from "@/app/lib/soul-primitives";
 
 interface NavNeighbor {
   slug: string;
@@ -101,7 +100,7 @@ export function StyleDetailClient({
   const stagePadClass =
     density === "compact" ? "p-3" : density === "airy" ? "p-7 md:p-9" : "p-4 md:p-6";
 
-  const prim = SOUL_PRIMITIVES[item.slug];
+  const prim = item.primitive;
   const activePrompt = isEn ? item.promptEn : item.prompt;
   const activeDonts = isEn ? item.dontsEn : item.donts;
 
@@ -212,7 +211,7 @@ export function StyleDetailClient({
                 transition: "transform 160ms ease",
               }}
             >
-              <RichStyleShowcase slug={item.slug} />
+              <RichStyleShowcase item={item} />
             </div>
           </CardContent>
 

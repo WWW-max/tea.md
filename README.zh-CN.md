@@ -81,11 +81,14 @@ npx shadcn@latest add https://tea-md.vercel.app/r/tactile-synth.json
 
 ---
 
-## 🤝 贡献新美学茶方（Contributing）
+## 🤝 贡献新美学茶方（零核心文件改动、零冲突！）
 
-1. 复制 [`TEMPLATE_DESIGN.md`](./TEMPLATE_DESIGN.md) 到 `styles/<your-slug>/DESIGN.md`；
-2. 提供**明确的物理实现代码片段（Physical Anchors）**与**至少 3 条防 AI 踩坑禁忌（DON'Ts）**；
-3. 在 `app/components/almanac-data.ts`、`sandbox-stage.tsx` 与 `soul-primitives.ts` 中注册预览并发起 Pull Request！
+`styles/<slug>/` 下的每个独立文件夹都会在构建时**自动扫描发现**——无需修改任何核心源码，多人同时提 PR 永不冲突：
+
+```bash
+pnpm new-style bauhaus-poster
+```
+填好生成的 `meta.json` 与 `DESIGN.md`（可选附带 `preview.html` 自定义演示或 `primitive.tsx` 原件）即可直接发起 PR！详见 [`CONTRIBUTING.md`](./CONTRIBUTING.md)（内附 AI 一键生成提示词模板）。
 
 ## 📄 开源协议
 MIT License

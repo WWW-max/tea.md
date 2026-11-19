@@ -1,0 +1,57 @@
+{
+  "order": 1,
+  "slug": "tactile-synth",
+  "name": "博朗 / TE 工业合成器",
+  "en": "Tactile Synth Hardware",
+  "cat": "工业硬件",
+  "catEn": "Industrial Hardware",
+  "origin": "源自 1960 年代 Dieter Rams 执掌的博朗（Braun T3/TP1）功能主义工业设计，融合 Teenage Engineering OP-1 便携合成器的机械键帽与凹陷液晶屏比例。",
+  "originEn": "Rooted in Dieter Rams' 1960s Braun T3/TP1 industrial functionalism fused with Teenage Engineering OP-1 tactile field synthesizers, recessed dot-matrix LCDs, and physical keycaps.",
+  "bestFor": "AI 语音/音频工作台、Agent 调试控制台、番茄钟效率工具、硬件参数面板。",
+  "bestForEn": "AI audio/voice studios, agent debugging consoles, focus timers, hardware parameter panels.",
+  "swatches": [
+    [
+      "#E5E3DC",
+      "阳极灰铝壳",
+      "Anodized Chassis"
+    ],
+    [
+      "#9BA88D",
+      "橄榄段码屏",
+      "Olive Dot LCD"
+    ],
+    [
+      "#FF5500",
+      "博朗国际橙",
+      "Braun Orange"
+    ],
+    [
+      "#26272B",
+      "炭黑键帽",
+      "Charcoal Keycap"
+    ]
+  ],
+  "donts": [
+    "严禁使用毛玻璃（backdrop-blur）或蓝紫霓虹渐变",
+    "严禁使用无厚度的扁平按钮——所有按键必须具备 3px~4px 底部物理键程阴影",
+    "严禁滥用胶囊圆角（rounded-full），圆形仅限阻尼旋钮与 3mm LED 指示灯"
+  ],
+  "dontsEn": [
+    "NEVER use frosted glassmorphism (backdrop-blur) or purple-to-blue gradients",
+    "NEVER render flat zero-travel buttons — enforce 3px–4px physical bottom lip shadows",
+    "NEVER use pill-shaped rounded-full buttons (reserve circles strictly for rotary knobs and 3mm LEDs)"
+  ],
+  "prompt": "请采用「Braun × Teenage Engineering 工业合成器美学（Tactile Synth UI）」构建此界面：\n1. 材质色板：机身采用温润哑光铝灰 #E5E3DC（带顶部内高光 inset 0 1px 0 rgba(255,255,255,0.85)），内凹控制槽 #D5D2C8，参数读数置于橄榄绿点阵液晶屏 #9BA88D（文字 #1B2416），唯二强调色为博朗橙 #FF5500 与炭黑 #26272B。\n2. 机械交互：所有按钮做成实体键帽（box-shadow: 0 4px 0 #ABA79C，:active 时 translateY(3px) 压下），参数调节优先使用刻度旋钮或推子。\n3. 排版与护栏：全大写等宽工业铭牌刻字（tracking-widest + tabular-nums）；严禁使用毛玻璃、彩色渐变阴影或廉价胶囊标签。",
+  "promptEn": "Build this interface using the \"Braun × Teenage Engineering Tactile Synth\" aesthetic:\n1. Surface Palette: Warm anodized aluminum chassis #E5E3DC (with top specular inset 0 1px 0 rgba(255,255,255,0.85)), recessed bay #D5D2C8, parameter readouts inside recessed olive dot-matrix LCD #9BA88D (ink #1B2416), accented solely by Braun Orange #FF5500 and Charcoal #26272B.\n2. Tactile Mechanics: Style all buttons as physical 3D keycaps (box-shadow: 0 4px 0 #ABA79C, depressing translateY(3px) on :active). Prefer rotary knobs and faders for numeric inputs.\n3. Guardrails: Uppercase monospace engraved labels (tracking-widest + tabular-nums). Strictly NO glassmorphism, gradients, or rounded-full pill buttons.",
+  "tokens": {
+    "font": "mono",
+    "radius": "12px",
+    "borderWidth": "1px",
+    "shadow": "hard"
+  },
+  "primitive": {
+    "componentName": "RotaryKnob & TactileKey",
+    "summary": "支持鼠标上下拖拽阻尼调参的工业刻度旋钮 + 3px 物理键程按压键帽",
+    "summaryEn": "Vertical-drag tactile rotary encoder knob + physical 3px-travel mechanical keycap button"
+  }
+}

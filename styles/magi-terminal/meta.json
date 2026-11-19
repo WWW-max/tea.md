@@ -1,0 +1,57 @@
+{
+  "order": 5,
+  "slug": "magi-terminal",
+  "name": "磁带未来主义 / MAGI 终端",
+  "en": "Cassette Futurism MAGI CRT",
+  "cat": "复古屏幕",
+  "catEn": "Retro Displays",
+  "origin": "致敬《EVA》NERV 总部 MAGI 三贤人超算系统与 1979《异形》飞船大型机界面——高对比单色荧光 CRT、45° 工业警示斜纹与八角切角装甲板。",
+  "originEn": "Pays homage to Evangelion's NERV MAGI supercomputer and Alien (1979) MU/TH/UR mainframes — phosphor amber/green CRTs, -45° hazard stripes, and octagonal chamfered plates.",
+  "bestFor": "Multi-Agent 多智能体协同监控大屏、安全攻防/CTF 平台、高危运维审批台。",
+  "bestForEn": "Multi-agent consensus dashboards, cybersecurity/CTF portals, DevOps war-rooms.",
+  "swatches": [
+    [
+      "#080A09",
+      "CRT 荧光黑底",
+      "CRT Void Black"
+    ],
+    [
+      "#FF9D00",
+      "琥珀荧光橙",
+      "Phosphor Amber"
+    ],
+    [
+      "#22FF66",
+      "同步荧光绿",
+      "Sync Green"
+    ],
+    [
+      "#FF2A2A",
+      "否决警报红",
+      "Veto Crimson"
+    ]
+  ],
+  "donts": [
+    "严禁做成粉青渐变的俗套赛博朋克（Vaporwave）——磁带未来主义只用黑底配纯琥珀橙/荧光绿/警报红三通道",
+    "严禁使用圆润卡片（改用 clip-path 45° 切角八边形面板）",
+    "危险按钮严禁直接裸露可点，宜配“先解锁安全保险开关（ARM）”的双步交互"
+  ],
+  "dontsEn": [
+    "NEVER use pink-to-cyan vaporwave gradients — stick strictly to Amber, Phosphor Green, and Crimson on deep black",
+    "NEVER use soft rounded-2xl cards — chamfer corners at 45° using clip-path polygon()",
+    "NEVER expose destructive actions without a two-step safety toggle (ARM OVERRIDE)"
+  ],
+  "prompt": "请采用「磁带未来主义 / EVA MAGI 超算终端美学（MAGI CRT UI）」构建此界面：\n1. 荧光配色：深黑 CRT 底色 #080A09 叠加细微水平扫描线遮罩，主信息色为琥珀橙 #FF9D00，通过态为荧光绿 #22FF66，否决/警报态为 #FF2A2A。\n2. 几何切角与警示条：页眉或高危弹窗顶部放置 -45deg 黑橙相间斜纹警示带（repeating-linear-gradient），核心状态卡片采用 clip-path 八角切角边框。\n3. 适合展示多智能体（如 3 节点表决矩阵）与实时绿色荧光示波器曲线。",
+  "promptEn": "Build this interface using the \"Cassette Futurism / EVA MAGI Terminal\" aesthetic:\n1. Phosphor Channels: Deep CRT void #080A09 with subtle horizontal scanlines, primary Amber #FF9D00, synchronized Green #22FF66, and alert Crimson #FF2A2A.\n2. Chamfered Geometry & Hazard Bars: Frame headers and alert dialogs with -45deg black-and-amber repeating hazard stripes, and bevel status nodes into octagonal plates via clip-path.\n3. Ideal for multi-agent voting matrices (APPROVE / VETO) and live green oscilloscope telemetry.",
+  "tokens": {
+    "font": "mono",
+    "radius": "0px",
+    "borderWidth": "2px",
+    "shadow": "none"
+  },
+  "primitive": {
+    "componentName": "MagiConsensusPanel",
+    "summary": "EVA MAGI 风格八角切角多智能体投票面板与 45° 黑橙斜纹工业警示栏",
+    "summaryEn": "Octagonal chamfered 3-agent voting matrix with -45deg repeating industrial hazard stripes"
+  }
+}

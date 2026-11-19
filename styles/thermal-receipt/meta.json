@@ -1,0 +1,57 @@
+{
+  "order": 3,
+  "slug": "thermal-receipt",
+  "name": "热敏小票与报刊网点",
+  "en": "Thermal Receipt & Halftone",
+  "cat": "印刷纸品",
+  "catEn": "Print & Paper",
+  "origin": "融合便利店热敏纸卷收据（Epson TM-T88）与近代黑白报纸照相铜版半调网点（Halftone）印刷术，充满烟火气与物理票据质感。",
+  "originEn": "Blends Epson TM-T88 POS thermal paper slips with vintage newspaper halftone photoengraving, serrated tear-off edges, perforated stubs, and vermilion rubber stamps.",
+  "bestFor": "记账与 API 账单页、年度总结报告、独立播客/文化专栏、Changelog 发布清单。",
+  "bestForEn": "Billing & API token statements, annual wrap-ups, indie blogs, release changelogs.",
+  "swatches": [
+    [
+      "#FAF7EF",
+      "热敏暖白纸",
+      "Thermal Paper"
+    ],
+    [
+      "#191918",
+      "热敏碳黑墨",
+      "Carbon Ink"
+    ],
+    [
+      "#DCD8CF",
+      "桌面衬底灰",
+      "Craft Desk Mat"
+    ],
+    [
+      "#C82824",
+      "朱红橡胶戳",
+      "Vermilion Stamp"
+    ]
+  ],
+  "donts": [
+    "严禁直接放置全彩高清照片——图片必须经黑白高反差或半调圆点网屏（Halftone）处理",
+    "严禁把单张小票拉伸成 1200px 超宽通栏（应保持 360px~460px 票据窄栏比例）",
+    "严禁在小票边缘使用圆角——两侧为直切边，上下两端为锯齿撕纸边"
+  ],
+  "dontsEn": [
+    "NEVER place glossy full-color photos directly on thermal paper — apply monochrome halftone dot filtering",
+    "NEVER stretch a single receipt slip across 1200px wide containers (constrain slips to 360px–460px columns)",
+    "NEVER round receipt corners — side edges are straight-cut and top/bottom edges use 10px zig-zag teeth"
+  ],
+  "prompt": "请采用「热敏小票与报刊半调网点美学（Thermal Receipt UI）」构建此界面：\n1. 票据结构：浅灰桌面底衬 #DCD8CF 上居中排布窄栏热敏纸 #FAF7EF，纸张上下边缘使用 linear-gradient 制作 10px 锯齿撕纸齿口，严禁使用圆角。\n2. 排版与分割：全等宽打字机字体，使用 \"====\" 或 \"----\" 字符线及 2px 虚线撕裂副券分割模块，底部附带矢量条形码。\n3. 视觉亮点：状态徽章采用微倾斜 -10deg 的朱红色双框橡胶印章（#C82824），插图采用黑白半调网点（Halftone Dots）渲染。",
+  "promptEn": "Build this interface using the \"Thermal Receipt & Newsprint Halftone\" aesthetic:\n1. Slip Geometry: Frame narrow #FAF7EF thermal paper columns against a #DCD8CF desk backdrop, capped top and bottom with 10px CSS linear-gradient serrated zig-zag tear edges (0px side radius).\n2. Dividers & Typography: Narrow monospace font throughout, separated by ASCII \"====\" / \"----\" rules, 2px dashed tear-off stubs, and vector UPC barcodes.\n3. Accents: Use angled (-10deg) vermilion rubber-stamp badges (#C82824) and render imagery via black-and-white halftone dot matrices.",
+  "tokens": {
+    "font": "mono",
+    "radius": "0px",
+    "borderWidth": "1px",
+    "shadow": "soft"
+  },
+  "primitive": {
+    "componentName": "ThermalReceiptSlip",
+    "summary": "自带上下锯齿撕纸齿口、虚线撕裂副券与朱红盖章动画的热敏纸票据容器",
+    "summaryEn": "POS thermal paper slip container with CSS serrated tear edges and vermilion rubber stamp"
+  }
+}

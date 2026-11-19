@@ -1,0 +1,57 @@
+{
+  "order": 2,
+  "slug": "cad-blueprint",
+  "name": "工程蓝图与 CAD 制图",
+  "en": "CAD Blueprint Schematic",
+  "cat": "技术制图",
+  "catEn": "Technical & Schematic",
+  "origin": "源自 19 世纪铁氰酸盐晒图法（普鲁士蓝工程蓝图）与航空航天 AutoCAD 结构制图规范，以双层公制网格、十字准星与尺寸标注线为核心秩序。",
+  "originEn": "Inspired by 19th-century Prussian blue cyanotype engineering prints and aerospace AutoCAD schematics — governed by dual metric grids, corner crosshairs, and live dimension rulers.",
+  "bestFor": "AI 基础设施官网、机器人/物联网遥测后台、硬核开发者文档、系统架构可视化。",
+  "bestForEn": "AI infrastructure portals, robotics/IoT telemetry consoles, developer docs, architecture diagrams.",
+  "swatches": [
+    [
+      "#09223B",
+      "普鲁士蓝底",
+      "Prussian Blueprint"
+    ],
+    [
+      "#E0F2FE",
+      "制图白青线",
+      "Drafting Cyan-White"
+    ],
+    [
+      "#38BDF8",
+      "尺寸辅助线",
+      "Dimension Rule"
+    ],
+    [
+      "#34D399",
+      "工程核准章",
+      "Approved Stamp"
+    ]
+  ],
+  "donts": [
+    "严禁使用任何模糊投影（box-shadow），工程图纸是纯粹的二维正交投影",
+    "严禁在内部模块框使用圆角（严格保持 0px 直角线框）",
+    "严禁使用不透明纯色卡片完全遮挡底层的双层公制坐标网格"
+  ],
+  "dontsEn": [
+    "NEVER use Gaussian drop shadows (box-shadow) — blueprints are flat 2D projections",
+    "NEVER apply border-radius to schematic boxes, inputs, or stamps (strictly 0px sharp corners)",
+    "NEVER fill cards with opaque solids that completely hide the underlying metric coordinate grid"
+  ],
+  "prompt": "请采用「工程蓝图与精密 CAD 制图美学（CAD Blueprint UI）」构建此界面：\n1. 画布网格：普鲁士深蓝底 #09223B 叠加 80px 主网格与 16px 次网格细线（rgba(56,189,248,0.18)），前景线条与文字使用高对比青白 #E0F2FE。\n2. 制图细节：所有容器保持 0px 直角半透明线框，四角放置「+」十字准星靶标，主卡片上方标注「├──── W: 480px ────┤」尺寸标尺，页眉放置包含 DWG NO. / SCALE 1:1 的工程图签栏。\n3. 护栏：100% 使用等宽字体；严禁出现任何高斯阴影、圆角胶囊或装饰性插画。",
+  "promptEn": "Build this interface using the \"Engineering Blueprint & CAD Schematic\" aesthetic:\n1. Coordinate Grid: Deep Prussian blue canvas #09223B overlaid with 80px major and 16px minor cyan drafting grids (rgba(56,189,248,0.18)), crisp #E0F2FE linework.\n2. Drafting Details: Keep all containers at 0px sharp wireframe corners with \"+\" crosshair reticles at all 4 corners, \"├──── W: 480px ────┤\" dimension rulers above primary modules, and a structured CAD Title Block header (DWG NO., SCALE 1:1).\n3. Guardrails: 100% monospace typography. Strictly NO drop shadows, rounded corners, or opaque card fills.",
+  "tokens": {
+    "font": "mono",
+    "radius": "0px",
+    "borderWidth": "1px",
+    "shadow": "none"
+  },
+  "primitive": {
+    "componentName": "BlueprintDimensionBox",
+    "summary": "基于 ResizeObserver 实时测量自身像素宽度的 CAD 标尺线框与四角十字准星容器",
+    "summaryEn": "ResizeObserver live pixel-measuring CAD wireframe container with 4-corner crosshair reticles"
+  }
+}

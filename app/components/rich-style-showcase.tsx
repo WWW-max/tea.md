@@ -1,13 +1,26 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { StyleEntry } from "./almanac-data";
 import { useI18n } from "./i18n-context";
 
-export function RichStyleShowcase({ slug }: { slug: string }) {
+export function RichStyleShowcase({ item }: { item: StyleEntry }) {
   const { locale } = useI18n();
   const isEn = locale === "en";
+  const slug = item.slug;
 
   const renderHeroApparatus = () => {
+    if (item.customPreviewHtml) {
+      return (
+        <iframe
+          title={`${item.en} custom preview`}
+          srcDoc={item.customPreviewHtml}
+          sandbox="allow-scripts"
+          className="w-full min-h-[340px] rounded-xl border border-border bg-background"
+        />
+      );
+    }
+
     switch (slug) {
       case "tactile-synth":
         return <TactileRichShowcase isEn={isEn} />;
@@ -34,14 +47,142 @@ export function RichStyleShowcase({ slug }: { slug: string }) {
       case "corkboard-dossier":
         return <CorkboardRichShowcase isEn={isEn} />;
       default:
-        return null;
+        return <AutoCommunityHeroStage item={item} isEn={isEn} />;
     }
   };
 
   return (
     <div className="space-y-6">
       {renderHeroApparatus()}
-      <StyleSpecimenExtension slug={slug} isEn={isEn} />
+      {SPECIMEN_THEMES[slug] ? (
+        <StyleSpecimenExtension slug={slug} isEn={isEn} />
+      ) : (
+        <AutoCommunitySpecimen item={item} isEn={isEn} />
+      )}
+    </div>
+  );
+}
+
+function AutoCommunityHeroStage({ item, isEn }: { item: StyleEntry; isEn: boolean }) {
+  const [meter, setMeter] = useState(72);
+  const bg = item.swatches[0]?.[0] ?? "#f5f5f0";
+  const ink = item.swatches[1]?.[0] ?? "#18181b";
+  const accent = item.swatches[2]?.[0] ?? ink;
+  const radius = item.tokens?.radius ?? "8px";
+  const bw = item.tokens?.borderWidth ?? "1.5px";
+  const fontCls =
+    item.tokens?.font === "serif"
+      ? "font-serif"
+      : item.tokens?.font === "sans"
+        ? "font-sans"
+        : "font-mono";
+  const shadow =
+    item.tokens?.shadow === "hard"
+      ? `5px 5px 0 ${ink}`
+      : item.tokens?.shadow === "soft"
+        ? "0 12px 28px rgba(0,0,0,0.14)"
+        : "none";
+
+  return (
+    <div
+      style={{
+        backgroundColor: bg,
+        color: ink,
+        borderRadius: radius,
+        border: `${bw} solid ${ink}`,
+        boxShadow: shadow,
+      }}
+      className={`${fontCls} p-6 space-y-4`}
+    >
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-current/20 text-xs">
+        <span className="font-bold uppercase tracking-wider">{item.en}</span>
+        <span
+          style={{ backgroundColor: accent, color: bg, borderRadius: radius }}
+          className="px-2.5 py-0.5 font-bold"
+        >
+          {item.slug.toUpperCase()}
+        </span>
+      </div>
+      <div className="space-y-2">
+        <h3 className="text-xl font-bold">{isEn ? item.en : item.name}</h3>
+        <p className="text-xs opacity-85 leading-relaxed">
+          {isEn ? item.originEn : item.origin}
+        </p>
+      </div>
+      <div className="space-y-1.5 text-xs pt-1">
+        <div className="flex justify-between font-bold">
+          <span>{isEn ? "INTERACTIVE INTENSITY" : "交互参数预览"}</span>
+          <span>{meter}%</span>
+        </div>
+        <input
+          type="range"
+          min={10}
+          max={100}
+          value={meter}
+          onChange={(e) => setMeter(Number(e.target.value))}
+          style={{ accentColor: accent }}
+          className="w-full cursor-pointer"
+        />
+      </div>
+    </div>
+  );
+}
+
+function AutoCommunitySpecimen({ item, isEn }: { item: StyleEntry; isEn: boolean }) {
+  const bg = item.swatches[0]?.[0] ?? "#f5f5f0";
+  const ink = item.swatches[1]?.[0] ?? "#18181b";
+  const accent = item.swatches[2]?.[0] ?? ink;
+  const radius = item.tokens?.radius ?? "8px";
+  const bw = item.tokens?.borderWidth ?? "1.5px";
+  const fontCls =
+    item.tokens?.font === "serif"
+      ? "font-serif"
+      : item.tokens?.font === "sans"
+        ? "font-sans"
+        : "font-mono";
+
+  return (
+    <div
+      style={{
+        backgroundColor: bg,
+        color: ink,
+        borderRadius: radius,
+        border: `${bw} solid ${ink}`,
+      }}
+      className={`${fontCls} p-5 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs`}
+    >
+      <div style={{ border: `1px solid ${ink}`, borderRadius: radius }} className="p-4 space-y-3">
+        <div className="font-bold uppercase">{isEn ? "CONTROLS & INPUT" : "基础按钮与表单标本"}</div>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            style={{ backgroundColor: accent, color: bg, borderRadius: radius }}
+            className="px-3.5 py-1.5 font-bold cursor-pointer"
+          >
+            {isEn ? "Primary Action" : "主操作按钮"}
+          </button>
+          <button
+            type="button"
+            style={{ border: `1px solid ${ink}`, borderRadius: radius }}
+            className="px-3.5 py-1.5 font-bold cursor-pointer"
+          >
+            {isEn ? "Secondary" : "次要操作"}
+          </button>
+        </div>
+        <input
+          defaultValue={isEn ? "Sample input..." : "输入示例文本…"}
+          style={{ border: `1px solid ${ink}`, borderRadius: radius }}
+          className="w-full bg-transparent px-3 py-1.5 focus:outline-none"
+        />
+      </div>
+      <div style={{ border: `1px solid ${ink}`, borderRadius: radius }} className="p-4 space-y-2">
+        <div className="font-bold uppercase">{isEn ? "GUARDRAIL SUMMARY" : "核心设计约束"}</div>
+        {(isEn ? item.dontsEn : item.donts).slice(0, 3).map((d, i) => (
+          <div key={i} className="opacity-85">
+            • {d}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
