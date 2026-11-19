@@ -20,8 +20,8 @@ Developers struggle to break out of generic templates for two reasons:
 
 ## ✨ Core Capabilities
 
-1. **🖼 Tiled Aesthetic Gallery & Benchmark Scenes (`/`, `/styles/[slug]`):**
-   Browse all 12 curated aesthetics side-by-side, then open any style to test it across **4 live scenes**: *Interactive Sandbox*, *AI Chat*, *Telemetry Dashboard*, and *Product Landing Page*.
+1. **🖼 Tiled Aesthetic Gallery & Rich Specimen Showcases (`/`, `/styles/[slug]`):**
+   Browse all 12 curated aesthetics side-by-side on the home gallery, then click into any style to explore a comprehensive, multi-section interactive specimen page (hero apparatus, tactile controls, form inputs, checklists, and pricing matrices) with EN/ZH bilingual support.
 2. **🎛 Interactive Steep Mixer:**
    Tune surface grain (`0%–100%`), tactile key travel depth (`1px / 3px / 5px`), spatial density, and accent overrides in real time — dynamically compiling into `DESIGN.md`, `Tailwind v4 CSS Tokens`, or `.cursorrules`.
 3. **🧩 `shadcn` Soul-Primitive Registry (`/r/[slug].json`):**

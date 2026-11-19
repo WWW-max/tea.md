@@ -3,9 +3,8 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { StyleEntry } from "./almanac-data";
-import { BenchmarkScene, type SceneMode } from "./benchmark-scenes";
 import { useI18n } from "./i18n-context";
-import { SandboxStage } from "./sandbox-stage";
+import { RichStyleShowcase } from "./rich-style-showcase";
 import { compileMixerOutput, type MixerParams } from "./steep-mixer";
 import { SOUL_PRIMITIVES } from "@/app/lib/soul-primitives";
 
@@ -28,7 +27,7 @@ export function StyleDetailClient({
   const { locale, toggleLocale } = useI18n();
   const isEn = locale === "en";
 
-  const [sceneMode, setSceneMode] = useState<SceneMode>("sandbox");
+  const [fullWidth, setFullWidth] = useState(false);
   const [recipeTab, setRecipeTab] = useState<"mixer" | "registry" | "lore" | "prompt">("mixer");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [origin, setOrigin] = useState("https://tea-md.vercel.app");
@@ -113,6 +112,19 @@ export function StyleDetailClient({
         <div className="flex flex-wrap items-center gap-2 text-xs">
           <button
             type="button"
+            onClick={() => setFullWidth((f) => !f)}
+            className="px-2.5 py-1.5 rounded-lg bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] cursor-pointer font-medium"
+          >
+            {fullWidth
+              ? isEn
+                ? "◫ Show Inspector"
+                : "◫ 展开右侧调配栏"
+              : isEn
+                ? "⛶ Full-Width Demo"
+                : "⛶ 全宽沉浸预览"}
+          </button>
+          <button
+            type="button"
             onClick={toggleLocale}
             className="px-2.5 py-1.5 rounded-lg font-mono font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] cursor-pointer"
           >
@@ -140,45 +152,26 @@ export function StyleDetailClient({
         </div>
       </header>
 
-      {/* 详情双栏工作台 */}
+      {/* 主体：左 8 栏完整丰富样板页面 + 右 4 栏参数化调配与提示词面板 */}
       <main className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-        {/* 左栏：实时交互沙盒 + 业务样板间切换 */}
-        <section className="lg:col-span-7 bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden">
-          <div className="px-4 py-3 border-b border-[var(--border)] flex flex-wrap items-center justify-between gap-2">
-            <div className="flex items-center gap-2 text-xs">
-              <span className="font-semibold">{isEn ? "Live Stage" : "实时交互舞台"}</span>
+        <section
+          className={`${
+            fullWidth ? "lg:col-span-12" : "lg:col-span-8"
+          } bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden`}
+        >
+          <div className="px-4 py-3 border-b border-[var(--border)] flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div className="flex items-center gap-2">
+              <span className="font-semibold">
+                {isEn ? "Interactive Full Specimen Showcase" : "完整交互样板间（含核心装置、控件表单与卡片矩阵）"}
+              </span>
               <span
                 className="w-3 h-3 rounded-full border border-black/20"
                 style={{ backgroundColor: effectiveAccent }}
               />
-              <span className="font-mono text-[var(--muted-foreground)]">
-                styles/{item.slug}/DESIGN.md
-              </span>
             </div>
-
-            <div className="flex rounded-lg border border-[var(--border)] overflow-hidden text-xs">
-              {(
-                [
-                  ["sandbox", isEn ? "🎛️ Sandbox" : "🎛️ 物理沙盒"],
-                  ["chat", isEn ? "🤖 AI Chat" : "🤖 AI 对话"],
-                  ["dashboard", isEn ? "📊 Dashboard" : "📊 数据看板"],
-                  ["landing", isEn ? "📝 Landing" : "📝 产品主页"],
-                ] as const
-              ).map(([m, label]) => (
-                <button
-                  key={m}
-                  type="button"
-                  onClick={() => setSceneMode(m)}
-                  className={`px-2.5 py-1 font-medium cursor-pointer transition ${
-                    sceneMode === m
-                      ? "bg-[var(--primary)] text-[var(--primary-foreground)]"
-                      : "bg-[var(--background)] text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
+            <span className="font-mono text-[var(--muted-foreground)]">
+              styles/{item.slug}/DESIGN.md
+            </span>
           </div>
 
           <div
@@ -194,22 +187,14 @@ export function StyleDetailClient({
               style={{
                 transform:
                   depth === "heavy"
-                    ? "scale(1.01)"
+                    ? "scale(1.005)"
                     : depth === "subtle"
-                      ? "scale(0.99)"
+                      ? "scale(0.995)"
                       : "none",
                 transition: "transform 160ms ease",
               }}
             >
-              {sceneMode === "sandbox" ? (
-                <SandboxStage slug={item.slug} />
-              ) : (
-                <BenchmarkScene
-                  slug={item.slug}
-                  styleName={isEn ? item.en : item.name}
-                  mode={sceneMode}
-                />
-              )}
+              <RichStyleShowcase slug={item.slug} />
             </div>
           </div>
 
@@ -239,7 +224,11 @@ export function StyleDetailClient({
         </section>
 
         {/* 右栏：参数化茶方调配台 & 词条检视器 */}
-        <aside className="lg:col-span-5 bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden flex flex-col">
+        <aside
+          className={`${
+            fullWidth ? "lg:col-span-12" : "lg:col-span-4 lg:sticky lg:top-4"
+          } bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden flex flex-col`}
+        >
           <div className="grid grid-cols-4 border-b border-[var(--border)] text-xs font-medium">
             {(
               [
@@ -289,9 +278,9 @@ export function StyleDetailClient({
                   <div className="grid grid-cols-3 gap-1.5">
                     {(
                       [
-                        ["subtle", isEn ? "Subtle (1px)" : "克制 (1px)"],
-                        ["balanced", isEn ? "Balanced (3px)" : "均衡 (3px)"],
-                        ["heavy", isEn ? "Heavy (5px)" : "重度机械 (5px)"],
+                        ["subtle", isEn ? "Subtle" : "克制"],
+                        ["balanced", isEn ? "Balanced" : "均衡"],
+                        ["heavy", isEn ? "Heavy" : "重度"],
                       ] as const
                     ).map(([val, label]) => (
                       <button
@@ -311,13 +300,13 @@ export function StyleDetailClient({
                 </div>
 
                 <div className="grid grid-cols-12 gap-2 items-end">
-                  <div className="col-span-8 space-y-1">
-                    <div className="font-medium">{isEn ? "Spatial Density" : "留白呼吸度"}</div>
+                  <div className="col-span-7 space-y-1">
+                    <div className="font-medium">{isEn ? "Density" : "留白密度"}</div>
                     <div className="grid grid-cols-3 gap-1">
                       {(
                         [
-                          ["compact", isEn ? "Compact" : "紧凑"],
-                          ["standard", isEn ? "Standard" : "标准"],
+                          ["compact", isEn ? "Tight" : "紧凑"],
+                          ["standard", isEn ? "Normal" : "标准"],
                           ["airy", isEn ? "Airy" : "疏朗"],
                         ] as const
                       ).map(([val, label]) => (
@@ -337,7 +326,7 @@ export function StyleDetailClient({
                     </div>
                   </div>
 
-                  <div className="col-span-4 space-y-1">
+                  <div className="col-span-5 space-y-1">
                     <div className="flex justify-between items-center">
                       <span className="font-medium">{isEn ? "Accent" : "点缀色"}</span>
                       {customAccent && (
@@ -369,8 +358,8 @@ export function StyleDetailClient({
                     {(
                       [
                         ["design-md", "DESIGN.md"],
-                        ["tailwind-css", "Tailwind CSS"],
-                        ["agent-rules", "Cursor Rules"],
+                        ["tailwind-css", "CSS"],
+                        ["agent-rules", "Rules"],
                       ] as const
                     ).map(([fmt, label]) => (
                       <button
@@ -407,12 +396,12 @@ export function StyleDetailClient({
                       onClick={downloadCompiledFile}
                       className="px-2.5 py-1 rounded-md font-medium bg-[var(--primary)] text-[var(--primary-foreground)] cursor-pointer"
                     >
-                      {isEn ? "⬇ Download" : "⬇ 导出文件"}
+                      {isEn ? "⬇ Save" : "⬇ 导出"}
                     </button>
                   </div>
                 </div>
 
-                <pre className="p-3 rounded-lg bg-[var(--background)] border border-[var(--border)] font-mono text-xs whitespace-pre-wrap leading-relaxed max-h-64 overflow-y-auto">
+                <pre className="p-3 rounded-lg bg-[var(--background)] border border-[var(--border)] font-mono text-xs whitespace-pre-wrap leading-relaxed max-h-72 overflow-y-auto">
                   {mixerOutput}
                 </pre>
               </div>
@@ -436,25 +425,25 @@ export function StyleDetailClient({
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="font-mono text-[var(--muted-foreground)]">
+                <span className="font-mono text-[var(--muted-foreground)] truncate">
                   components/tea/{prim.fileName}
                 </span>
                 <button
                   type="button"
                   onClick={() => copyWithFeedback(prim.code, "prim")}
-                  className="px-2.5 py-1 rounded-md font-medium bg-[var(--primary)] text-[var(--primary-foreground)] cursor-pointer"
+                  className="px-2.5 py-1 rounded-md font-medium bg-[var(--primary)] text-[var(--primary-foreground)] cursor-pointer shrink-0"
                 >
                   {copiedKey === "prim"
                     ? isEn
                       ? "✓ Copied"
-                      : "✓ 已复制源码"
+                      : "✓ 已复制"
                     : isEn
                       ? "📋 Copy TSX"
-                      : "📋 复制 TSX 原件"}
+                      : "📋 复制 TSX"}
                 </button>
               </div>
 
-              <pre className="p-3 rounded-lg bg-[var(--background)] border border-[var(--border)] font-mono text-xs whitespace-pre-wrap leading-relaxed max-h-72 overflow-y-auto">
+              <pre className="p-3 rounded-lg bg-[var(--background)] border border-[var(--border)] font-mono text-xs whitespace-pre-wrap leading-relaxed max-h-80 overflow-y-auto">
                 {prim.code}
               </pre>
             </div>
@@ -537,15 +526,15 @@ export function StyleDetailClient({
                 <button
                   type="button"
                   onClick={() => copyWithFeedback(activePrompt, "prompt")}
-                  className="px-3 py-1.5 rounded-lg font-medium bg-[var(--primary)] text-[var(--primary-foreground)] transition cursor-pointer"
+                  className="px-3 py-1.5 rounded-lg font-medium bg-[var(--primary)] text-[var(--primary-foreground)] transition cursor-pointer shrink-0"
                 >
                   {copiedKey === "prompt"
                     ? isEn
                       ? "✓ Copied!"
                       : "✓ 已复制！"
                     : isEn
-                      ? "📋 Copy Prompt"
-                      : "📋 一键复制 Prompt"}
+                      ? "📋 Copy"
+                      : "📋 复制"}
                 </button>
               </div>
               <pre className="p-3.5 rounded-lg bg-[var(--background)] border border-[var(--border)] font-mono text-xs whitespace-pre-wrap leading-relaxed select-all">
