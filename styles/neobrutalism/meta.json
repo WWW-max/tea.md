@@ -1,0 +1,41 @@
+{
+  "order": 15,
+  "slug": "neobrutalism",
+  "name": "新粗野主义波普风",
+  "en": "Neo-Brutalism Hard Shadow",
+  "cat": "现代数字",
+  "catEn": "Modern Web",
+  "origin": "致敬 Gumroad、Figma 与 neobrutalism-components 潮流——高饱和明快波普色块、3px 纯黑粗描边、零模糊硬边投影（5px 5px 0 #000）以及点击归零贴合的物理反馈。",
+  "originEn": "Inspired by Gumroad, Figma, and neobrutalism-components — high-saturation pop color blocks, bold 3px solid black strokes, zero-blur 5px hard drop shadows, and crisp snap-to-zero click physics.",
+  "bestFor": "创作者变现平台、独立开发者 SaaS 定价页、潮流电商、设计工具官网。",
+  "bestForEn": "Creator commerce platforms, indie SaaS landing pages, bold e-commerce, design tool portals.",
+  "swatches": [
+    ["#FFFDF7", "米白画布底", "Cream Canvas"],
+    ["#000000", "纯黑粗描边", "Stark Black Stroke"],
+    ["#FFDE59", "波普明黄块", "Pop Canary Yellow"],
+    ["#FF6B6B", "珊瑚粉撞色", "Coral Punch"]
+  ],
+  "donts": [
+    "严禁使用任何带模糊半径的阴影（blur 必须严格为 0px，如 5px 5px 0px #000）",
+    "严禁使用浅灰细边框（#E5E7EB）——所有卡片、输入框与按钮必须统一使用 2.5px~3px 纯黑实线描边",
+    "严禁使用低对比雾霾灰文字，保持纯黑粗体高张力视觉冲击"
+  ],
+  "dontsEn": [
+    "NEVER use blurred shadows — shadow blur radius MUST be strictly 0px (e.g. 5px 5px 0px #000000)",
+    "NEVER use faint grey 1px borders — enforce 2.5px–3px solid #000000 strokes across all cards, inputs, and buttons",
+    "NEVER use washed-out low-contrast text or subtle translucent gradients"
+  ],
+  "prompt": "请采用「新粗野主义（Neo-Brutalism Hard Shadow）」构建此界面：\n1. 粗黑描边与零模糊硬阴影：暖白底 #FFFDF7 上排布高饱和色块卡片（明黄 #FFDE59、珊瑚红 #FF6B6B、青柠绿 #A3E635、淡紫 #C4B5FD），所有容器、输入框与按钮统一使用 3px solid #000000 纯黑粗边框 + 5px 5px 0px #000000 零模糊硬阴影。\n2. 按压物理反馈：按钮悬停时轻微浮起（translate(-1px,-1px) + 6px 硬阴影），点击 :active 时瞬间向右下方位移 translate(4px,4px) 且阴影归零（0px 0px 0px），模拟贴合底纸的干脆手感。",
+  "promptEn": "Build this interface using the \"Neo-Brutalism (neobrutalism-components)\" aesthetic:\n1. Thick Black Strokes & Zero-Blur Shadows: Pair #FFFDF7 canvas with bold pop fills (#FFDE59 yellow, #FF6B6B coral, #A3E635 lime, #C4B5FD lavender). Enforce 3px solid #000000 borders and crisp 5px 5px 0px #000000 hard shadows (0px blur!) on every card, input, and badge.\n2. Snap-to-Zero Click Physics: Buttons cast 4px 4px 0px #000000 shadows and snap to translate(4px, 4px) with 0px shadow on :active.",
+  "tokens": {
+    "font": "sans",
+    "radius": "8px",
+    "borderWidth": "3px",
+    "shadow": "hard"
+  },
+  "primitive": {
+    "componentName": "BrutalCard & BrutalButton",
+    "summary": "3px 纯黑粗描边 + 5px 零模糊硬边阴影卡片与点击位移归零波普按钮",
+    "summaryEn": "3px solid black stroke card with 5px zero-blur hard shadow and snap-on-click pop button"
+  }
+}

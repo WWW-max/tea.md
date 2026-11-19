@@ -1,0 +1,41 @@
+{
+  "order": 13,
+  "slug": "looseleaf-sketch",
+  "name": "手绘活页纸笔草图风",
+  "en": "Looseleaf Paper & Ink Sketch",
+  "cat": "印刷纸品",
+  "catEn": "Print & Paper",
+  "origin": "致敬 looseleaf 与 Excalidraw 手绘笔记本美学——横格活页纸、红色竖向装订线、不规则钢笔手绘线框、荧光笔涂抹与和纸胶带贴纸。",
+  "originEn": "Inspired by looseleaf and Excalidraw notebook aesthetics — ruled loose-leaf paper, red margin lines, organic hand-drawn ink borders, highlighter strokes, and washi tape.",
+  "bestFor": "白板协作工具、个人数字花园、知识笔记应用、轻松亲和的独立产品落地页。",
+  "bestForEn": "Whiteboard tools, digital gardens, note-taking apps, approachable indie product landing pages.",
+  "swatches": [
+    ["#FDFCF7", "活页书写纸", "Notebook Paper"],
+    ["#24292F", "钢笔碳素墨", "Fountain Pen Ink"],
+    ["#FEF08A", "荧光记号黄", "Highlighter Yellow"],
+    ["#E15C5C", "活页装订红线", "Margin Rule Red"]
+  ],
+  "donts": [
+    "严禁使用死板对称的 8px/12px 标准圆角——必须使用非对称椭圆圆角或 SVG turbulence 模拟手绘抖动线条",
+    "严禁使用柔和模糊投影（blur > 4px），阴影应为干脆的 2px~3px 钢笔复描硬边阴影",
+    "严禁使用冰冷的深色科技渐变遮盖活页横格纸底纹"
+  ],
+  "dontsEn": [
+    "NEVER use uniform symmetric border-radius (e.g. rounded-xl) — use asymmetric organic radii or SVG displacement for hand-drawn wobble",
+    "NEVER use soft Gaussian drop shadows — use crisp 2px–3px ink offset strokes",
+    "NEVER cover the ruled notebook substrate with glossy gradients"
+  ],
+  "prompt": "请采用「手绘活页纸笔草图风（Looseleaf Paper & Ink Sketch）」构建此界面：\n1. 纸面基底：暖白活页纸 #FDFCF7 叠加 28px 间距浅蓝横格线与左侧 40px 处竖向红装订线（rgba(225,92,92,0.42)）。\n2. 手绘线框与按钮：所有卡片与按钮采用 2px solid #24292F 钢笔描边，配合非对称手绘圆角（border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px）与 2px 3px 0 硬边复描阴影。\n3. 视觉挂件：重点词汇用 #FEF08A 倾斜荧光笔高亮涂抹，卡片顶部可点缀半透明胶带或回形针标签。",
+  "promptEn": "Build this interface using the \"Looseleaf Paper & Ink Sketch\" aesthetic:\n1. Ruled Notebook Paper: Warm #FDFCF7 paper with 28px horizontal blue ruling lines and a vertical red margin line at 40px.\n2. Hand-Drawn Ink Borders: Frame cards and buttons with 2px solid #24292F strokes, asymmetric sketchy border-radius (255px 15px 225px 15px / 15px 225px 15px 255px), and crisp 2px 3px 0 ink offset shadows.\n3. Annotations: Highlight key phrases with #FEF08A marker strokes and top masking-tape strips.",
+  "tokens": {
+    "font": "serif",
+    "radius": "12px",
+    "borderWidth": "2px",
+    "shadow": "hard"
+  },
+  "primitive": {
+    "componentName": "SketchNotebookCard & HighlighterMark",
+    "summary": "带活页纸横格装订线、非对称手绘抖动边框、顶部胶带贴与荧光笔涂抹的手绘容器原件",
+    "summaryEn": "Ruled loose-leaf notebook card with wobbly hand-drawn ink borders, masking tape strip, and marker highlight"
+  }
+}

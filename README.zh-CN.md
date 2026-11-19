@@ -31,7 +31,7 @@ AI 编程让页面开发快了 10 倍，但也制造了严重的**「AI 审美�
 
 ---
 
-## 📚 首批收录的 12 味美学茶方
+## 📚 已收录的 16 味美学茶方
 
 | 编号 | 词条 ID | 美学概念 | 分类 | 核心物理/视觉锚点 |
 | :--- | :--- | :--- | :--- | :--- |
@@ -47,6 +47,10 @@ AI 编程让页面开发快了 10 倍，但也制造了严重的**「AI 审美�
 | `10` | [`analog-tape-deck`](./styles/analog-tape-deck/DESIGN.md) | **磁带卡座与暖光指针表** | 工业硬件 | 拉丝香槟银铝面板、钨丝暖黄背光模拟红针 VU 表、双轴旋转磁带仓 |
 | `11` | [`atomic-purple`](./styles/atomic-purple/DESIGN.md) | **千禧透明紫掌机透视电路** | 工业硬件 | 低模糊度半透聚碳酸酯壳叠加 45° 布线镀金焊盘 SVG 电路板 |
 | `12` | [`corkboard-dossier`](./styles/corkboard-dossier/DESIGN.md) | **侦探线索板红绳与机密档案** | 文化古籍 | 软木颗粒底板、重力下垂贝塞尔红绳、点击揭秘的 `████` 脱敏黑条 |
+| `13` | [`looseleaf-sketch`](./styles/looseleaf-sketch/DESIGN.md) | **手绘活页纸笔草图风** | 印刷纸品 | 横格活页纸（`looseleaf`）、非对称手绘抖动线框、荧光笔涂抹与胶带贴 |
+| `14` | [`pixel-8bit`](./styles/pixel-8bit/DESIGN.md) | **8-Bit 像素游戏风** | 复古屏幕 | 零圆角阶梯内倒角边框（`8bitcn`）、分格 HP/MP 血槽、`steps(1)` 跳帧按压 |
+| `15` | [`neobrutalism`](./styles/neobrutalism/DESIGN.md) | **新粗野主义波普风** | 现代数字 | `3px` 纯黑粗描边、`5px` 零模糊硬投影、高饱和撞色与点击位移归零 |
+| `16` | [`aurora-spotlight`](./styles/aurora-spotlight/DESIGN.md) | **流光溢彩 SaaS 动效风** | 现代数字 | 曜石点阵暗底、`1.5px` 旋转圆锥流光边框（Magic UI）与光标跟随聚光灯 |
 
 ---
 

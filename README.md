@@ -31,7 +31,7 @@ Developers struggle to break out of generic templates for two reasons:
 
 ---
 
-## 📚 Curated Collection (12 Blends)
+## 📚 Curated Collection (16 Blends)
 
 | # | Slug | Aesthetic System | Category | Signature Physical Anchors |
 | :--- | :--- | :--- | :--- | :--- |
@@ -47,6 +47,10 @@ Developers struggle to break out of generic templates for two reasons:
 | `10` | [`analog-tape-deck`](./styles/analog-tape-deck/DESIGN.md) | **Analog Tape Deck & VU Meter** | Industrial Hardware | Brushed aluminum faceplate, tungsten backlit swinging VU needle, dual reels |
 | `11` | [`atomic-purple`](./styles/atomic-purple/DESIGN.md) | **Y2K Atomic Purple PCB Shell** | Industrial Hardware | Tight `2.5px` frosted polycarbonate shell over 45°-routed SVG PCB traces |
 | `12` | [`corkboard-dossier`](./styles/corkboard-dossier/DESIGN.md) | **Corkboard Red-String & Dossier** | Cultural & Archival | Cork grain, gravity-sagging Bézier red yarn, click-to-reveal `████` redactions |
+| `13` | [`looseleaf-sketch`](./styles/looseleaf-sketch/DESIGN.md) | **Looseleaf Paper & Ink Sketch** | Print & Paper | Ruled notebook paper, asymmetric wobbly ink strokes, highlighter & washi tape |
+| `14` | [`pixel-8bit`](./styles/pixel-8bit/DESIGN.md) | **8-Bit Retro Pixel Arcade** | Retro Displays | Zero-radius stepped pixel bevels (`8bitcn`), segmented HP/MP bars, `steps(1)` press |
+| `15` | [`neobrutalism`](./styles/neobrutalism/DESIGN.md) | **Neo-Brutalism Hard Shadow** | Modern Web | Bold `3px` black strokes, `5px` zero-blur hard shadows, pop colors & snap press |
+| `16` | [`aurora-spotlight`](./styles/aurora-spotlight/DESIGN.md) | **Aurora Beam & Spotlight SaaS** | Modern Web | Obsidian dot void, `1.5px` spinning conic Border Beam & radial cursor spotlight |
 
 ---
 

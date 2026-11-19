@@ -222,6 +222,108 @@ html.dark {
 .redacted { background: #161615; color: transparent; padding: 0 4px; border-radius: 2px; cursor: pointer; transition: 0.18s; }
 .redacted:hover, .redacted.revealed { background: #fef08a; color: #161615; }
 
+/* 13. 手绘活页纸笔草图风 (Looseleaf Sketch) */
+.sketch-notebook {
+  background-color: #fdfcf7;
+  color: #24292f;
+  background-image:
+    linear-gradient(90deg, transparent 39px, rgba(225, 92, 92, 0.42) 39px, rgba(225, 92, 92, 0.42) 41px, transparent 41px),
+    repeating-linear-gradient(180deg, transparent 0px, transparent 27px, rgba(110, 168, 229, 0.28) 27px, rgba(110, 168, 229, 0.28) 28px);
+}
+.sketch-box {
+  border: 2px solid #24292f;
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  box-shadow: 2px 3px 0 rgba(36, 41, 47, 0.88);
+}
+.sketch-btn {
+  border: 2px solid #24292f;
+  border-radius: 220px 18px 200px 16px / 16px 210px 18px 225px;
+  box-shadow: 2px 2px 0 #24292f;
+  transition: transform 80ms ease, box-shadow 80ms ease;
+}
+.sketch-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 #24292f;
+}
+.sketch-marker {
+  background: linear-gradient(104deg, rgba(254, 240, 138, 0) 0.9%, rgba(254, 240, 138, 0.95) 2.4%, rgba(254, 240, 138, 0.7) 96%, rgba(254, 240, 138, 0) 98%);
+  padding: 0 4px;
+}
+
+/* 14. 8-Bit 像素游戏风 (8bitcn) */
+.pixel-box {
+  border: 4px solid #f8fafc;
+  box-shadow:
+    inset -4px -4px 0 #475569,
+    inset 4px 4px 0 #cbd5e1,
+    0 4px 0 #020617;
+  image-rendering: pixelated;
+}
+.pixel-btn {
+  border: 3px solid #0f172a;
+  box-shadow: inset -3px -3px 0 rgba(0, 0, 0, 0.3), inset 3px 3px 0 rgba(255, 255, 255, 0.45), 0 4px 0 #0f172a;
+  transition: transform 40ms steps(1);
+}
+.pixel-btn:active {
+  transform: translateY(4px);
+  box-shadow: inset -2px -2px 0 rgba(0, 0, 0, 0.3), 0 0 0 #0f172a;
+}
+@keyframes pixelBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.pixel-blink { animation: pixelBlink 0.9s steps(1) infinite; }
+
+/* 15. 新粗野主义风 (Neo-Brutalism) */
+.brutal-card {
+  border: 3px solid #000000;
+  box-shadow: 5px 5px 0px #000000;
+}
+.brutal-btn {
+  border: 2.5px solid #000000;
+  box-shadow: 4px 4px 0px #000000;
+  transition: transform 80ms ease, box-shadow 80ms ease;
+}
+.brutal-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px #000000;
+}
+.brutal-btn:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0px 0px 0px #000000;
+}
+
+/* 16. 流光溢彩暗黑动效风 (Aurora & Border Beam — Magic UI / Aceternity) */
+.aurora-canvas {
+  background-color: #06060b;
+  color: #f4f4f8;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 0);
+  background-size: 20px 20px;
+}
+@keyframes spinBeam {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.beam-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+  padding: 1.5px;
+  background: rgba(255, 255, 255, 0.08);
+}
+.beam-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: -120%;
+  background: conic-gradient(from 0deg, transparent 0 72%, #38bdf8 82%, #a855f7 92%, #f472b6 100%);
+  animation: spinBeam 4.5s linear infinite;
+}
+.beam-inner {
+  position: relative;
+  border-radius: 12.5px;
+  background: #0b0b13;
+}
+
 /* Steep Mixer 实时物理叠加层 */
 .tea-mixer-stage {
   position: relative;

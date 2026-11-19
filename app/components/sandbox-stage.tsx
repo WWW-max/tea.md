@@ -39,6 +39,14 @@ export function SandboxStage({
       return <AtomicPurpleDemo isEn={isEn} />;
     case "corkboard-dossier":
       return <CorkboardDemo isEn={isEn} />;
+    case "looseleaf-sketch":
+      return <LooseleafDemo isEn={isEn} />;
+    case "pixel-8bit":
+      return <Pixel8BitDemo isEn={isEn} />;
+    case "neobrutalism":
+      return <NeobrutalismDemo isEn={isEn} />;
+    case "aurora-spotlight":
+      return <AuroraSpotlightDemo isEn={isEn} />;
     default:
       return fallbackItem ? <AutoCommunityMiniStage item={fallbackItem} isEn={isEn} /> : null;
   }
@@ -781,6 +789,120 @@ function CorkboardDemo({ isEn }: { isEn: boolean }) {
               SECTOR-09
             </span>
             {isEn ? " node." : " 节点。"}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function LooseleafDemo({ isEn }: { isEn: boolean }) {
+  return (
+    <div className="sketch-notebook rounded-xl p-5 pl-12 border border-[#d8d3c5] space-y-3 relative font-serif text-xs">
+      <div className="absolute top-2 right-4 -rotate-3 bg-[#fde68a]/90 border border-[#24292f]/40 px-2.5 py-0.5 font-mono text-[11px]">
+        ✎ DRAFT NOTE
+      </div>
+      <div className="sketch-box bg-[#fdfcf7] p-4 space-y-2.5">
+        <div className="font-bold text-sm">
+          {isEn ? "Hand-Drawn Notebook UI" : "手绘活页纸与钢笔草图"}
+        </div>
+        <p className="leading-relaxed">
+          {isEn ? "Ruled paper with " : "横格活页纸搭配"}
+          <span className="sketch-marker font-bold">
+            {isEn ? "marker highlights" : "荧光笔手涂重点"}
+          </span>
+          {isEn ? " & wobbly ink strokes." : "与不规则钢笔描边。"}
+        </p>
+        <div className="flex gap-2 pt-1 font-mono">
+          <span className="sketch-btn bg-[#24292f] text-[#fdfcf7] px-3 py-1 font-bold">
+            {isEn ? "Sketch →" : "落笔草拟 →"}
+          </span>
+          <span className="sketch-btn bg-[#fdfcf7] px-3 py-1 font-bold">
+            {isEn ? "Pin Note" : "贴便签"}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Pixel8BitDemo({ isEn }: { isEn: boolean }) {
+  return (
+    <div className="bg-[#020617] p-4 rounded-xl font-mono text-xs space-y-3">
+      <div className="pixel-box bg-[#0f172a] text-[#f8fafc] p-4 space-y-3">
+        <div className="flex items-center justify-between">
+          <span className="bg-[#facc15] text-[#0f172a] px-2 py-0.5 font-bold">LV.99 HERO</span>
+          <div className="flex items-center gap-1.5">
+            <span className="font-bold text-[#ef4444]">HP</span>
+            <div className="flex gap-0.5 bg-[#020617] p-0.5 border-2 border-[#f8fafc]">
+              {[1, 1, 1, 1, 1, 1, 1, 0].map((on, i) => (
+                <span
+                  key={i}
+                  className={`w-2 h-3 block ${on ? "bg-[#ef4444]" : "bg-slate-800"}`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+        <p className="leading-relaxed">
+          {isEn
+            ? "▶ A wild 8-bit component appeared! Zero border-radius, crisp pixel bevels."
+            : "▶ 野生像素组件出现了！零圆角阶梯倒角与跳帧按键反馈。"}
+          <span className="pixel-blink ml-1 text-[#facc15]">▼</span>
+        </p>
+        <div className="flex gap-2">
+          <span className="pixel-btn bg-[#22c55e] text-[#052e16] px-3 py-1 font-bold">FIGHT</span>
+          <span className="pixel-btn bg-[#38bdf8] text-[#082f49] px-3 py-1 font-bold">ITEM</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function NeobrutalismDemo({ isEn }: { isEn: boolean }) {
+  return (
+    <div className="bg-[#fffdf7] p-5 rounded-xl border-2 border-black space-y-3 text-black text-xs">
+      <div className="brutal-card bg-[#ffde59] rounded-lg p-4 space-y-2.5">
+        <div className="flex items-center justify-between">
+          <span className="px-2 py-0.5 bg-[#ff6b6b] border-2 border-black font-black uppercase">
+            NEO-BRUTAL
+          </span>
+          <span className="font-mono font-bold">3PX STROKE</span>
+        </div>
+        <div className="text-base font-black tracking-tight">
+          {isEn ? "BOLD POP & HARD SHADOWS." : "高饱和撞色与零模糊硬阴影"}
+        </div>
+        <div className="flex gap-2.5 pt-1">
+          <span className="brutal-btn bg-[#a3e635] rounded-md px-3 py-1.5 font-black">
+            {isEn ? "SHIP IT!" : "立即发布"}
+          </span>
+          <span className="brutal-btn bg-white rounded-md px-3 py-1.5 font-black">
+            DOCS
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AuroraSpotlightDemo({ isEn }: { isEn: boolean }) {
+  return (
+    <div className="aurora-canvas rounded-xl p-5 space-y-3 text-xs">
+      <div className="beam-wrapper">
+        <div className="beam-inner p-4 space-y-2.5">
+          <div className="flex items-center justify-between">
+            <span className="px-2.5 py-0.5 rounded-full border border-sky-400/30 bg-sky-400/10 text-sky-300 font-mono text-[11px]">
+              ✦ BORDER BEAM 2.0
+            </span>
+            <span className="text-zinc-400 font-mono">60 FPS</span>
+          </div>
+          <div className="text-base font-bold bg-gradient-to-r from-white via-sky-200 to-purple-300 bg-clip-text text-transparent">
+            {isEn ? "Obsidian Void & Conic Light Beam" : "深邃曜石点阵与 1.5px 流光边框"}
+          </div>
+          <p className="text-zinc-400 leading-relaxed">
+            {isEn
+              ? "92% calm dark obsidian illuminated by a razor-thin spinning conic beam."
+              : "克制大面积暗色底，仅以纤细旋转圆锥光束与局部聚光灯提亮。"}
           </p>
         </div>
       </div>

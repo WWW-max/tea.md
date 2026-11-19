@@ -3,14 +3,16 @@ export type CategoryZh =
   | "印刷纸品"
   | "技术制图"
   | "复古屏幕"
-  | "文化古籍";
+  | "文化古籍"
+  | "现代数字";
 
 export type CategoryEn =
   | "Industrial Hardware"
   | "Print & Paper"
   | "Technical & Schematic"
   | "Retro Displays"
-  | "Cultural & Archival";
+  | "Cultural & Archival"
+  | "Modern Web";
 
 export interface StyleTokens {
   font?: "mono" | "serif" | "sans";
@@ -57,4 +59,5 @@ export const CATEGORY_DEFS = [
   { id: "技术制图", zh: "技术制图", en: "Technical" },
   { id: "复古屏幕", zh: "复古屏幕", en: "Retro Displays" },
   { id: "文化古籍", zh: "文化古籍", en: "Cultural & Archival" },
+  { id: "现代数字", zh: "现代数字", en: "Modern Web" },
 ] as const;

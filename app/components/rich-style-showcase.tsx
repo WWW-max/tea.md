@@ -46,6 +46,14 @@ export function RichStyleShowcase({ item }: { item: StyleEntry }) {
         return <AtomicPurpleRichShowcase isEn={isEn} />;
       case "corkboard-dossier":
         return <CorkboardRichShowcase isEn={isEn} />;
+      case "looseleaf-sketch":
+        return <LooseleafRichShowcase isEn={isEn} />;
+      case "pixel-8bit":
+        return <Pixel8BitRichShowcase isEn={isEn} />;
+      case "neobrutalism":
+        return <NeobrutalismRichShowcase isEn={isEn} />;
+      case "aurora-spotlight":
+        return <AuroraSpotlightRichShowcase isEn={isEn} />;
       default:
         return <AutoCommunityHeroStage item={item} isEn={isEn} />;
     }
@@ -2130,6 +2138,50 @@ const SPECIMEN_THEMES: Record<string, SpecimenTheme> = {
     input: "bg-white/90 border border-[#8c7a62] px-3 py-1.5",
     bar: "bg-rose-700",
   },
+  "looseleaf-sketch": {
+    wrap: "sketch-notebook rounded-2xl p-5 pl-12 border border-[#d8d3c5] font-serif",
+    panel: "sketch-box bg-[#fdfcf7] p-4",
+    inset: "bg-[#fef08a]/55 border-2 border-dashed border-[#24292f] p-3",
+    btnPri: "sketch-btn bg-[#24292f] text-[#fdfcf7] px-3.5 py-1.5 font-mono font-bold",
+    btnSec: "sketch-btn bg-[#fdfcf7] text-[#24292f] px-3.5 py-1.5 font-mono font-bold",
+    badgeA: "bg-[#fef08a] border border-[#24292f] px-2 py-0.5 font-mono font-bold",
+    badgeB: "border border-[#e15c5c] text-[#c93b3b] px-2 py-0.5 font-mono font-bold",
+    input: "sketch-box bg-white px-3 py-1.5 font-mono",
+    bar: "bg-[#24292f]",
+  },
+  "pixel-8bit": {
+    wrap: "bg-[#020617] rounded-none p-5 border-4 border-[#f8fafc] font-mono text-[#f8fafc]",
+    panel: "pixel-box bg-[#0f172a] p-4",
+    inset: "border-2 border-[#38bdf8] bg-[#082f49] p-3 text-[#e0f2fe]",
+    btnPri: "pixel-btn bg-[#22c55e] text-[#052e16] px-3.5 py-1.5 font-bold",
+    btnSec: "pixel-btn bg-[#facc15] text-[#0f172a] px-3.5 py-1.5 font-bold",
+    badgeA: "bg-[#ef4444] text-white px-2 py-0.5 font-bold",
+    badgeB: "bg-[#facc15] text-[#0f172a] px-2 py-0.5 font-bold",
+    input: "bg-[#020617] border-2 border-[#f8fafc] px-3 py-1.5 text-[#facc15]",
+    bar: "bg-[#22c55e]",
+  },
+  "neobrutalism": {
+    wrap: "bg-[#fffdf7] rounded-xl p-5 border-[3px] border-black shadow-[6px_6px_0_#000] text-black",
+    panel: "brutal-card bg-white rounded-lg p-4",
+    inset: "border-[2.5px] border-black bg-[#c4b5fd] rounded-md p-3 font-bold",
+    btnPri: "brutal-btn bg-[#ffde59] rounded-md px-4 py-1.5 font-black uppercase",
+    btnSec: "brutal-btn bg-[#a3e635] rounded-md px-4 py-1.5 font-black uppercase",
+    badgeA: "bg-[#ff6b6b] border-2 border-black px-2 py-0.5 font-black",
+    badgeB: "bg-[#ffde59] border-2 border-black px-2 py-0.5 font-black",
+    input: "bg-white border-[2.5px] border-black rounded-md px-3 py-1.5 font-bold",
+    bar: "bg-[#ff6b6b]",
+  },
+  "aurora-spotlight": {
+    wrap: "aurora-canvas rounded-2xl p-5 border border-white/10",
+    panel: "rounded-xl border border-white/10 bg-[#0b0b13] p-4",
+    inset: "rounded-lg border border-sky-400/30 bg-sky-500/10 p-3 text-sky-200",
+    btnPri: "rounded-full bg-white text-zinc-950 px-4 py-1.5 font-semibold hover:bg-zinc-200 transition",
+    btnSec: "rounded-full border border-white/15 bg-white/5 text-white px-4 py-1.5 font-medium",
+    badgeA: "rounded-full border border-purple-400/40 bg-purple-500/15 text-purple-200 px-2.5 py-0.5 font-mono",
+    badgeB: "rounded-full border border-sky-400/40 bg-sky-500/15 text-sky-200 px-2.5 py-0.5 font-mono",
+    input: "rounded-lg border border-white/15 bg-[#06060b] px-3 py-1.5 text-white",
+    bar: "bg-gradient-to-r from-sky-400 via-purple-500 to-pink-500",
+  },
 };
 
 function StyleSpecimenExtension({ slug, isEn }: { slug: string; isEn: boolean }) {
@@ -2261,6 +2313,392 @@ function StyleSpecimenExtension({ slug, isEn }: { slug: string; isEn: boolean })
             </button>
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================================
+   13. 手绘活页纸笔草图风完整画板 (Looseleaf Sketch)
+============================================================================ */
+function LooseleafRichShowcase({ isEn }: { isEn: boolean }) {
+  const [notes, setNotes] = useState(
+    isEn
+      ? ["Sketch wireframes on ruled paper", "Highlight key copy with yellow marker"]
+      : ["在活页横格纸上手绘线框草图", "用黄色荧光笔涂抹核心关键词"]
+  );
+  const [draft, setDraft] = useState("");
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const drawingRef = useRef(false);
+
+  const clearPad = () => {
+    const c = canvasRef.current;
+    if (!c) return;
+    const ctx = c.getContext("2d");
+    if (!ctx) return;
+    ctx.clearRect(0, 0, c.width, c.height);
+  };
+
+  return (
+    <div className="sketch-notebook rounded-2xl p-6 pl-12 border border-[#d8d3c5] space-y-5 relative font-serif text-xs">
+      {/* 左侧装订孔装饰 */}
+      <div className="absolute left-3.5 inset-y-8 flex flex-col justify-between pointer-events-none">
+        {[0, 1, 2].map((i) => (
+          <span
+            key={i}
+            className="w-3.5 h-3.5 rounded-full bg-zinc-200/90 border border-zinc-400/60 shadow-inner"
+          />
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 items-stretch">
+        <div className="xl:col-span-7 sketch-box bg-[#fdfcf7] p-5 space-y-3 relative">
+          <div className="absolute -top-3 left-6 -rotate-2 bg-[#fde68a]/90 border border-[#24292f]/40 px-3 py-0.5 font-mono text-[11px]">
+            WASHI TAPE · NOTE #13
+          </div>
+          <h3 className="text-lg font-bold pt-1">
+            {isEn ? "Looseleaf Paper & Fountain-Pen Ink" : "手绘活页纸与钢笔速写工作台"}
+          </h3>
+          <p className="leading-relaxed">
+            {isEn ? "Asymmetric elliptical radii give boxes a " : "非对称椭圆圆角赋予线框真实的"}
+            <span className="sketch-marker font-bold">
+              {isEn ? "warm hand-sketched wobble" : "手绘钢笔微抖质感"}
+            </span>
+            {isEn ? " while preserving keyboard accessibility." : "，搭配荧光笔涂抹与胶带便签。"}
+          </p>
+
+          <ul className="space-y-1.5 pt-1 font-mono">
+            {notes.map((n, idx) => (
+              <li key={idx} className="flex items-center gap-2">
+                <span className="font-bold">✎</span>
+                <span>{n}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div className="flex gap-2 pt-2 font-mono">
+            <input
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              placeholder={isEn ? "Jot a quick note..." : "随手添一行活页笔记…"}
+              className="sketch-box flex-1 bg-white px-3 py-1.5 focus:outline-none"
+            />
+            <button
+              type="button"
+              onClick={() => {
+                if (!draft.trim()) return;
+                setNotes((prev) => [...prev, draft.trim()]);
+                setDraft("");
+              }}
+              className="sketch-btn bg-[#24292f] text-[#fdfcf7] px-3.5 py-1.5 font-bold cursor-pointer"
+            >
+              {isEn ? "+ Jot" : "+ 记一笔"}
+            </button>
+          </div>
+        </div>
+
+        {/* 右侧真实可手绘涂鸦速写板 */}
+        <div className="xl:col-span-5 sketch-box bg-white p-4 flex flex-col justify-between space-y-2 font-mono">
+          <div className="flex items-center justify-between">
+            <span className="font-bold">{isEn ? "INK DOODLE PAD (DRAW HERE)" : "钢笔速写区（按住鼠标涂鸦）"}</span>
+            <button
+              type="button"
+              onClick={clearPad}
+              className="underline text-[#e15c5c] font-bold cursor-pointer"
+            >
+              {isEn ? "Erase" : "擦除"}
+            </button>
+          </div>
+          <canvas
+            ref={canvasRef}
+            width={280}
+            height={130}
+            onMouseDown={(e) => {
+              drawingRef.current = true;
+              const c = canvasRef.current;
+              const ctx = c?.getContext("2d");
+              if (!c || !ctx) return;
+              const r = c.getBoundingClientRect();
+              ctx.strokeStyle = "#24292f";
+              ctx.lineWidth = 2.2;
+              ctx.lineCap = "round";
+              ctx.beginPath();
+              ctx.moveTo(((e.clientX - r.left) / r.width) * c.width, ((e.clientY - r.top) / r.height) * c.height);
+            }}
+            onMouseMove={(e) => {
+              if (!drawingRef.current) return;
+              const c = canvasRef.current;
+              const ctx = c?.getContext("2d");
+              if (!c || !ctx) return;
+              const r = c.getBoundingClientRect();
+              ctx.lineTo(((e.clientX - r.left) / r.width) * c.width, ((e.clientY - r.top) / r.height) * c.height);
+              ctx.stroke();
+            }}
+            onMouseUp={() => {
+              drawingRef.current = false;
+            }}
+            onMouseLeave={() => {
+              drawingRef.current = false;
+            }}
+            className="w-full h-32 border border-dashed border-[#24292f]/40 cursor-crosshair bg-[#fdfcf7]"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================================
+   14. 8-Bit 像素街机与 JRPG 战斗对话面板 (8bitcn)
+============================================================================ */
+function Pixel8BitRichShowcase({ isEn }: { isEn: boolean }) {
+  const [hp, setHp] = useState(8);
+  const [mp, setMp] = useState(6);
+  const [gold, setGold] = useState(1280);
+  const [log, setLog] = useState(
+    isEn
+      ? "▶ SLIME_BUG appeared! Choose an 8-bit command."
+      : "▶ 野生「样式崩坏史莱姆」出现了！请选择指令。"
+  );
+
+  return (
+    <div className="bg-[#020617] p-5 md:p-6 border-4 border-[#f8fafc] font-mono text-[#f8fafc] space-y-5 text-xs">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b-4 border-[#1e293b] pb-3">
+        <div className="flex items-center gap-2">
+          <span className="bg-[#facc15] text-[#0f172a] px-2.5 py-0.5 font-bold">STAGE 1-4</span>
+          <span className="font-bold">8BITCN // ARCADE QUEST</span>
+        </div>
+        <span className="text-[#facc15] font-bold">GOLD: {gold}G</span>
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
+        <div className="xl:col-span-5 pixel-box bg-[#0f172a] p-4 space-y-3">
+          <div className="font-bold text-[#38bdf8]">PARTY STATUS // LV.42</div>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between gap-2">
+              <span className="font-bold text-[#ef4444]">HP</span>
+              <div className="flex gap-1 bg-[#020617] p-1 border-2 border-[#f8fafc]">
+                {Array.from({ length: 10 }).map((_, i) => (
+                  <span
+                    key={i}
+                    className={`w-2.5 h-3.5 block ${i < hp ? "bg-[#ef4444]" : "bg-slate-800"}`}
+                  />
+                ))}
+              </div>
+            </div>
+            <div className="flex items-center justify-between gap-2">
+              <span className="font-bold text-[#38bdf8]">MP</span>
+              <div className="flex gap-1 bg-[#020617] p-1 border-2 border-[#f8fafc]">
+                {Array.from({ length: 10 }).map((_, i) => (
+                  <span
+                    key={i}
+                    className={`w-2.5 h-3.5 block ${i < mp ? "bg-[#38bdf8]" : "bg-slate-800"}`}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="xl:col-span-7 pixel-box bg-[#0f172a] p-4 flex flex-col justify-between space-y-4">
+          <div className="leading-relaxed min-h-[3rem]">
+            {log}
+            <span className="pixel-blink ml-1.5 text-[#facc15]">▼</span>
+          </div>
+          <div className="grid grid-cols-3 gap-2.5">
+            <button
+              type="button"
+              onClick={() => {
+                setGold((g) => g + 150);
+                setLog(
+                  isEn
+                    ? "▶ CRITICAL HIT! +150G earned!"
+                    : "▶ 会心一击！击败了塑料渐变怪，获得 +150G！"
+                );
+              }}
+              className="pixel-btn bg-[#ef4444] text-white py-2 font-bold cursor-pointer"
+            >
+              ⚔ ATTACK
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setMp((m) => Math.max(0, m - 2));
+                setHp(10);
+                setLog(
+                  isEn
+                    ? "▶ Cast PIXEL_HEAL! HP fully restored!"
+                    : "▶ 咏唱「像素回复术」！HP 已回满！"
+                );
+              }}
+              className="pixel-btn bg-[#22c55e] text-[#052e16] py-2 font-bold cursor-pointer"
+            >
+              ✦ HEAL
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setMp(10);
+                setLog(isEn ? "▶ Drank ETHER POTION! MP 10/10." : "▶ 饮用以太药水！MP 已恢复至 10/10。");
+              }}
+              className="pixel-btn bg-[#facc15] text-[#0f172a] py-2 font-bold cursor-pointer"
+            >
+              ★ POTION
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================================
+   15. 新粗野主义高饱和硬阴影完整展台 (Neo-Brutalism)
+============================================================================ */
+function NeobrutalismRichShowcase({ isEn }: { isEn: boolean }) {
+  const [cardBg, setCardBg] = useState("#ffde59");
+  const [sales, setSales] = useState(4280);
+
+  return (
+    <div className="bg-[#fffdf7] rounded-xl p-5 md:p-6 border-[3px] border-black shadow-[6px_6px_0_#000] text-black space-y-5 text-xs">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b-[3px] border-black">
+        <div className="flex items-center gap-2">
+          <span className="px-2.5 py-1 bg-[#ff6b6b] border-2 border-black font-black uppercase">
+            NEOBRUTALISM
+          </span>
+          <span className="font-mono font-bold">ZERO BLUR · 3PX SOLID BLACK</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          {["#ffde59", "#a3e635", "#c4b5fd", "#67e8f9"].map((hex) => (
+            <button
+              key={hex}
+              type="button"
+              onClick={() => setCardBg(hex)}
+              style={{ backgroundColor: hex }}
+              className="w-6 h-6 rounded border-2 border-black shadow-[2px_2px_0_#000] cursor-pointer"
+              title={`Pop color ${hex}`}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 items-stretch">
+        <div
+          style={{ backgroundColor: cardBg }}
+          className="xl:col-span-7 brutal-card rounded-lg p-5 space-y-3 transition-colors"
+        >
+          <h3 className="text-xl font-black tracking-tight">
+            {isEn
+              ? "LOUD COLORS. CRISP 0PX SHADOWS."
+              : "高饱和撞色块 + 干脆利落的零模糊硬投影"}
+          </h3>
+          <p className="font-medium leading-relaxed">
+            {isEn
+              ? "Click the buttons below to feel the signature 4px snap-to-zero press mechanic made famous by Gumroad and neobrutalism-components."
+              : "点击下方按钮感受标志性的 4px 位移贴合手感（阴影在按下瞬间归零，松手弹起）。"}
+          </p>
+          <div className="flex flex-wrap gap-3 pt-1">
+            <button
+              type="button"
+              onClick={() => setSales((s) => s + 49)}
+              className="brutal-btn bg-white rounded-md px-4 py-2 font-black uppercase cursor-pointer"
+            >
+              {isEn ? "Buy Pack ($49) →" : "模拟成交一单 (+$49) →"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setCardBg("#ffde59")}
+              className="brutal-btn bg-[#ff6b6b] text-black rounded-md px-4 py-2 font-black uppercase cursor-pointer"
+            >
+              {isEn ? "Reset Vibe" : "重置明黄配色"}
+            </button>
+          </div>
+        </div>
+
+        <div className="xl:col-span-5 brutal-card bg-white rounded-lg p-5 flex flex-col justify-between space-y-3">
+          <div className="flex justify-between items-center">
+            <span className="font-black uppercase">CREATOR REVENUE</span>
+            <span className="px-2 py-0.5 bg-[#a3e635] border-2 border-black font-black">+24%</span>
+          </div>
+          <div className="text-3xl font-black font-mono">${sales.toLocaleString()}</div>
+          <div className="h-4 border-2 border-black bg-[#fffdf7] p-0.5">
+            <div className="h-full bg-[#ff6b6b] border-r-2 border-black w-4/5" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================================
+   16. 流光溢彩暗黑聚光灯完整展台 (Magic UI / Aceternity UI)
+============================================================================ */
+function AuroraSpotlightRichShowcase({ isEn }: { isEn: boolean }) {
+  const [spot, setSpot] = useState({ x: -200, y: -200 });
+
+  return (
+    <div className="aurora-canvas rounded-2xl p-6 border border-white/10 space-y-5 text-xs">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 items-stretch">
+        {/* 左侧：1.5px 旋转圆锥流光边框主推卡 */}
+        <div className="xl:col-span-7 beam-wrapper">
+          <div className="beam-inner p-6 h-full flex flex-col justify-between space-y-4">
+            <div className="space-y-2.5">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-sky-400/30 bg-sky-400/10 text-sky-300 font-mono text-[11px]">
+                ✦ CONIC BORDER BEAM · 1.5PX
+              </span>
+              <h3 className="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-sky-100 to-purple-300 bg-clip-text text-transparent">
+                {isEn
+                  ? "Disciplined Darkness, Razor-Sharp Light."
+                  : "克制 92% 曜石暗底，把流光浓缩在 1.5px 边缘"}
+              </h3>
+              <p className="text-zinc-400 leading-relaxed">
+                {isEn
+                  ? "Premium Magic UI / Aceternity layouts avoid flooding cards with loud purple fills — keeping surfaces crisp #0B0B13 while edge beams and cursor spotlights do the talking."
+                  : "高级的流光动效绝不是涂满廉价紫蓝渐变背景，而是用实色深黑 #0B0B13 托底，仅让纤细旋转光束与光标聚光灯呼吸发光。"}
+              </p>
+            </div>
+            <div className="flex gap-3 pt-1">
+              <button
+                type="button"
+                className="rounded-full bg-white text-zinc-950 px-4 py-2 font-semibold hover:bg-zinc-200 transition cursor-pointer"
+              >
+                {isEn ? "Deploy Edge Mesh →" : "立即部署流光节点 →"}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* 右侧：鼠标实时跟随径向聚光灯探测卡 */}
+        <div
+          onMouseMove={(e) => {
+            const r = e.currentTarget.getBoundingClientRect();
+            setSpot({ x: e.clientX - r.left, y: e.clientY - r.top });
+          }}
+          onMouseLeave={() => setSpot({ x: -200, y: -200 })}
+          style={{
+            background: `radial-gradient(240px circle at ${spot.x}px ${spot.y}px, rgba(56,189,248,0.22), rgba(168,85,247,0.08) 45%, transparent 75%), #0b0b13`,
+          }}
+          className="xl:col-span-5 rounded-2xl border border-white/10 p-5 flex flex-col justify-between space-y-4 cursor-crosshair"
+        >
+          <div className="flex items-center justify-between">
+            <span className="font-mono text-purple-300 font-semibold">RADIAL SPOTLIGHT</span>
+            <span className="font-mono text-zinc-500">HOVER ME</span>
+          </div>
+          <div className="space-y-1.5">
+            <div className="text-base font-bold text-white">
+              {isEn ? "Move Cursor Inside This Card" : "在此卡片内移动鼠标体验聚光灯"}
+            </div>
+            <p className="text-zinc-400 leading-relaxed">
+              {isEn
+                ? "Tracks cursor X/Y coordinates to project a soft 240px radial glow across dark Bento surfaces."
+                : "实时追踪鼠标 X/Y 坐标投射 240px 柔和径向光晕，是 Bento Grid 特性矩阵的经典交互。"}
+            </p>
+          </div>
+          <div className="font-mono text-zinc-500 border-t border-white/10 pt-2 flex justify-between">
+            <span>SPOT_X: {Math.max(0, Math.round(spot.x))}px</span>
+            <span>SPOT_Y: {Math.max(0, Math.round(spot.y))}px</span>
+          </div>
+        </div>
       </div>
     </div>
   );

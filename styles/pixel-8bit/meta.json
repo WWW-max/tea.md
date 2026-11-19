@@ -1,0 +1,41 @@
+{
+  "order": 14,
+  "slug": "pixel-8bit",
+  "name": "8-Bit 像素游戏风",
+  "en": "8-Bit Retro Pixel Arcade",
+  "cat": "复古屏幕",
+  "catEn": "Retro Displays",
+  "origin": "致敬 8bitcn 与红白机（NES / Famicom）JRPG 对话框美学——零抗锯齿阶梯像素边框、HP/MP 血槽进度条、闪烁三角游标与清脆跳帧按压。",
+  "originEn": "Inspired by 8bitcn and classic NES/SNES JRPG dialogue windows — stepped pixel borders, segmented HP/EXP bars, blinking cursors, and 1-frame arcade button presses.",
+  "bestFor": "独立游戏官网、Gamified 习惯打卡应用、黑客松活动页、趣味开发者个人主页。",
+  "bestForEn": "Indie game portals, gamified habit trackers, hackathon landing pages, playful dev profiles.",
+  "swatches": [
+    ["#0F172A", "街机暗夜底", "Arcade Midnight"],
+    ["#F8FAFC", "像素纯白框", "Pixel White"],
+    ["#EF4444", "HP 红心血条", "Heart Red HP"],
+    ["#FACC15", "金币高光黄", "Coin Gold"]
+  ],
+  "donts": [
+    "严禁出现任何平滑圆角（border-radius 必须严格为 0px）或模糊阴影",
+    "动画严禁使用线性平滑过渡（ease/linear），必须使用 steps(1) 像素跳帧感",
+    "状态条严禁做平滑渐变条，应拆分为一格一格的离散像素块"
+  ],
+  "dontsEn": [
+    "NEVER use rounded corners (border-radius must be strictly 0px) or blurred shadows",
+    "NEVER use smooth ease-in-out transitions — use discrete steps(1) frame jumps",
+    "NEVER render smooth gradient progress bars — segment meters into discrete pixel blocks"
+  ],
+  "prompt": "请采用「8-Bit 像素街机与 JRPG 对话框美学（8bitcn Pixel UI）」构建此界面：\n1. 零圆角像素边框：全站严禁使用任何圆角（0px）与模糊投影；对话框采用深蓝黑底 #0F172A 配 4px solid #F8FAFC 纯白像素框及内嵌阶梯阴影（inset -4px -4px 0 #475569, inset 4px 4px 0 #CBD5E1）。\n2. 街机组件转译：进度条改为离散分格的 HP（#EF4444）/ EXP（#FACC15）像素槽，对话框右下角放置 steps(1) 闪烁的「▼」等待游标，按钮点击采用瞬间下沉 4px 的无过渡跳帧反馈。",
+  "promptEn": "Build this interface using the \"8-Bit Retro Pixel Arcade (8bitcn)\" aesthetic:\n1. Crisp Pixel Borders: Strictly 0px border-radius and zero blur everywhere. Frame RPG dialogue cards on #0F172A with 4px solid #F8FAFC borders and stepped inner bevels (inset -4px -4px 0 #475569, inset 4px 4px 0 #CBD5E1).\n2. Arcade Widgets: Render progress bars as segmented HP (#EF4444) and Gold EXP (#FACC15) blocks, add a steps(1) blinking '▼' prompt cursor, and snap buttons down 4px instantaneously on :active.",
+  "tokens": {
+    "font": "mono",
+    "radius": "0px",
+    "borderWidth": "4px",
+    "shadow": "hard"
+  },
+  "primitive": {
+    "componentName": "PixelDialogBox & PixelStatBar",
+    "summary": "红白机 JRPG 阶梯内倒角像素对话框与分格 HP/EXP 像素状态槽组件",
+    "summaryEn": "NES-style stepped bevel RPG dialogue box and segmented pixel HP/EXP stat bar"
+  }
+}

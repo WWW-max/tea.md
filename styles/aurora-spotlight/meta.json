@@ -1,0 +1,41 @@
+{
+  "order": 16,
+  "slug": "aurora-spotlight",
+  "name": "流光溢彩 SaaS 动效风",
+  "en": "Aurora Beam & Spotlight SaaS",
+  "cat": "现代数字",
+  "catEn": "Modern Web",
+  "origin": "萃取 Magic UI 与 Aceternity UI 的现代暗黑旗舰落地页技法——深邃曜石底点阵网格、1.5px 旋转圆锥流光边框（Border Beam）与跟随鼠标游走的径向聚光灯（Mouse Spotlight）。",
+  "originEn": "Distills signature Magic UI & Aceternity UI dark flagship techniques — deep obsidian dot-matrix canvas, 1.5px rotating conic Border Beams, and cursor-tracking radial spotlight cards.",
+  "bestFor": "现代 AI SaaS 产品首发页、开发者工具英雄区（Hero Section）、高转化定价主推卡。",
+  "bestForEn": "Modern AI SaaS launch pages, developer tool Hero sections, high-converting flagship pricing tiers.",
+  "swatches": [
+    ["#06060B", "深邃曜石底", "Obsidian Void"],
+    ["#38BDF8", "流光冰川青", "Beam Sky Cyan"],
+    ["#A855F7", "极光星云紫", "Aurora Violet"],
+    ["#F472B6", "脉冲霓虹粉", "Pulse Magenta"]
+  ],
+  "donts": [
+    "严禁把大面积背景直接涂成刺眼的紫蓝渐变色块——真正的流光溢彩必须克制在 92% 深邃黑底之上，仅让 1px~1.5px 边框流光与微弱聚光灯发光！",
+    "严禁在同一屏内给所有普通卡片都加旋转流光边框（仅限核心主推卡片 1~2 处，避免视觉疲劳）",
+    "卡片背景严禁全透明导致文字发虚，内层必须使用实色深灰黑 #0B0B13 托底"
+  ],
+  "dontsEn": [
+    "NEVER flood large card backgrounds with loud purple gradients — keep 92%+ of the canvas deep obsidian #06060B and confine luminescence strictly to 1.5px Border Beams and subtle radial spotlights!",
+    "NEVER put spinning border beams on every single card simultaneously — reserve them for 1–2 focal hero/pro cards",
+    "NEVER sacrifice text contrast with muddy semi-transparent fills — back inner cards with crisp #0B0B13"
+  ],
+  "prompt": "请采用「高质感 Magic UI / Aceternity 流光聚光灯暗黑美学（Aurora Beam & Spotlight）」构建此界面（注意克制高级感，杜绝廉价大面积渐变）：\n1. 深邃点阵底：全站背景采用 #06060B 曜石黑配微弱 20px 白色圆点网格（rgba(255,255,255,0.08)），保持 90% 以上冷静暗色面积。\n2. 1.5px 旋转流光边框（Border Beam）：仅在核心主推卡片外层套 1.5px 溢出裁切容器，内部旋转 conic-gradient(transparent 72%, #38BDF8, #A855F7, #F472B6) 形成精致游走流光，内层用 #0B0B13 实色遮罩。\n3. 鼠标跟随聚光灯（Spotlight）：次级卡片监听 onMouseMove，在光标坐标处渲染 radial-gradient(280px circle at x y, rgba(56,189,248,0.14), transparent) 柔和局部高光。",
+  "promptEn": "Build this interface using the refined \"Magic UI / Aceternity Border Beam & Spotlight\" aesthetic (high-restraint dark craft, NOT loud gradient slop):\n1. Obsidian Dot Canvas: Deep #06060B background with subtle 20px radial dot pattern (rgba(255,255,255,0.08)), keeping 90%+ of surfaces calm dark obsidian.\n2. 1.5px Conic Border Beam: Wrap focal hero/featured cards in a 1.5px overflow-hidden container with a spinning conic-gradient(transparent 72%, #38BDF8, #A855F7, #F472B6) masked by a solid #0B0B13 inner card.\n3. Interactive Cursor Spotlight: Track onMouseMove on bento cards to render a soft radial-gradient(280px circle at mouseX mouseY, rgba(56,189,248,0.14), transparent) glow.",
+  "tokens": {
+    "font": "sans",
+    "radius": "14px",
+    "borderWidth": "1px",
+    "shadow": "soft"
+  },
+  "primitive": {
+    "componentName": "BorderBeamCard & SpotlightCard",
+    "summary": "1.5px 圆锥旋转流光边框卡片与鼠标坐标实时跟随径向聚光灯卡片（Magic UI / Aceternity 核心原件）",
+    "summaryEn": "1.5px spinning conic Border Beam card and mouse-tracking radial Spotlight Bento card"
+  }
+}

@@ -21,6 +21,10 @@ When designing or refactoring frontend interfaces, avoid generic "AI slop" (whit
 10. `analog-tape-deck` — **Hi-Fi Cassette Deck & Warm Analog VU Meter** (`./styles/analog-tape-deck/DESIGN.md`)
 11. `atomic-purple` — **Y2K Atomic Purple Translucent PCB Shell** (`./styles/atomic-purple/DESIGN.md`)
 12. `corkboard-dossier` — **Detective Corkboard, Red-String & Redacted Dossier** (`./styles/corkboard-dossier/DESIGN.md`)
+13. `looseleaf-sketch` — **Looseleaf Paper & Hand-Drawn Ink Sketch** (`./styles/looseleaf-sketch/DESIGN.md`)
+14. `pixel-8bit` — **8-Bit Retro Pixel Arcade (`8bitcn`)** (`./styles/pixel-8bit/DESIGN.md`)
+15. `neobrutalism` — **Neo-Brutalism Hard Shadow & Bold Strokes** (`./styles/neobrutalism/DESIGN.md`)
+16. `aurora-spotlight` — **Aurora Conic Border Beam & Radial Spotlight** (`./styles/aurora-spotlight/DESIGN.md`)
 
 ## Workflow
 
