@@ -593,6 +593,35 @@ export function AlmanacClient({ entries }: { entries: StyleEntry[] }) {
           </aside>
         </main>
       )}
+
+      {/* 底部远程 MCP Server 接入栏 */}
+      <footer className="bg-[var(--card)] border border-[var(--border)] rounded-xl px-4 py-3 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="px-2 py-0.5 rounded font-mono font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)]">
+            MCP SERVER
+          </span>
+          <span className="text-[var(--muted-foreground)]">
+            支持 Cursor / Claude Code / Antigravity 远程检索美学配方与原件：
+          </span>
+          <code className="font-mono text-[var(--foreground)]">{origin}/api/mcp</code>
+        </div>
+        <button
+          type="button"
+          onClick={() =>
+            copyWithFeedback(
+              JSON.stringify(
+                { mcpServers: { "tea-md": { url: `${origin}/api/mcp` } } },
+                null,
+                2
+              ),
+              "mcp"
+            )
+          }
+          className="px-3 py-1.5 rounded-lg font-medium bg-[var(--primary)] text-[var(--primary-foreground)] cursor-pointer transition"
+        >
+          {copiedKey === "mcp" ? "✓ 已复制 mcpServers 配置" : "🔌 复制远程 MCP 配置 JSON"}
+        </button>
+      </footer>
     </div>
   );
 }

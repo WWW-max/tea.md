@@ -54,7 +54,27 @@ pnpm dev
 挑选心仪的风格，将对应的 `styles/<style-id>/DESIGN.md` 复制到你项目的根目录并命名为 `DESIGN.md`，然后对 Cursor / Claude Code / Antigravity 说：
 > *"请严格遵循根目录 `DESIGN.md` 中的色彩 Token、物理锚点 CSS 公式与禁忌规则（Anti-Slop Guardrails）来构建当前页面。"*
 
-### 方式 3：作为 Agent Skill 安装
+### 方式 3：通过 `shadcn` Registry 一行命令直装「灵魂原件 + DESIGN.md」
+无需手动复制，直接在你的 React / Next.js 项目中运行：
+```bash
+npx shadcn@latest add https://tea-md.vercel.app/r/tactile-synth.json
+```
+将自动把对应风格的 `DESIGN.md` 与高难度物理交互组件（如阻尼旋钮 `RotaryKnob`、墨水屏反色刷新层 `EInkRefreshStage`、双色错位卡 `RisoMisprintCard`）写入你的工程。
+
+### 方式 4：接入内置远程 MCP Server（`/api/mcp`）
+将你的 Vercel 部署地址配置进 Cursor / Claude Code / Antigravity 的 `mcpServers`：
+```json
+{
+  "mcpServers": {
+    "tea-md": {
+      "url": "https://tea-md.vercel.app/api/mcp"
+    }
+  }
+}
+```
+AI 即可自动调用 `list_aesthetics`、`get_design_recipe` 与 `get_soul_primitive` 按需检索并应用全套美学体系。
+
+### 方式 5：作为本地 Agent Skill 安装
 本仓库根目录自带标准 [`SKILL.md`](./SKILL.md)，将其链接或复制到你的 Agent Skills 目录后，即可在对话中直接通过风格名调用对应配方。
 
 ---
