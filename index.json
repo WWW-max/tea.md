@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-23T09:02:13.990Z",
+  "updatedAt": "2026-11-23T09:08:44.619Z",
   "sessions": {
     "antigravity/0a19f922-699d-4e78-ae87-c20379a49f28": {
       "id": "0a19f922-699d-4e78-ae87-c20379a49f28",
@@ -8,7 +8,7 @@
       "title": "Add GitHub Jump Link",
       "workspaceKey": "github.com/WWW-max/tea.md",
       "workspaceName": "tea.md",
-      "updatedAt": "2026-11-23T09:02:11.218Z",
+      "updatedAt": "2026-11-23T09:08:27.731Z",
       "sourceHost": "MacBook-Air.local",
       "hasWipPatch": true
     }
