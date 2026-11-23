@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowRight, Check, Copy, Plug, Search } from "lucide-react";
+import { ArrowRight, Check, Copy, ImagePlus, Plug, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
@@ -135,7 +135,7 @@ export function GalleryHome({ entries }: { entries: StyleEntry[] }) {
                 </CardContent>
               </Link>
 
-              <CardFooter className="justify-between gap-3">
+              <CardFooter className="flex-wrap justify-between gap-2">
                 <div className="flex items-center gap-1.5">
                   {item.swatches.map(([hex, zhLbl, enLbl]) => (
                     <span
@@ -147,7 +147,24 @@ export function GalleryHome({ entries }: { entries: StyleEntry[] }) {
                   ))}
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    asChild
+                  >
+                    <a
+                      href={`https://chatgpt.com/?${new URLSearchParams({
+                        hints: "picture",
+                        prompt: isEn ? item.promptEn : item.prompt,
+                      }).toString()}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <ImagePlus className="size-3.5" />
+                      <span>{isEn ? "ChatGPT Image" : "ChatGPT 生图"}</span>
+                    </a>
+                  </Button>
                   <Button
                     variant="outline"
                     size="sm"

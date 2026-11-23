@@ -11,6 +11,7 @@ import {
   ChevronRight,
   Copy,
   Download,
+  ImagePlus,
   Maximize2,
   Minimize2,
   SlidersHorizontal,
@@ -103,6 +104,10 @@ export function StyleDetailClient({
   const prim = item.primitive;
   const activePrompt = isEn ? item.promptEn : item.prompt;
   const activeDonts = isEn ? item.dontsEn : item.donts;
+  const chatGptImageUrl = `https://chatgpt.com/?${new URLSearchParams({
+    hints: "picture",
+    prompt: activePrompt,
+  }).toString()}`;
 
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-6 space-y-5">
@@ -127,6 +132,17 @@ export function StyleDetailClient({
         </div>
 
         <div className="flex flex-wrap items-center gap-1.5">
+          <Button variant="default" size="sm" asChild>
+            <a
+              href={chatGptImageUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <ImagePlus className="size-3.5" />
+              <span>{isEn ? "ChatGPT Image" : "ChatGPT 生图"}</span>
+            </a>
+          </Button>
+
           <Button
             variant="outline"
             size="sm"
@@ -525,31 +541,43 @@ export function StyleDetailClient({
 
             {/* Tab 4: 纯净短指令 */}
             <TabsContent value="prompt" className="space-y-3 text-xs">
-              <div className="flex items-center justify-between gap-2">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="text-muted-foreground">
                   {isEn
                     ? "Paste into Claude / ChatGPT / v0 / Cursor:"
                     : "粘贴至 Claude / ChatGPT / v0 / Cursor："}
                 </span>
-                <Button
-                  size="sm"
-                  onClick={() => copyWithFeedback(activePrompt, "prompt")}
-                >
-                  {copiedKey === "prompt" ? (
-                    <Check className="size-3.5" />
-                  ) : (
-                    <Copy className="size-3.5" />
-                  )}
-                  <span>
-                    {copiedKey === "prompt"
-                      ? isEn
-                        ? "Copied"
-                        : "已复制"
-                      : isEn
-                        ? "Copy"
-                        : "复制"}
-                  </span>
-                </Button>
+                <div className="flex items-center gap-1.5">
+                  <Button variant="outline" size="sm" asChild>
+                    <a
+                      href={chatGptImageUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <ImagePlus className="size-3.5" />
+                      <span>{isEn ? "ChatGPT Image" : "ChatGPT 生图"}</span>
+                    </a>
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={() => copyWithFeedback(activePrompt, "prompt")}
+                  >
+                    {copiedKey === "prompt" ? (
+                      <Check className="size-3.5" />
+                    ) : (
+                      <Copy className="size-3.5" />
+                    )}
+                    <span>
+                      {copiedKey === "prompt"
+                        ? isEn
+                          ? "Copied"
+                          : "已复制"
+                        : isEn
+                          ? "Copy"
+                          : "复制"}
+                    </span>
+                  </Button>
+                </div>
               </div>
               <pre className="p-3.5 rounded-lg bg-background border border-border font-mono text-xs whitespace-pre-wrap leading-relaxed select-all">
                 {activePrompt}
